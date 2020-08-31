@@ -294,123 +294,6 @@ response = requests.get(&quot;http://example.org&quot;, cookies=cookies)</code><
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://honywen.com/2020/08/31/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="honywen">
-      <meta itemprop="description" content="多多指教">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小咕✨">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/08/31/hello-world/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2020-08-31 11:40:11 / Modified: 20:31:37" itemprop="dateCreated datePublished" datetime="2020-08-31T11:40:11+08:00">2020-08-31</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <hr>
-<h2 id="title-Python-requests库介绍"><a href="#title-Python-requests库介绍" class="headerlink" title="title:Python requests库介绍"></a>title:Python requests库介绍</h2><h1 id="Python-requests库介绍"><a href="#Python-requests库介绍" class="headerlink" title="Python requests库介绍"></a>Python requests库介绍</h1><p>Python的库函数有很多可以用来实现爬虫，这里介绍一下我经常使用的requests库。</p>
-<p><strong>官方中文文档：</strong><a target="_blank" rel="noopener" href="https://cn.python-requests.org/zh_CN/latest/" title="快速上手 - Requests 2.18.1 文档">快速上手 - Requests 2.18.1 文档</a></p>
-<h2 id="1-库函数的安装"><a href="#1-库函数的安装" class="headerlink" title="1- 库函数的安装"></a>1- 库函数的安装</h2><p>使用pip安装<br><code>$ pip install requests</code><br>或者使用easy_install安装<br><code>$ easy_install requests</code><br>还可以使用IDE自带的一些功能实现安装的</p>
-<h2 id="2-requests用法"><a href="#2-requests用法" class="headerlink" title="2- requests用法"></a>2- requests用法</h2><p>这里我们就不一一的介绍requests的各种方法了，我们这里举两个例子分别介绍如何使用requests实现POST和GET两种常用的方法。</p>
-<hr>
-<h3 id="GET方法请求页面"><a href="#GET方法请求页面" class="headerlink" title="- GET方法请求页面"></a>- GET方法请求页面</h3><p><code>    import requests     host = &quot;www.honywen.com&quot;     response = requests.get(host, headers=headers,timeout=1,params=payload,stream=True,proxies=proxies )     print(response.text)</code><br>这样就获得到了页面的源代码。  </p>
-<pre><code>&lt;!DOCTYPE html&gt;    
-&lt;html&gt;  
-    &lt;head&gt;
-        &lt;meta charset=&quot;utf-8&quot; /&gt;
-        &lt;title&gt;hi&lt;/title&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-        ···
-        ···
-        ···
-    &lt;/body&gt;
-&lt;/html&gt;</code></pre>
-<p>这里我们解释一下上面的相关的代码</p>
-<p>首先就是requests中除了<code>host</code>即网页的URL是必须的之外其他的参数都是可选的<br><code>headers=headers,timeout=1,params=payload,stream=True,proxies=proxies</code><br>这些都是可有可无的</p>
-<h3 id="发送参数的get请求"><a href="#发送参数的get请求" class="headerlink" title="- -发送参数的get请求"></a>- -发送参数的get请求</h3><p><code>    response = requests.get(host)</code><br>这样的请求一般是不可取的，因为大部分的网站都是有一定的反爬机制的，最简单的就是最容易被封的。</p>
-<h3 id="添加headers伪造浏览器进行请求"><a href="#添加headers伪造浏览器进行请求" class="headerlink" title="- -添加headers伪造浏览器进行请求"></a>- -添加headers伪造浏览器进行请求</h3><p> <code>   response = requests.get(host, headers=headers )</code><br>这里的常用的请求头如下所示：<br><code>    HEADER = &#123;&#39;Accept&#39;: &#39;text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&#39;,         &#39;Accept-Language&#39;: &#39;zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2&#39;,         &#39;Cache-Control&#39;: &#39;max-age=0&#39;,         &#39;Connection&#39;: &#39;Keep-alive&#39;,         &#39;Upgrade-Insecure-Requests&#39;: &#39;1&#39;,         &#39;User-Agent&#39;:&#39;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36&#39; &#125;</code><br>之前写代码的时候找了很多的浏览器代理，在日常的代码中可以采用随机请求头来避免被封。<br>    “Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36(KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36”,<br>        “Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 “<br>        “(KHTML, like Gecko) Chrome/22.0.1207.1 Safari/537.1”,<br>        “Mozilla/5.0 (X11; CrOS i686 2268.111.0) AppleWebKit/536.11 “<br>        “(KHTML, like Gecko) Chrome/20.0.1132.57 Safari/536.11”,<br>        “Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.6 “<br>        “(KHTML, like Gecko) Chrome/20.0.1092.0 Safari/536.6”,<br>        “Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.6 “<br>        “(KHTML, like Gecko) Chrome/20.0.1090.0 Safari/536.6”,<br>        “Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.1 “<br>        “(KHTML, like Gecko) Chrome/19.77.34.5 Safari/537.1”,<br>        “Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/536.5 “<br>        “(KHTML, like Gecko) Chrome/19.0.1084.9 Safari/536.5”,<br>        “Mozilla/5.0 (Windows NT 6.0) AppleWebKit/536.5 “<br>        “(KHTML, like Gecko) Chrome/19.0.1084.36 Safari/536.5”,<br>        “Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.3 “<br>        “(KHTML, like Gecko) Chrome/19.0.1063.0 Safari/536.3”,<br>        “Mozilla/5.0 (Windows NT 5.1) AppleWebKit/536.3 “<br>        “(KHTML, like Gecko) Chrome/19.0.1063.0 Safari/536.3”,<br>        “Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_0) AppleWebKit/536.3 “<br>        “(KHTML, like Gecko) Chrome/19.0.1063.0 Safari/536.3”,<br>        “Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.3 “<br>        “(KHTML, like Gecko) Chrome/19.0.1062.0 Safari/536.3”,<br>        “Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.3 “<br>        “(KHTML, like Gecko) Chrome/19.0.1062.0 Safari/536.3”,<br>        “Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.3 “<br>        “(KHTML, like Gecko) Chrome/19.0.1061.1 Safari/536.3”,<br>        “Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.3 “<br>        “(KHTML, like Gecko) Chrome/19.0.1061.1 Safari/536.3”,<br>        “Mozilla/5.0 (Windows NT 6.1) AppleWebKit/536.3 “<br>        “(KHTML, like Gecko) Chrome/19.0.1061.1 Safari/536.3”,<br>        “Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.3 “<br>        “(KHTML, like Gecko) Chrome/19.0.1061.0 Safari/536.3”,<br>        “Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.24 “<br>        “(KHTML, like Gecko) Chrome/19.0.1055.1 Safari/535.24”,<br>        “Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/535.24 “<br>        “(KHTML, like Gecko) Chrome/19.0.1055.1 Safari/535.24”<br>`</p>
-<h3 id="添加timeout来设置请求超时时间"><a href="#添加timeout来设置请求超时时间" class="headerlink" title="- -添加timeout来设置请求超时时间"></a>- -添加timeout来设置请求超时时间</h3><p><code>response = requests.get(host, timeout=1 )</code></p>
-<h3 id="使用params来传递参数"><a href="#使用params来传递参数" class="headerlink" title="- -使用params来传递参数"></a>- -使用params来传递参数</h3><p><code>payload = &#123;&quot;key1&quot;:value1,&quot;key2&quot;:&quot;value2&quot;&#125;</code><br><code>response = requests.get(host,params=payload )</code><br>通过参数设置其实最后实际的URL<br><code>http://www.honywen.com?key1=value1&amp;key2=value2</code><br>初次之外还可以直接传递一个list<br>    payload = {“key1”:value1,”key2”:[value2,value3]}<br>    response = requests.get(host,params=payload )<br>最后实际的URL<br><code>http://www.honywen.com?key1=value1&amp;key2=value2&amp;key2=value3</code></p>
-<h3 id="使用stream-True来获取来自服务器的原始套接字响应"><a href="#使用stream-True来获取来自服务器的原始套接字响应" class="headerlink" title="- -使用stream=True来获取来自服务器的原始套接字响应"></a>- -使用stream=True来获取来自服务器的原始套接字响应</h3><p><code>response = requests.get(host,stream=True )</code><br>然后获取原始套接字响应<br><code>response.raw</code><br>这里要提醒一下，只有设置了stream之后才能获取原始套接字，没有该参数是接收不到的。<br><code>&lt;requests.packages.urllib3.response.HTTPResponse object at 0x101194810&gt;</code><br><code>response.raw.read(10)</code><br>    ‘\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\x03’</p>
-<h3 id="使用proxies-proxies来设置代理"><a href="#使用proxies-proxies来设置代理" class="headerlink" title="- -使用proxies=proxies来设置代理"></a>- -使用proxies=proxies来设置代理</h3><p>这里主要考虑的是访问国外的一些网站的时候，为了顺利的出去都是需要设置代理的<br> <code>  proxies = &#123;           &quot;http&quot;: &quot;http://149.28.21.37:3128&quot;,           &quot;https&quot;: &quot;http://149.28.21.38:1080&quot;,         &#125;         response = requests.get(&quot;http://www.honywen.com&quot;, proxies=proxies)</code></p>
-<h3 id="使用cookies更快的访问网站"><a href="#使用cookies更快的访问网站" class="headerlink" title="- -使用cookies更快的访问网站"></a>- -使用cookies更快的访问网站</h3><p>Cookie 是一个保存在客户机中的简单的文本文件一般为4kb, 这个文件与特定的 Web网站关联在一起, 保存了该客户机访问这个Web网站时的相关信息, 使用cookie可以弥补HTTP无状态连接的缺点，维护web会话的状态</p>
-<pre><code>cookies = &#123;&#39;testCookies_1&#39;: &#39;Hello_Python3&#39;, &#39;testCookies_2&#39;: &#39;Hello_Requests&#39;&#125;
-response = requests.get(&quot;http://example.org&quot;, cookies=cookies)</code></pre>
-<p>常用request方法请求参数基本就是以上几种了<br>接下来接收一下POST请求，大部分的参数是一样的</p>
-<hr>
-<h3 id="POST方法请求页面"><a href="#POST方法请求页面" class="headerlink" title="- -POST方法请求页面"></a>- -POST方法请求页面</h3><p>post方法和get方法最主要的差别在于参数传递的不同。</p>
-<h3 id="使用data传递参数"><a href="#使用data传递参数" class="headerlink" title="- -使用data传递参数"></a>- -使用data传递参数</h3><p>post所传递的参数都是键值对的，所以可以使用字典也可以使用json来传递数据。</p>
-<ol>
-<li>使用字典传递参数<br><code>response = requests.post(&#39;http://www.honywen.com/post&#39;,data=&#123;&quot;kay&quot;:&quot;value&quot;&#125;)</code></li>
-<li>使用json来传递参数<br><code>  payload = &#123;&quot;key&quot;:&quot;value&quot;&#125;</code><br><code>response = requests.get(&#39;http://www.honywen.com/post&#39;,json = payload)</code><br>同时也可以使用json库函数所提供的方法实现字典转化json数据进行传递。<br><code>data=json.dumps(payload)</code><h3 id="使用files来传递文件"><a href="#使用files来传递文件" class="headerlink" title="- -使用files来传递文件"></a>- -使用files来传递文件</h3>上传文件一般情况下用的比较的少，主要的方法代码所示<br> firles = {‘file’:open(‘test.txt’,’rb’)}<br> response = requests.post(url,files=files)</li>
-</ol>
-<p>除了GET，POST方法之外还有其他的方法，这里就不详细说明了，参数同上。<br>    requests.get(url) #GET请求<br>    requests.post(url) #POST请求<br>    requests.put(url) #PUT请求<br>    requests.delete(url) #DELETE请求<br>    requests.head(url) #HEAD请求<br>    requests.options(url) #OPTIONS请求</p>
-<h3 id="Response响应的处理"><a href="#Response响应的处理" class="headerlink" title="- Response响应的处理"></a>- Response响应的处理</h3><p>使用requests方法后，会返回一个response对象，其存储了服务器响应的内容，包括文本响应内容，状态码，cookies，</p>
-<ol>
-<li><p><code>response.status_code</code><br>返回状态码</p>
-</li>
-<li><p><code>response.url</code><br>返回访问的url</p>
-</li>
-<li><p><code>response.raw</code><br>返回原始套接字</p>
-</li>
-<li><p><code> response.content</code><br>返回字节方式的响应体</p>
-<p>  b’<!DOCTYPE html>\n&lt;html xmlns=”<a target="_blank" rel="noopener" href="http://www.w3.org/1999/xhtml&quot;...&#39;">http://www.w3.org/1999/xhtml&quot;...&#39;</a></p>
-</li>
-</ol>
-<p>5.<code> response.text</code><br>返回字符串方式的响应体</p>
-<pre><code>u&#39;&lt;!DOCTYPE html&gt;\n&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;...&#39;</code></pre>
-<p>6.<code>response.headers</code><br>返回字典形式的服务器响应头<br><code>response.headers[&#39;Content-Type&#39;]</code><br><code>text/html; charset=utf-8</code><br><code>response.headers.get(&#39;content-type&#39;)</code><br><code>text/html; charset=utf-8</code></p>
-<ol start="7">
-<li><code>response.json()</code><br>Requests中内置的JSON解码器</li>
-<li><code>response.raise_for_status()</code><br>失败请求抛出异常</li>
-<li><code>response.encoding</code><br>返回编码方式</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
 
@@ -479,7 +362,7 @@ response = requests.get(&quot;http://example.org&quot;, cookies=cookies)</code><
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-count">1</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
