@@ -20,30 +20,40 @@
     var CONFIG = {"hostname":"honywen.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","Pisces | Gemini":240,"width":300,"display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="多多指教">
-<meta property="og:type" content="website">
-<meta property="og:title" content="小咕✨">
-<meta property="og:url" content="http://honywen.com/index.html">
+  <meta name="description" content="一、背景 备份原因mysql是一种关系型数据库，在当前的开发应用中非常广泛。但是在开发的过程中，经常会发生各种各样的意外，导致数据库服务奔溃，数据丢失以及无法启动等事故。本人是由于在python代码在访问数据库的时候，电脑忽然没电，关机导致数据库服务无法重新启动，所以尝试了数据恢复，并成功会付出所有的表。 恢复条件mysql服务奔溃，数据库数据文件保留以macbook为例：&#x2F;usr&#x2F;local&#x2F;m">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MYSQL数据表恢复">
+<meta property="og:url" content="http://honywen.com/2020/09/27/MYSQL%E6%95%B0%E6%8D%AE%E8%A1%A8%E6%81%A2%E5%A4%8D/index.html">
 <meta property="og:site_name" content="小咕✨">
-<meta property="og:description" content="多多指教">
+<meta property="og:description" content="一、背景 备份原因mysql是一种关系型数据库，在当前的开发应用中非常广泛。但是在开发的过程中，经常会发生各种各样的意外，导致数据库服务奔溃，数据丢失以及无法启动等事故。本人是由于在python代码在访问数据库的时候，电脑忽然没电，关机导致数据库服务无法重新启动，所以尝试了数据恢复，并成功会付出所有的表。 恢复条件mysql服务奔溃，数据库数据文件保留以macbook为例：&#x2F;usr&#x2F;local&#x2F;m">
 <meta property="og:locale">
+<meta property="og:image" content="https://i.loli.net/2020/08/08/AqnaxkUC1QdMrv3.png">
+<meta property="og:image" content="https://i.loli.net/2020/08/08/5gZAiI1c2PYw6y3.png">
+<meta property="og:image" content="https://i.loli.net/2020/08/09/mz1prSqW6QFLlKA.png">
+<meta property="og:image" content="https://i.loli.net/2020/08/09/lbJkipHOU1IMLAV.png">
+<meta property="og:image" content="https://i.loli.net/2020/08/09/Kwf6aBpu8jDAEkr.png">
+<meta property="og:image" content="https://i.loli.net/2020/08/09/UTMozGEAcCkRpyZ.png">
+<meta property="article:published_time" content="2020-09-27T09:18:55.000Z">
+<meta property="article:modified_time" content="2020-09-27T09:22:34.510Z">
 <meta property="article:author" content="honywen">
+<meta property="article:tag" content="MYSQL，数据恢复">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/08/08/AqnaxkUC1QdMrv3.png">
 
-<link rel="canonical" href="http://honywen.com/">
+<link rel="canonical" href="http://honywen.com/2020/09/27/MYSQL%E6%95%B0%E6%8D%AE%E8%A1%A8%E6%81%A2%E5%A4%8D/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'zh-Hans'
   };
 </script>
 
-  <title>小咕✨</title>
+  <title>MYSQL数据表恢复 | 小咕✨</title>
   
 
 
@@ -167,9 +177,10 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content post posts-expand">
             
-      
+
+    
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
@@ -185,10 +196,9 @@
       <meta itemprop="name" content="小咕✨">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/09/27/MYSQL%E6%95%B0%E6%8D%AE%E8%A1%A8%E6%81%A2%E5%A4%8D/" class="post-title-link" itemprop="url">MYSQL数据表恢复</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          MYSQL数据表恢复
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
@@ -221,7 +231,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h1><ol>
+        <h1 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h1><ol>
 <li>备份原因<br>mysql是一种关系型数据库，在当前的开发应用中非常广泛。但是在开发的过程中，经常会发生各种各样的意外，导致数据库服务奔溃，数据丢失以及无法启动等事故。本人是由于在python代码在访问数据库的时候，电脑忽然没电，关机导致数据库服务无法重新启动，所以尝试了数据恢复，并成功会付出所有的表。</li>
 <li>恢复条件<br>mysql服务奔溃，数据库数据文件保留<br>以macbook为例：<code>/usr/local/mysql</code>路径下的<code>data</code>文件夹存在<br><code>.frm</code>和<code>.ibd</code>文件存在</li>
 <li>环境要求<br>数据库版本：MySQL-5.7.23(没试过其他版本的，应该5.7都是可以的)<br>数据库要求：innodb_file_per_table=1</li>
@@ -278,146 +288,33 @@
 <h1 id="三、总结"><a href="#三、总结" class="headerlink" title="三、总结"></a>三、总结</h1><p>在本次的数据恢复中，最主要的是表相关的.frm和.ibd文件完整。这样才能恢复出数据。如果忘记了表结构的话，首先就是要通过error_log找到原表结构信息。然后进一步恢复。同时在整个过程中创建的辅助表表名必须和要恢复的表的表名保持一致。</p>
 <h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p>[1] 数据恢复新姿势——通过ibd和frm文件恢复数据:<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/52185155">https://zhuanlan.zhihu.com/p/52185155</a><br>[2] 通过.ibd和.frm恢复mysql数据:<a target="_blank" rel="noopener" href="https://www.cnblogs.com/meitian/p/9886654.html">https://www.cnblogs.com/meitian/p/9886654.html</a><br>[3] mysql通过ibd恢复数据:<a target="_blank" rel="noopener" href="https://www.cnblogs.com/jkklearn/p/6654199.html">https://www.cnblogs.com/jkklearn/p/6654199.html</a><br>[4] mysql通过.ibd和.frm文件恢复数据:<a target="_blank" rel="noopener" href="https://baishunhua.com/2019/12/17/mysql%E9%80%9A%E8%BF%87-ibd%E5%92%8C-frm%E6%96%87%E4%BB%B6%E6%81%A2%E5%A4%8D%E6%95%B0%E6%8D%AE/">https://baishunhua.com/2019/12/17/mysql%E9%80%9A%E8%BF%87-ibd%E5%92%8C-frm%E6%96%87%E4%BB%B6%E6%81%A2%E5%A4%8D%E6%95%B0%E6%8D%AE/</a></p>
 
-      
     </div>
 
     
     
     
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
+          <div class="post-tags">
+              <a href="/tags/MYSQL%EF%BC%8C%E6%95%B0%E6%8D%AE%E6%81%A2%E5%A4%8D/" rel="tag"># MYSQL，数据恢复</a>
+          </div>
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://honywen.com/2020/08/31/Python-Request%E5%BA%93%E4%BB%8B%E7%BB%8D/">
+        
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="honywen">
-      <meta itemprop="description" content="多多指教">
-    </span>
 
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小咕✨">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/08/31/Python-Request%E5%BA%93%E4%BB%8B%E7%BB%8D/" class="post-title-link" itemprop="url">Python Request库介绍</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2020-08-31 20:34:04 / Modified: 20:36:31" itemprop="dateCreated datePublished" datetime="2020-08-31T20:34:04+08:00">2020-08-31</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Python-requests库介绍"><a href="#Python-requests库介绍" class="headerlink" title="Python requests库介绍"></a>Python requests库介绍</h1><p>Python的库函数有很多可以用来实现爬虫，这里介绍一下我经常使用的requests库。</p>
-<p><strong>官方中文文档：</strong><a target="_blank" rel="noopener" href="https://cn.python-requests.org/zh_CN/latest/" title="快速上手 - Requests 2.18.1 文档">快速上手 - Requests 2.18.1 文档</a></p>
-<h2 id="1-库函数的安装"><a href="#1-库函数的安装" class="headerlink" title="1- 库函数的安装"></a>1- 库函数的安装</h2><p>使用pip安装<br><code>$ pip install requests</code><br>或者使用easy_install安装<br><code>$ easy_install requests</code><br>还可以使用IDE自带的一些功能实现安装的</p>
-<h2 id="2-requests用法"><a href="#2-requests用法" class="headerlink" title="2- requests用法"></a>2- requests用法</h2><p>这里我们就不一一的介绍requests的各种方法了，我们这里举两个例子分别介绍如何使用requests实现POST和GET两种常用的方法。</p>
-<hr>
-<h3 id="GET方法请求页面"><a href="#GET方法请求页面" class="headerlink" title="- GET方法请求页面"></a>- GET方法请求页面</h3><p><code>    import requests     host = &quot;www.honywen.com&quot;     response = requests.get(host, headers=headers,timeout=1,params=payload,stream=True,proxies=proxies )     print(response.text)</code><br>这样就获得到了页面的源代码。  </p>
-<pre><code>&lt;!DOCTYPE html&gt;    
-&lt;html&gt;  
-    &lt;head&gt;
-        &lt;meta charset=&quot;utf-8&quot; /&gt;
-        &lt;title&gt;hi&lt;/title&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-        ···
-        ···
-        ···
-    &lt;/body&gt;
-&lt;/html&gt;</code></pre>
-<p>这里我们解释一下上面的相关的代码</p>
-<p>首先就是requests中除了<code>host</code>即网页的URL是必须的之外其他的参数都是可选的<br><code>headers=headers,timeout=1,params=payload,stream=True,proxies=proxies</code><br>这些都是可有可无的</p>
-<h3 id="发送参数的get请求"><a href="#发送参数的get请求" class="headerlink" title="- -发送参数的get请求"></a>- -发送参数的get请求</h3><p><code>    response = requests.get(host)</code><br>这样的请求一般是不可取的，因为大部分的网站都是有一定的反爬机制的，最简单的就是最容易被封的。</p>
-<h3 id="添加headers伪造浏览器进行请求"><a href="#添加headers伪造浏览器进行请求" class="headerlink" title="- -添加headers伪造浏览器进行请求"></a>- -添加headers伪造浏览器进行请求</h3><p> <code>   response = requests.get(host, headers=headers )</code><br>这里的常用的请求头如下所示：<br><code>    HEADER = &#123;&#39;Accept&#39;: &#39;text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&#39;,         &#39;Accept-Language&#39;: &#39;zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2&#39;,         &#39;Cache-Control&#39;: &#39;max-age=0&#39;,         &#39;Connection&#39;: &#39;Keep-alive&#39;,         &#39;Upgrade-Insecure-Requests&#39;: &#39;1&#39;,         &#39;User-Agent&#39;:&#39;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36&#39; &#125;</code><br>之前写代码的时候找了很多的浏览器代理，在日常的代码中可以采用随机请求头来避免被封。<br>    “Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36(KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36”,<br>        “Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 “<br>        “(KHTML, like Gecko) Chrome/22.0.1207.1 Safari/537.1”,<br>        “Mozilla/5.0 (X11; CrOS i686 2268.111.0) AppleWebKit/536.11 “<br>        “(KHTML, like Gecko) Chrome/20.0.1132.57 Safari/536.11”,<br>        “Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.6 “<br>        “(KHTML, like Gecko) Chrome/20.0.1092.0 Safari/536.6”,<br>        “Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.6 “<br>        “(KHTML, like Gecko) Chrome/20.0.1090.0 Safari/536.6”,<br>        “Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.1 “<br>        “(KHTML, like Gecko) Chrome/19.77.34.5 Safari/537.1”,<br>        “Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/536.5 “<br>        “(KHTML, like Gecko) Chrome/19.0.1084.9 Safari/536.5”,<br>        “Mozilla/5.0 (Windows NT 6.0) AppleWebKit/536.5 “<br>        “(KHTML, like Gecko) Chrome/19.0.1084.36 Safari/536.5”,<br>        “Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.3 “<br>        “(KHTML, like Gecko) Chrome/19.0.1063.0 Safari/536.3”,<br>        “Mozilla/5.0 (Windows NT 5.1) AppleWebKit/536.3 “<br>        “(KHTML, like Gecko) Chrome/19.0.1063.0 Safari/536.3”,<br>        “Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_0) AppleWebKit/536.3 “<br>        “(KHTML, like Gecko) Chrome/19.0.1063.0 Safari/536.3”,<br>        “Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.3 “<br>        “(KHTML, like Gecko) Chrome/19.0.1062.0 Safari/536.3”,<br>        “Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.3 “<br>        “(KHTML, like Gecko) Chrome/19.0.1062.0 Safari/536.3”,<br>        “Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.3 “<br>        “(KHTML, like Gecko) Chrome/19.0.1061.1 Safari/536.3”,<br>        “Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.3 “<br>        “(KHTML, like Gecko) Chrome/19.0.1061.1 Safari/536.3”,<br>        “Mozilla/5.0 (Windows NT 6.1) AppleWebKit/536.3 “<br>        “(KHTML, like Gecko) Chrome/19.0.1061.1 Safari/536.3”,<br>        “Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.3 “<br>        “(KHTML, like Gecko) Chrome/19.0.1061.0 Safari/536.3”,<br>        “Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.24 “<br>        “(KHTML, like Gecko) Chrome/19.0.1055.1 Safari/535.24”,<br>        “Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/535.24 “<br>        “(KHTML, like Gecko) Chrome/19.0.1055.1 Safari/535.24”<br>`</p>
-<h3 id="添加timeout来设置请求超时时间"><a href="#添加timeout来设置请求超时时间" class="headerlink" title="- -添加timeout来设置请求超时时间"></a>- -添加timeout来设置请求超时时间</h3><p><code>response = requests.get(host, timeout=1 )</code></p>
-<h3 id="使用params来传递参数"><a href="#使用params来传递参数" class="headerlink" title="- -使用params来传递参数"></a>- -使用params来传递参数</h3><p><code>payload = &#123;&quot;key1&quot;:value1,&quot;key2&quot;:&quot;value2&quot;&#125;</code><br><code>response = requests.get(host,params=payload )</code><br>通过参数设置其实最后实际的URL<br><code>http://www.honywen.com?key1=value1&amp;key2=value2</code><br>初次之外还可以直接传递一个list<br>    payload = {“key1”:value1,”key2”:[value2,value3]}<br>    response = requests.get(host,params=payload )<br>最后实际的URL<br><code>http://www.honywen.com?key1=value1&amp;key2=value2&amp;key2=value3</code></p>
-<h3 id="使用stream-True来获取来自服务器的原始套接字响应"><a href="#使用stream-True来获取来自服务器的原始套接字响应" class="headerlink" title="- -使用stream=True来获取来自服务器的原始套接字响应"></a>- -使用stream=True来获取来自服务器的原始套接字响应</h3><p><code>response = requests.get(host,stream=True )</code><br>然后获取原始套接字响应<br><code>response.raw</code><br>这里要提醒一下，只有设置了stream之后才能获取原始套接字，没有该参数是接收不到的。<br><code>&lt;requests.packages.urllib3.response.HTTPResponse object at 0x101194810&gt;</code><br><code>response.raw.read(10)</code><br>    ‘\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\x03’</p>
-<h3 id="使用proxies-proxies来设置代理"><a href="#使用proxies-proxies来设置代理" class="headerlink" title="- -使用proxies=proxies来设置代理"></a>- -使用proxies=proxies来设置代理</h3><p>这里主要考虑的是访问国外的一些网站的时候，为了顺利的出去都是需要设置代理的<br> <code>  proxies = &#123;           &quot;http&quot;: &quot;http://149.28.21.37:3128&quot;,           &quot;https&quot;: &quot;http://149.28.21.38:1080&quot;,         &#125;         response = requests.get(&quot;http://www.honywen.com&quot;, proxies=proxies)</code></p>
-<h3 id="使用cookies更快的访问网站"><a href="#使用cookies更快的访问网站" class="headerlink" title="- -使用cookies更快的访问网站"></a>- -使用cookies更快的访问网站</h3><p>Cookie 是一个保存在客户机中的简单的文本文件一般为4kb, 这个文件与特定的 Web网站关联在一起, 保存了该客户机访问这个Web网站时的相关信息, 使用cookie可以弥补HTTP无状态连接的缺点，维护web会话的状态</p>
-<pre><code>cookies = &#123;&#39;testCookies_1&#39;: &#39;Hello_Python3&#39;, &#39;testCookies_2&#39;: &#39;Hello_Requests&#39;&#125;
-response = requests.get(&quot;http://example.org&quot;, cookies=cookies)</code></pre>
-<p>常用request方法请求参数基本就是以上几种了<br>接下来接收一下POST请求，大部分的参数是一样的</p>
-<hr>
-<h3 id="POST方法请求页面"><a href="#POST方法请求页面" class="headerlink" title="- -POST方法请求页面"></a>- -POST方法请求页面</h3><p>post方法和get方法最主要的差别在于参数传递的不同。</p>
-<h3 id="使用data传递参数"><a href="#使用data传递参数" class="headerlink" title="- -使用data传递参数"></a>- -使用data传递参数</h3><p>post所传递的参数都是键值对的，所以可以使用字典也可以使用json来传递数据。</p>
-<ol>
-<li>使用字典传递参数<br><code>response = requests.post(&#39;http://www.honywen.com/post&#39;,data=&#123;&quot;kay&quot;:&quot;value&quot;&#125;)</code></li>
-<li>使用json来传递参数<br><code>  payload = &#123;&quot;key&quot;:&quot;value&quot;&#125;</code><br><code>response = requests.get(&#39;http://www.honywen.com/post&#39;,json = payload)</code><br>同时也可以使用json库函数所提供的方法实现字典转化json数据进行传递。<br><code>data=json.dumps(payload)</code><h3 id="使用files来传递文件"><a href="#使用files来传递文件" class="headerlink" title="- -使用files来传递文件"></a>- -使用files来传递文件</h3>上传文件一般情况下用的比较的少，主要的方法代码所示<br> firles = {‘file’:open(‘test.txt’,’rb’)}<br> response = requests.post(url,files=files)</li>
-</ol>
-<p>除了GET，POST方法之外还有其他的方法，这里就不详细说明了，参数同上。<br>    requests.get(url) #GET请求<br>    requests.post(url) #POST请求<br>    requests.put(url) #PUT请求<br>    requests.delete(url) #DELETE请求<br>    requests.head(url) #HEAD请求<br>    requests.options(url) #OPTIONS请求</p>
-<h3 id="Response响应的处理"><a href="#Response响应的处理" class="headerlink" title="- Response响应的处理"></a>- Response响应的处理</h3><p>使用requests方法后，会返回一个response对象，其存储了服务器响应的内容，包括文本响应内容，状态码，cookies，</p>
-<ol>
-<li><p><code>response.status_code</code><br>返回状态码</p>
-</li>
-<li><p><code>response.url</code><br>返回访问的url</p>
-</li>
-<li><p><code>response.raw</code><br>返回原始套接字</p>
-</li>
-<li><p><code> response.content</code><br>返回字节方式的响应体</p>
-<p>  b’<!DOCTYPE html>\n&lt;html xmlns=”<a target="_blank" rel="noopener" href="http://www.w3.org/1999/xhtml&quot;...&#39;">http://www.w3.org/1999/xhtml&quot;...&#39;</a></p>
-</li>
-</ol>
-<p>5.<code> response.text</code><br>返回字符串方式的响应体</p>
-<pre><code>u&#39;&lt;!DOCTYPE html&gt;\n&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;...&#39;</code></pre>
-<p>6.<code>response.headers</code><br>返回字典形式的服务器响应头<br><code>response.headers[&#39;Content-Type&#39;]</code><br><code>text/html; charset=utf-8</code><br><code>response.headers.get(&#39;content-type&#39;)</code><br><code>text/html; charset=utf-8</code></p>
-<ol start="7">
-<li><code>response.json()</code><br>Requests中内置的JSON解码器</li>
-<li><code>response.raise_for_status()</code><br>失败请求抛出异常</li>
-<li><code>response.encoding</code><br>返回编码方式</li>
-</ol>
-
-      
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/08/31/Python-Request%E5%BA%93%E4%BB%8B%E7%BB%8D/" rel="prev" title="Python Request库介绍">
+      <i class="fa fa-chevron-left"></i> Python Request库介绍
+    </a></div>
+      <div class="post-nav-item"></div>
     </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
       </footer>
+    
   </article>
   
   
-  
-
-
   
 
 
@@ -470,6 +367,7 @@ response = requests.get(&quot;http://example.org&quot;, cookies=cookies)</code><
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E8%83%8C%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">一、背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E6%95%B0%E6%8D%AE%E6%81%A2%E5%A4%8D%E6%AD%A5%E9%AA%A4"><span class="nav-number">2.</span> <span class="nav-text">二、数据恢复步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A6%82%E6%9E%9C%E5%BF%98%E8%AE%B0%E4%BA%86%E8%A1%A8%E7%9A%84%E7%BB%93%E6%9E%84%EF%BC%8C%E9%A6%96%E5%85%88%E5%B0%B1%E9%9C%80%E8%A6%81%E6%89%BE%E5%88%B0%E8%A1%A8%E7%BB%93%E6%9E%84"><span class="nav-number">2.0.0.1.</span> <span class="nav-text">如果忘记了表的结构，首先就需要找到表结构</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E6%80%BB%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text">三、总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="nav-number">4.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
