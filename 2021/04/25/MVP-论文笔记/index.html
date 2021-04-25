@@ -20,27 +20,21 @@
     var CONFIG = {"hostname":"honywen.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","Pisces | Gemini":240,"width":300,"display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="一、背景 备份原因mysql是一种关系型数据库，在当前的开发应用中非常广泛。但是在开发的过程中，经常会发生各种各样的意外，导致数据库服务奔溃，数据丢失以及无法启动等事故。本人是由于在python代码在访问数据库的时候，电脑忽然没电，关机导致数据库服务无法重新启动，所以尝试了数据恢复，并成功会付出所有的表。">
+  <meta name="description" content="MVP: Detecting Vulnerabilities using Patch-Enhanced Vulnerability Signatures来源信息 USENIX Security Symposium(CCF A) 机构：中国科学院信息工程研究所 作者：Yang Xiao;  Bihuan Chen; Chendong Yu;  Zhengzi Xu et al.  摘要反复出现的漏洞">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MYSQL数据表恢复">
-<meta property="og:url" content="http://honywen.com/2020/09/27/MYSQL%E6%95%B0%E6%8D%AE%E8%A1%A8%E6%81%A2%E5%A4%8D/index.html">
+<meta property="og:title" content="MVP-论文笔记">
+<meta property="og:url" content="http://honywen.com/2021/04/25/MVP-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/index.html">
 <meta property="og:site_name" content="小咕✨">
-<meta property="og:description" content="一、背景 备份原因mysql是一种关系型数据库，在当前的开发应用中非常广泛。但是在开发的过程中，经常会发生各种各样的意外，导致数据库服务奔溃，数据丢失以及无法启动等事故。本人是由于在python代码在访问数据库的时候，电脑忽然没电，关机导致数据库服务无法重新启动，所以尝试了数据恢复，并成功会付出所有的表。">
+<meta property="og:description" content="MVP: Detecting Vulnerabilities using Patch-Enhanced Vulnerability Signatures来源信息 USENIX Security Symposium(CCF A) 机构：中国科学院信息工程研究所 作者：Yang Xiao;  Bihuan Chen; Chendong Yu;  Zhengzi Xu et al.  摘要反复出现的漏洞">
 <meta property="og:locale">
-<meta property="og:image" content="https://i.loli.net/2020/08/08/AqnaxkUC1QdMrv3.png">
-<meta property="og:image" content="https://i.loli.net/2020/08/08/5gZAiI1c2PYw6y3.png">
-<meta property="og:image" content="https://i.loli.net/2020/08/09/mz1prSqW6QFLlKA.png">
-<meta property="og:image" content="https://i.loli.net/2020/08/09/lbJkipHOU1IMLAV.png">
-<meta property="og:image" content="https://i.loli.net/2020/08/09/Kwf6aBpu8jDAEkr.png">
-<meta property="og:image" content="https://i.loli.net/2020/08/09/UTMozGEAcCkRpyZ.png">
-<meta property="article:published_time" content="2020-09-27T09:18:55.000Z">
-<meta property="article:modified_time" content="2020-09-27T12:29:52.727Z">
+<meta property="article:published_time" content="2021-04-25T12:01:07.000Z">
+<meta property="article:modified_time" content="2021-04-25T14:55:06.422Z">
 <meta property="article:author" content="honywen">
-<meta property="article:tag" content="MYSQL，数据恢复">
+<meta property="article:tag" content="漏洞检测">
+<meta property="article:tag" content="程序切片">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2020/08/08/AqnaxkUC1QdMrv3.png">
 
-<link rel="canonical" href="http://honywen.com/2020/09/27/MYSQL%E6%95%B0%E6%8D%AE%E8%A1%A8%E6%81%A2%E5%A4%8D/">
+<link rel="canonical" href="http://honywen.com/2021/04/25/MVP-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
 
 
 <script id="page-configurations">
@@ -53,7 +47,7 @@
   };
 </script>
 
-  <title>MYSQL数据表恢复 | 小咕✨</title>
+  <title>MVP-论文笔记 | 小咕✨</title>
   
 
 
@@ -184,7 +178,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://honywen.com/2020/09/27/MYSQL%E6%95%B0%E6%8D%AE%E8%A1%A8%E6%81%A2%E5%A4%8D/">
+    <link itemprop="mainEntityOfPage" href="http://honywen.com/2021/04/25/MVP-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -197,7 +191,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          MYSQL数据表恢复
+          MVP-论文笔记
         </h1>
 
         <div class="post-meta">
@@ -208,7 +202,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2020-09-27 17:18:55 / Modified: 20:29:52" itemprop="dateCreated datePublished" datetime="2020-09-27T17:18:55+08:00">2020-09-27</time>
+              <time title="Created: 2021-04-25 20:01:07 / Modified: 22:55:06" itemprop="dateCreated datePublished" datetime="2021-04-25T20:01:07+08:00">2021-04-25</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -216,7 +210,7 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MYSQL/" itemprop="url" rel="index"><span itemprop="name">MYSQL</span></a>
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">论文笔记</span></a>
                 </span>
             </span>
 
@@ -231,68 +225,35 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h1><ol>
-<li>备份原因<br>mysql是一种关系型数据库，在当前的开发应用中非常广泛。但是在开发的过程中，经常会发生各种各样的意外，导致数据库服务奔溃，数据丢失以及无法启动等事故。本人是由于在python代码在访问数据库的时候，电脑忽然没电，关机导致数据库服务无法重新启动，所以尝试了数据恢复，并成功会付出所有的表。</li>
-</ol>
-<a id="more"></a>
-
-
-<ol start="2">
-<li>恢复条件<br>mysql服务奔溃，数据库数据文件保留<br>以macbook为例：<code>/usr/local/mysql</code>路径下的<code>data</code>文件夹存在<br><code>.frm</code>和<code>.ibd</code>文件存在</li>
-<li>环境要求<br>数据库版本：MySQL-5.7.23(没试过其他版本的，应该5.7都是可以的)<br>数据库要求：innodb_file_per_table=1</li>
-<li>文件说明  </li>
-</ol>
-<ul>
-<li>Innodb 引擎:  <blockquote>
-<p>xxx.ibd 数据和索引文件<br>xxx.frm 表结构文件  </p>
-</blockquote>
-</li>
-<li>Myisam 引擎: <blockquote>
-<p>xxx.frm 表结构文件<br>xxx.MYD 数据文件<br>xxx.MYI 索引文件  </p>
-</blockquote>
-</li>
+        <h1 id="MVP-Detecting-Vulnerabilities-using-Patch-Enhanced-Vulnerability-Signatures"><a href="#MVP-Detecting-Vulnerabilities-using-Patch-Enhanced-Vulnerability-Signatures" class="headerlink" title="MVP: Detecting Vulnerabilities using Patch-Enhanced Vulnerability Signatures"></a>MVP: Detecting Vulnerabilities using Patch-Enhanced Vulnerability Signatures</h1><h2 id="来源信息"><a href="#来源信息" class="headerlink" title="来源信息"></a>来源信息</h2><ul>
+<li>USENIX Security Symposium(<strong>CCF A</strong>)</li>
+<li>机构：中国科学院信息工程研究所</li>
+<li>作者：Yang Xiao;  Bihuan Chen; Chendong Yu;  Zhengzi Xu et al.</li>
 </ul>
-<h1 id="二、数据恢复步骤"><a href="#二、数据恢复步骤" class="headerlink" title="二、数据恢复步骤"></a>二、数据恢复步骤</h1><ol>
-<li>重装数据库<br>需要注意的在重装数据库之前先对<code>/usr/local/mysql/data</code>文件夹进行备份，可以拷贝出来<br><img src="https://i.loli.net/2020/08/08/AqnaxkUC1QdMrv3.png" alt="截屏2020-08-08 上午12.13.01.png"><br>重新安装mysql数据库（步骤省略）</li>
-<li>新建一个数据库<br>新建一个数据库，这里和以前的数据库同不同名都是可以的<br><code>create database db</code></li>
-<li>新建表   </li>
-</ol>
-<p><strong>假设要恢复的表名为：<code>ability</code></strong></p>
+<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>反复出现的漏洞在现实世界的系统中广泛存在，而且仍然没有被检测到，而这些漏洞通常是由可重用的代码库或共享的代码逻辑造成的。然而，脆弱功能及其修补功能之间潜在的小差异，以及脆弱功能和目标功能之间可能存在的大差异，检测到的基于克隆和基于功能匹配的方法为识别这些反复出现的漏洞带来了挑战，即导致较高的假阳性和假阴性。  <a id="more"></a></p>
+<p>在论文中，作者提出了一种新方法以低假阳率和假阴率去检测重复发生的漏洞，首先使用程序切片来从语法和语义级别上的脆弱函数及其修补函数中提取漏洞和补丁签名。然后，如果目标函数与漏洞签名相匹配，但与补丁程序签名不匹配，则它将被识别为可能易受攻击。作者在MVP工具中测试该方法，对10个开源系统的评估表明，i)MVP显著优于最先进的基于克隆和基于函数匹配的漏洞检测方法；ii)MVP检测到了通用的漏洞检测方法无法检测到的反复漏洞； iii)MVP检测到了97个新漏洞，申请了23个CVE。</p>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><h3 id="现有的方法"><a href="#现有的方法" class="headerlink" title="现有的方法"></a>现有的方法</h3><p>匹配反复出现漏洞的方法大致的思想是在目标的程序代码中匹配已知的漏洞代码，现有的方法主要分为两种：基于克隆方法，基于函数匹配方法。</p>
 <ul>
-<li><p>新建表的结构必须和要恢复的表的结构是<strong>一样</strong></p>
-</li>
-<li><h4 id="如果忘记了表的结构，首先就需要找到表结构"><a href="#如果忘记了表的结构，首先就需要找到表结构" class="headerlink" title="如果忘记了表的结构，首先就需要找到表结构"></a>如果忘记了表的结构，首先就需要找到表结构</h4><p>在数据库中创建一张表名与被恢复表表名一致的表，表结构不限制<br>这里以<code>ability</code>表为例：<br><code>create table ability(id int);</code><br>使用被恢复的<code>ability.frm</code>文件替换新创建的同名表的<code>ability.frm</code>文件<br>注意<code>ability.frm</code>文件在<code>/usr/local/mysql/data/db</code>路径下<br>这里需要注意的是，由于权限的限制无法进行拷贝，所以这里首先设置dat文件夹的权限<br><code>sudo chmod -R 777 db</code><br>下图为已替换<br><img src="https://i.loli.net/2020/08/08/5gZAiI1c2PYw6y3.png" alt="截屏2020-08-08 上午12.43.47.png"><br>在数据库中执行<code> show create table</code> 语句<br>注意需要在show create table查看表结构之前执行<code> flush tables</code> 语句，因为如果<code>ability</code>表之前被打开过，那么表结构会被缓存在内存中，<code>show create table</code>不会报错，也就无法从错误日志中拿到我们需要的信息。<br>具体命令如下：<br><code> flush tables;</code><br><code> show create table ability;</code><br><img src="https://i.loli.net/2020/08/09/mz1prSqW6QFLlKA.png" alt="截屏2020-08-09 上午10.35.55.png"><br>可以发现这里出现了报错，接下来我们就去查看<code>log_error</code>,找到表的字段数。<br>mac 查看日志路径的sql命令：<br><code> show variables like &#39;log_%&#39;;</code><br><img src="https://i.loli.net/2020/08/09/lbJkipHOU1IMLAV.png" alt="截屏2020-08-09 上午10.36.02.png"><br>找到日志文件，然后搜索表名就可以找到报错信息：<br><img src="https://i.loli.net/2020/08/09/Kwf6aBpu8jDAEkr.png" alt="截屏2020-08-09 上午10.36.21.png"><br>可以看到报错提示该表有<code>4 columns</code><br>接下来我们删除ability表，重新新建一个4字段的ability表,字段名以及字段类型不限制。<br><code>  create table ability(id int,id1 int,id2 int,id3 int);</code><br>再次使用被恢复的<code> .frm</code> 文件替换新创建的同名表的<code> .frm</code> 文件:<br>在MySQL配置文件中添加<code>innodb_force_recovery=4</code>，并重启数据库.<br>然后执行：<code> show create table ability;</code> 得到<code> ability</code> 表结构信息。<br><img src="https://i.loli.net/2020/08/09/UTMozGEAcCkRpyZ.png" alt="截屏2020-08-09 上午11.37.28.png"><br>这样我们就找到表的结构了。</p>
-</li>
+<li>基于克隆的方法<br>该方法将重复出现的漏洞检测问题视为代码克隆的检测问题，它们从已知漏洞中提取令牌或语法级签名，并识别签名的代码克隆可能容易受到攻击。</li>
+<li>基于函数匹配的方法<br>直接将已知漏洞的中漏洞函数作为签名，并检测这些漏洞函数的克隆。</li>
 </ul>
-<ol start="4">
-<li>表恢复<br>这里已经知道了表的结构了，就按照原表的结构新建一张表。  <pre><code> ```
- create table ability
-     (id int not null auto_increment,  
-     username varchar(255),  
-     forum varchar(255),
-     content_value varchar(100),
-     primary key(id)) 
- ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
- ```  </code></pre>
-</li>
-</ol>
+<h3 id="现有的挑战"><a href="#现有的挑战" class="headerlink" title="现有的挑战"></a>现有的挑战</h3><ul>
+<li>第一个挑战是如何区分已经修补的漏洞，以减少误阳性。</li>
+<li>第二个挑战是如何精确地生成一个已知漏洞的签名，以减少假阳性和假阴性。</li>
+</ul>
+<h3 id="论文方法"><a href="#论文方法" class="headerlink" title="论文方法"></a>论文方法</h3><p>文章提出了针对反复出现的漏洞检测方法MVP（Matching Vulnerabilities with Patches）匹配漏洞以及补丁。具体来说：</p>
 <ul>
-<li><p>将原先的.ibd文件与原先的.frm文件解除绑定</p>
-<p><code>alter table ability discard tablespace;</code></p>
-</li>
-<li><p>停掉服务，新的<code>.ibd</code>文件覆盖旧的<code>.ibd</code>文件，再开启服务</p>
-</li>
-<li><p>将新的<code>.ibd</code>文件与<code>.frm</code>文件进行关联</p>
-<p><code>alter table ability import tablespace;</code><br>  正常情况下不会报错，但是如果报这个</p>
-<blockquote>
-<p>Schema mismatch (Table has ROW_TYPE_COMPACT row format, .ibd file has ROW_TYPE_DYNAMIC row format</p>
-</blockquote>
-<p>  表类型错误，在创建时候 加上这个  <code>ROW_FORMAT=DYNAMIC</code>;<br>  或者 <code>alter table tb_name row_format=DYNAMIC;</code><br>  然后再执行  <code>ALTER TABLE tbname IMPORT TABLESPACE; </code>  </p>
-</li>
+<li>为了解决第一个挑战，我们不仅生成一个漏洞签名，而且还生成一个补丁签名来捕获漏洞是如何导致和修复的。我们利用漏洞签名来搜索潜在的脆弱功能，并使用补丁签名来区分它们是否已经打过补丁。</li>
+<li>为了解决第二个挑战，我们提出了一种新的切片方法，只提取与漏洞相关和补丁相关的语句，以在语法和语义级别上生成漏洞和补丁签名。</li>
+<li>此外，我们还应用语句抽象和基于熵的语句选择来进一步提高MVP的准确性。</li>
 </ul>
-<h1 id="三、总结"><a href="#三、总结" class="headerlink" title="三、总结"></a>三、总结</h1><p>在本次的数据恢复中，最主要的是表相关的.frm和.ibd文件完整。这样才能恢复出数据。如果忘记了表结构的话，首先就是要通过error_log找到原表结构信息。然后进一步恢复。同时在整个过程中创建的辅助表表名必须和要恢复的表的表名保持一致。</p>
-<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p>[1] 数据恢复新姿势——通过ibd和frm文件恢复数据:<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/52185155">https://zhuanlan.zhihu.com/p/52185155</a><br>[2] 通过.ibd和.frm恢复mysql数据:<a target="_blank" rel="noopener" href="https://www.cnblogs.com/meitian/p/9886654.html">https://www.cnblogs.com/meitian/p/9886654.html</a><br>[3] mysql通过ibd恢复数据:<a target="_blank" rel="noopener" href="https://www.cnblogs.com/jkklearn/p/6654199.html">https://www.cnblogs.com/jkklearn/p/6654199.html</a><br>[4] mysql通过.ibd和.frm文件恢复数据:<a target="_blank" rel="noopener" href="https://baishunhua.com/2019/12/17/mysql%E9%80%9A%E8%BF%87-ibd%E5%92%8C-frm%E6%96%87%E4%BB%B6%E6%81%A2%E5%A4%8D%E6%95%B0%E6%8D%AE/">https://baishunhua.com/2019/12/17/mysql%E9%80%9A%E8%BF%87-ibd%E5%92%8C-frm%E6%96%87%E4%BB%B6%E6%81%A2%E5%A4%8D%E6%95%B0%E6%8D%AE/</a></p>
-
+<h3 id="方法评价"><a href="#方法评价" class="headerlink" title="方法评价"></a>方法评价</h3><p>MVP在10个具有25,377个安全补丁的开源系统上进行了评估。比较两种最先进的、最密切相关的基于克隆的方法(ReDeBug和VUUDY)。结果表明，MVP优于ReDeBug和VUUDY，其精度提高了74.5%和75.6%，召回率提高了42.4%和65.8%。MVP发现了97个新的漏洞，并成功提交了23个CVE。我们还将MVP与基于函数匹配的方法（SourcererCC and CCAligner)进行了比较。结果表明，MVP性能优于SourcererCC和CCCligner提高了83.1%和83.3%，召回率提高了22.5%和30.6%。</p>
+<h3 id="论文贡献"><a href="#论文贡献" class="headerlink" title="论文贡献"></a>论文贡献</h3><ul>
+<li>文章提出并实现了一种新的通过利用程序切片利用漏洞和补丁签名来实现重复漏洞检测的方法。</li>
+<li>作者进行了密集的评估，以将MVP与四种最先进的方法进行了比较。MVP在准确性上明显优于他们。</li>
+<li>在10个开源系统种进行测试，发现了97个新漏洞，提交了23个CVE。</li>
+</ul>
+<h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2>
     </div>
 
     
@@ -301,7 +262,8 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/MYSQL%EF%BC%8C%E6%95%B0%E6%8D%AE%E6%81%A2%E5%A4%8D/" rel="tag"># MYSQL，数据恢复</a>
+              <a href="/tags/%E6%BC%8F%E6%B4%9E%E6%A3%80%E6%B5%8B/" rel="tag"># 漏洞检测</a>
+              <a href="/tags/%E7%A8%8B%E5%BA%8F%E5%88%87%E7%89%87/" rel="tag"># 程序切片</a>
           </div>
 
         
@@ -310,12 +272,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/08/31/Python-Request%E5%BA%93%E4%BB%8B%E7%BB%8D/" rel="prev" title="Python Request库介绍">
-      <i class="fa fa-chevron-left"></i> Python Request库介绍
+    <a href="/2021/04/24/HinCTI-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" rel="prev" title="HinCTI-论文笔记">
+      <i class="fa fa-chevron-left"></i> HinCTI-论文笔记
     </a></div>
       <div class="post-nav-item">
-    <a href="/2021/04/24/HinCTI-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" rel="next" title="HinCTI-论文笔记">
-      HinCTI-论文笔记 <i class="fa fa-chevron-right"></i>
+    <a href="/2021/04/26/CTF-WEB-Hello-World/" rel="next" title="CTF-WEB:Hello World">
+      CTF-WEB:Hello World <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -375,7 +337,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E8%83%8C%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">一、背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E6%95%B0%E6%8D%AE%E6%81%A2%E5%A4%8D%E6%AD%A5%E9%AA%A4"><span class="nav-number">2.</span> <span class="nav-text">二、数据恢复步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A6%82%E6%9E%9C%E5%BF%98%E8%AE%B0%E4%BA%86%E8%A1%A8%E7%9A%84%E7%BB%93%E6%9E%84%EF%BC%8C%E9%A6%96%E5%85%88%E5%B0%B1%E9%9C%80%E8%A6%81%E6%89%BE%E5%88%B0%E8%A1%A8%E7%BB%93%E6%9E%84"><span class="nav-number">2.0.0.1.</span> <span class="nav-text">如果忘记了表的结构，首先就需要找到表结构</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E6%80%BB%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text">三、总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="nav-number">4.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MVP-Detecting-Vulnerabilities-using-Patch-Enhanced-Vulnerability-Signatures"><span class="nav-number">1.</span> <span class="nav-text">MVP: Detecting Vulnerabilities using Patch-Enhanced Vulnerability Signatures</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A5%E6%BA%90%E4%BF%A1%E6%81%AF"><span class="nav-number">1.1.</span> <span class="nav-text">来源信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%91%98%E8%A6%81"><span class="nav-number">1.2.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.3.</span> <span class="nav-text">介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%B0%E6%9C%89%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">1.3.1.</span> <span class="nav-text">现有的方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%B0%E6%9C%89%E7%9A%84%E6%8C%91%E6%88%98"><span class="nav-number">1.3.2.</span> <span class="nav-text">现有的挑战</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BA%E6%96%87%E6%96%B9%E6%B3%95"><span class="nav-number">1.3.3.</span> <span class="nav-text">论文方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E8%AF%84%E4%BB%B7"><span class="nav-number">1.3.4.</span> <span class="nav-text">方法评价</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BA%E6%96%87%E8%B4%A1%E7%8C%AE"><span class="nav-number">1.3.5.</span> <span class="nav-text">论文贡献</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%9C%BA"><span class="nav-number">1.4.</span> <span class="nav-text">动机</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
