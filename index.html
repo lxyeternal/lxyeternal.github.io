@@ -198,7 +198,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-04-26 00:20:08 / Modified: 00:20:30" itemprop="dateCreated datePublished" datetime="2021-04-26T00:20:08+08:00">2021-04-26</time>
+              <time title="Created: 2021-04-26 00:20:08 / Modified: 00:23:55" itemprop="dateCreated datePublished" datetime="2021-04-26T00:20:08+08:00">2021-04-26</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -228,30 +228,14 @@
 <li>难度：★★★☆☆</li>
 <li>题目地址：<a target="_blank" rel="noopener" href="http://106.75.72.168:9999/">链接</a></li>
 </ul>
-<h2 id="解题过程"><a href="#解题过程" class="headerlink" title="解题过程"></a>解题过程</h2><p>打开链接直接看到的就只有Hello World，其他什么信息都没有。</p>
-<p><img src="https://i.loli.net/2021/04/25/dyTWBQ4MkGFeRIV.png" alt="截屏2021-04-25 下午11.11.58.png"></p>
-<p>第一翻译就是F12看源码了，常规操作。打开就能看到**<em>flag.xmas.js**</em></p>
-<p><img src="https://i.loli.net/2021/04/25/vk31YtwqrnhLUIe.png" alt="截屏2021-04-25 下午11.12.06.png"></p>
-<p>第一反应就是flag可能与这个文件有关系。接下来就是寻找该文件。</p>
-<p>首先试了一下了 <a target="_blank" rel="noopener" href="http://106.75.72.168:9999/flag.xmas.js">http://106.75.72.168:9999/flag.xmas.js</a>  发现啥也没有，只能想想其他的方法了。<br><img src="https://i.loli.net/2021/04/25/9FXjKIJi7RPmVys.png" alt="截屏2021-04-25 下午11.20.28.png"></p>
-<p>然后想想可能路径不对，就尝试用dirsearch扫描一下服务器的目录文件。<br>果然有重大的发现，目录中有很多的git文件，第一反应就是git源码泄漏。</p>
-<p><img src="https://i.loli.net/2021/04/25/ytrlj3p2qgaWxc7.png" alt="截屏2021-04-25 下午11.19.46.png"></p>
-<p>于是尝试使用githack去抓他的源码。果然有发现，找到了flag.js和flag.php.</p>
-<p><img src="https://i.loli.net/2021/04/25/jP7YhZdLtTUfV1K.png" alt="截屏2021-04-25 下午11.25.36.png"></p>
-<p>三个文件中index.php就是那个hello world界面，没啥用。</p>
-<p>flag.js 看着像是一个用来加密的js文件，但是非常的乱，啥也看不了。</p>
-<p><img src="https://i.loli.net/2021/04/25/iQgclPxXOEKkALp.png" alt="截屏2021-04-25 下午11.58.30.png"></p>
-<p>flag.php文件，同样也是一个编码的文件，但是不知道怎么解。同时看到下面提示的变量c，flag_is_not_here。应该就是说flag不在这里。</p>
-<p><img src="https://i.loli.net/2021/04/25/UcJN1guE7VASnxr.png" alt="截屏2021-04-25 下午11.29.28.png"></p>
-<p>分析了半天的flag.js实在是看不下去了，然后找了wp，发现自己踩了一个坑。wp中说git泄漏中有两个flag.js文件，但是我使用githack只抓到了一个，于是重新换了一个工具，找到了另一个文件。</p>
-<p><img src="https://i.loli.net/2021/04/25/vm6ktMTbRVnN3Jo.png" alt="截屏2021-04-25 下午11.52.35.png"></p>
-<p>git中包含两个flag.js文件，也不知道这两个文件有啥区别，直接用站长之家在线<a target="_blank" rel="noopener" href="https://tool.chinaz.com/tools/diff">diff工具</a>看一下不同。</p>
-<p><img src="https://i.loli.net/2021/04/26/AU9ucRPMXOjnz3W.png" alt="截屏2021-04-26 上午12.08.14.png"></p>
-<p>仔细对比了这37处不同，发现就是flag。</p>
-<p><img src="https://i.loli.net/2021/04/26/hBbs2SzCPn9XTDk.png" alt="截屏2021-04-26 上午12.16.43.png"></p>
-<p>如果说缺了字符的话，就以flag.js为准，如果说字符不同的话就以flag.js.04bb09为准</p>
-<p>flag{82efc37f1cd5d4636ea7cadcd5a814a2}</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/04/26/CTF-WEB-Hello-World/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
