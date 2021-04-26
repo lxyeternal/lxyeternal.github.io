@@ -27,12 +27,17 @@
 <meta property="og:site_name" content="小咕✨">
 <meta property="og:description" content="MVP: Detecting Vulnerabilities using Patch-Enhanced Vulnerability Signatures来源信息 USENIX Security Symposium(CCF A) 机构：中国科学院信息工程研究所 作者：Yang Xiao;  Bihuan Chen; Chendong Yu;  Zhengzi Xu et al.  摘要反复出现的漏洞">
 <meta property="og:locale">
+<meta property="og:image" content="https://i.loli.net/2021/04/26/CBiPeWuYgTNnHrs.png">
+<meta property="og:image" content="https://i.loli.net/2021/04/26/MjLcF4VvriClsfJ.png">
+<meta property="og:image" content="https://i.loli.net/2021/04/26/d6lFuALpn1Vqtig.png">
+<meta property="og:image" content="https://i.loli.net/2021/04/26/FSZG2bia5CUBmJW.png">
 <meta property="article:published_time" content="2021-04-25T12:01:07.000Z">
-<meta property="article:modified_time" content="2021-04-25T14:55:06.422Z">
+<meta property="article:modified_time" content="2021-04-26T09:37:14.755Z">
 <meta property="article:author" content="honywen">
 <meta property="article:tag" content="漏洞检测">
 <meta property="article:tag" content="程序切片">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/04/26/CBiPeWuYgTNnHrs.png">
 
 <link rel="canonical" href="http://honywen.com/2021/04/25/MVP-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
 
@@ -200,10 +205,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2021-04-25 20:01:07 / Modified: 22:55:06" itemprop="dateCreated datePublished" datetime="2021-04-25T20:01:07+08:00">2021-04-25</time>
+              <time title="Created: 2021-04-25 20:01:07" itemprop="dateCreated datePublished" datetime="2021-04-25T20:01:07+08:00">2021-04-25</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-04-26 17:37:14" itemprop="dateModified" datetime="2021-04-26T17:37:14+08:00">2021-04-26</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -253,7 +264,52 @@
 <li>作者进行了密集的评估，以将MVP与四种最先进的方法进行了比较。MVP在准确性上明显优于他们。</li>
 <li>在10个开源系统种进行测试，发现了97个新漏洞，提交了23个CVE。</li>
 </ul>
-<h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2>
+<h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2><h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p><img src="https://i.loli.net/2021/04/26/CBiPeWuYgTNnHrs.png" alt="截屏2021-04-26 下午2.00.11.png"></p>
+<ul>
+<li>提取函数签名的步骤：以目标系统作为输入，并为目标系统中的每个函数生成一个签名。</li>
+<li>提取漏洞和修补程序签名的步骤：将安全补丁程序作为输入，并生成漏洞签名和补丁程序签名，以从漏洞如何引起以及如何修复漏洞的角度反映漏洞。</li>
+<li>最终的“检测漏洞”步骤：通过将目标系统中的每个函数与漏洞和补丁签名匹配来确定该功能是否存在潜在的脆弱性。</li>
+</ul>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><ul>
+<li>函数签名：给定一个C/C++函数 f，我们将它的签名定义为一个元组(fsyn，fsem)，其中fsyn是函数中所有语句的哈希值的集合；fsem是一组3元组(h1，h2，type)，这样h1和h2表示两个语句的哈希值，type{data，control}表示哈希值为h1的语句对其哈希的语句具有数据或控制依赖性.<br>fsyn捕获目标函数的语句作为语法签名。fsem捕获数据，并控制函数中语句之间的依赖关系作为语义签名。这提供了一个函数的补充信息，以帮助提高匹配的精度.</li>
+</ul>
+<p><strong><em>在本文的其余部分中，我们假设每个漏洞都在一个函数内。我们使用(fv，pv)来表示一对脆弱的函数fv和其补丁函数pv。</em></strong></p>
+<ul>
+<li>函数补丁：给定一对函数（fv、pv），函数补丁Pv由一个或多个hunk（块）组成。hunk是补丁中的一个基本单元，它由上下文行、已删除的代码行和/或已添加的代码行组成。被删除的行是fv中，但在pv中缺少的行。而添加的行是在fv中缺少但在pv中存在的行。</li>
+</ul>
+<h3 id="提取函数签名"><a href="#提取函数签名" class="headerlink" title="提取函数签名"></a>提取函数签名</h3><h4 id="解析和分析函数"><a href="#解析和分析函数" class="headerlink" title="解析和分析函数"></a>解析和分析函数</h4><p>给定目标系统的源代码作为输入，首先使用Joern来解析代码并生成一个代码属性图，它将抽象语法树、控制流图和程序依赖图合并为一个联合的数据结构。从代码属性图中，首先得到目标系统中的所有函数，然后对每个函数生成其抽象语法树(AST)和程序依赖性图(PDG)。</p>
+<h4 id="抽象化和规范化的函数"><a href="#抽象化和规范化的函数" class="headerlink" title="抽象化和规范化的函数"></a>抽象化和规范化的函数</h4><p>由于开发人员可以重用具有重命名参数/变量的代码片段，因此首先在提取签名之前对每个函数执行抽象，以避免假阴。具体地说，从一个函数的AST中识别形式参数、局部变量和字符串文本，并替换所有的形式参数、局部参数和字符串文本。</p>
+<ul>
+<li>形参 -&gt; PARAM</li>
+<li>局部变量 -&gt; VARIABLE</li>
+<li>字符串 -&gt; STRING</li>
+</ul>
+<p>在抽象之后，通过删除所有注释、大括号、tabs和空白，对函数体中的每个语句应用规范化。</p>
+<h4 id="函数签名生成"><a href="#函数签名生成" class="headerlink" title="函数签名生成"></a>函数签名生成</h4><p>为了生成函数签名，我们首先对每个抽象和规范化的语句应用一个哈希函数来计算一个hash值。因此，函数的语法签名fsyn被表示为语句的计算哈希值的集合。</p>
+<p>然后，我们从一个函数的PDG中提取数据或控制两个语句之间的依赖关系，每个依赖项表示为3元组（h1、h2、type）。一个函数的语义特征，表示为fsem，因此被表示为一组提取的依赖项。我们的抽象和规范化可能会丢失一些信息，并导致假阳性，但是考虑到语义信息（即语句之间的控制或数据依赖性）可以弥补抽象和归一化的不足。</p>
+<p><img src="https://i.loli.net/2021/04/26/MjLcF4VvriClsfJ.png" alt="截屏2021-04-26 下午3.48.44.png"></p>
+<h3 id="提取漏洞及补丁签名"><a href="#提取漏洞及补丁签名" class="headerlink" title="提取漏洞及补丁签名"></a>提取漏洞及补丁签名</h3><h4 id="识别代码修改"><a href="#识别代码修改" class="headerlink" title="识别代码修改"></a>识别代码修改</h4><p>我们首先通过解析安全补丁的头(即diff文件)来识别更改的文件，并记录获得更改文件的易受攻击和补丁版本的提交。为了识别更改的函数，我们通过解析diff文件来查找已删除和添加的语句及其行号。并在更改的文件的易受攻击版本和补丁的版本中获取所有函数以及它们的开始和结束行号。如果一个语句包括一个或多个已被删除的代码行，我们认为该语句已被删除（或添加）。部分修改的语句是删除语句、添加语句或删除语句和添加语句。</p>
+<p>通过检查已删除的（或添加的）语句的行号是否在已更改的文件的脆弱的（或补丁的）版本中函数的开始和结束行号的范围内，我们确定所有更改的函数，针对每一个函数，我们还提取Sdel和Sadd、Svul和Spat。</p>
+<h4 id="漏洞和补丁签名生成"><a href="#漏洞和补丁签名生成" class="headerlink" title="漏洞和补丁签名生成"></a>漏洞和补丁签名生成</h4><p>利用切片技术可以提取相关的语句和排除不相关的语句。作者在PDG上执行前后切片，使用已删除的语句Sdel(Sadd添加的语句）作为切片的标准。向前向后切片是根据函数的依赖关系，包括数据依赖和控制依赖。</p>
+<p>传统的程序切片存在的问题：</p>
+<ul>
+<li>如果说将条件语句设置为切片准则，正向切片的结果可能包含太多的语句，其中会包含一些与漏洞无关的噪声语句。如图可以发现 24行与18行和23行相关，但是却与28行（漏洞行）无关。</li>
+</ul>
+<p><img src="https://i.loli.net/2021/04/26/d6lFuALpn1Vqtig.png" alt="截屏2021-04-26 下午5.13.02.png"></p>
+<ul>
+<li>一个补丁可以只是添加一个函数调用（第3行），而不使用其返回值。因此，如果将函数调用语句设置为切片标准，我们只有向后切片结果，但没有得到正向切片结果。  </li>
+</ul>
+<p><img src="https://i.loli.net/2021/04/26/FSZG2bia5CUBmJW.png" alt="截屏2021-04-26 下午5.16.19.png"></p>
+<p>前两种程序切片方法都存在问题，所以作者提出了一种新的切片方法。作者将Sdel和Sadd中的每个语句作为切片的标准。</p>
+<p>反向切片：对Fv和Pv的PDG进行正常的向后切片，获取对数据和控制依赖关系有影响的切片标准的所有语句。</p>
+<p>前向切片：对Fv和Pv的PDG进行前向切片时，根据不同的语句类型执行不同的切片准则。</p>
+<ul>
+<li>赋值语句：进行正常的正向切片，按照数据流进行常规切片即可</li>
+<li>条件语句：在正向切片的过程中只针对条件语句中使用的的变量或参数进行切片。</li>
+<li>返回语句：返回值与返回语句之后的语句之间如果不存在任何依赖关系了则不需要向前切片。</li>
+<li>其他：</li>
+</ul>
+<h3 id="通过匹配来检测漏洞"><a href="#通过匹配来检测漏洞" class="headerlink" title="通过匹配来检测漏洞"></a>通过匹配来检测漏洞</h3><h2 id="评估"><a href="#评估" class="headerlink" title="评估"></a>评估</h2><h3 id="实验设置"><a href="#实验设置" class="headerlink" title="实验设置"></a>实验设置</h3><h3 id=""><a href="#" class="headerlink" title=""></a></h3>
     </div>
 
     
@@ -337,7 +393,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MVP-Detecting-Vulnerabilities-using-Patch-Enhanced-Vulnerability-Signatures"><span class="nav-number">1.</span> <span class="nav-text">MVP: Detecting Vulnerabilities using Patch-Enhanced Vulnerability Signatures</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A5%E6%BA%90%E4%BF%A1%E6%81%AF"><span class="nav-number">1.1.</span> <span class="nav-text">来源信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%91%98%E8%A6%81"><span class="nav-number">1.2.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.3.</span> <span class="nav-text">介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%B0%E6%9C%89%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">1.3.1.</span> <span class="nav-text">现有的方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%B0%E6%9C%89%E7%9A%84%E6%8C%91%E6%88%98"><span class="nav-number">1.3.2.</span> <span class="nav-text">现有的挑战</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BA%E6%96%87%E6%96%B9%E6%B3%95"><span class="nav-number">1.3.3.</span> <span class="nav-text">论文方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E8%AF%84%E4%BB%B7"><span class="nav-number">1.3.4.</span> <span class="nav-text">方法评价</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BA%E6%96%87%E8%B4%A1%E7%8C%AE"><span class="nav-number">1.3.5.</span> <span class="nav-text">论文贡献</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%9C%BA"><span class="nav-number">1.4.</span> <span class="nav-text">动机</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MVP-Detecting-Vulnerabilities-using-Patch-Enhanced-Vulnerability-Signatures"><span class="nav-number">1.</span> <span class="nav-text">MVP: Detecting Vulnerabilities using Patch-Enhanced Vulnerability Signatures</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A5%E6%BA%90%E4%BF%A1%E6%81%AF"><span class="nav-number">1.1.</span> <span class="nav-text">来源信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%91%98%E8%A6%81"><span class="nav-number">1.2.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.3.</span> <span class="nav-text">介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%B0%E6%9C%89%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">1.3.1.</span> <span class="nav-text">现有的方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%B0%E6%9C%89%E7%9A%84%E6%8C%91%E6%88%98"><span class="nav-number">1.3.2.</span> <span class="nav-text">现有的挑战</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BA%E6%96%87%E6%96%B9%E6%B3%95"><span class="nav-number">1.3.3.</span> <span class="nav-text">论文方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E8%AF%84%E4%BB%B7"><span class="nav-number">1.3.4.</span> <span class="nav-text">方法评价</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BA%E6%96%87%E8%B4%A1%E7%8C%AE"><span class="nav-number">1.3.5.</span> <span class="nav-text">论文贡献</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%9C%BA"><span class="nav-number">1.4.</span> <span class="nav-text">动机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95"><span class="nav-number">1.5.</span> <span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89"><span class="nav-number">1.5.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E5%8F%96%E5%87%BD%E6%95%B0%E7%AD%BE%E5%90%8D"><span class="nav-number">1.5.2.</span> <span class="nav-text">提取函数签名</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A7%A3%E6%9E%90%E5%92%8C%E5%88%86%E6%9E%90%E5%87%BD%E6%95%B0"><span class="nav-number">1.5.2.1.</span> <span class="nav-text">解析和分析函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8A%BD%E8%B1%A1%E5%8C%96%E5%92%8C%E8%A7%84%E8%8C%83%E5%8C%96%E7%9A%84%E5%87%BD%E6%95%B0"><span class="nav-number">1.5.2.2.</span> <span class="nav-text">抽象化和规范化的函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E7%AD%BE%E5%90%8D%E7%94%9F%E6%88%90"><span class="nav-number">1.5.2.3.</span> <span class="nav-text">函数签名生成</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E5%8F%96%E6%BC%8F%E6%B4%9E%E5%8F%8A%E8%A1%A5%E4%B8%81%E7%AD%BE%E5%90%8D"><span class="nav-number">1.5.3.</span> <span class="nav-text">提取漏洞及补丁签名</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%86%E5%88%AB%E4%BB%A3%E7%A0%81%E4%BF%AE%E6%94%B9"><span class="nav-number">1.5.3.1.</span> <span class="nav-text">识别代码修改</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E5%92%8C%E8%A1%A5%E4%B8%81%E7%AD%BE%E5%90%8D%E7%94%9F%E6%88%90"><span class="nav-number">1.5.3.2.</span> <span class="nav-text">漏洞和补丁签名生成</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E5%8C%B9%E9%85%8D%E6%9D%A5%E6%A3%80%E6%B5%8B%E6%BC%8F%E6%B4%9E"><span class="nav-number">1.5.4.</span> <span class="nav-text">通过匹配来检测漏洞</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%84%E4%BC%B0"><span class="nav-number">1.6.</span> <span class="nav-text">评估</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E8%AE%BE%E7%BD%AE"><span class="nav-number">1.6.1.</span> <span class="nav-text">实验设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">1.6.2.</span> <span class="nav-text"></span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
