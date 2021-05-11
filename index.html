@@ -173,6 +173,156 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://honywen.com/2021/05/10/%E6%B8%97%E9%80%8F%E4%B9%8B%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="honywen">
+      <meta itemprop="description" content="多多指教">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小咕✨">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/05/10/%E6%B8%97%E9%80%8F%E4%B9%8B%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86/" class="post-title-link" itemprop="url">渗透之信息搜集</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-05-10 20:56:09" itemprop="dateCreated datePublished" datetime="2021-05-10T20:56:09+08:00">2021-05-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-05-11 15:46:48" itemprop="dateModified" datetime="2021-05-11T15:46:48+08:00">2021-05-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B8%97%E9%80%8F/" itemprop="url" rel="index"><span itemprop="name">渗透</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="渗透流程"><a href="#渗透流程" class="headerlink" title="渗透流程"></a>渗透流程</h2><p>一次完整的渗透测试包括一下几步：*<strong>明确目标**<em>，</em></strong>信息收集*<strong>，**<em>漏洞探测</em></strong>，*<strong>漏洞利用**<em>，</em></strong>内网转发*<strong>，**<em>内网渗透</em></strong>，**<em>痕迹清除**</em></p>
+<p>渗透测试主要分为两种方式：</p>
+<ul>
+<li>白盒测试：知道目标网站源码和其他一些信息的情况下对其进行渗透，代码审计</li>
+<li>黑盒测试：只知道目标网站的URL，其他信息一无所知，需要测试者自行去发现</li>
+</ul>
+<h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><p><strong><em>收集的信息越多，攻击面就会越广，成功概率就会越高</em></strong></p>
+<p>信息收集是渗透测试的第一步，有时候也是至关重要的一步，通过信息收集我们可以理清整个网站的结构以及相关的框架（CMS），服务器版本等。可能直接针对某一个网站进行渗透很难，但是其二级域名网站中存在漏洞，相对容易利用，然后拿到二级域名的站之后再进一步提权，最终拿下目标网站。</p>
+<p>我们所要收集的网站信息主要包括以下信息：</p>
+<ul>
+<li>域名</li>
+<li>子域名</li>
+<li>IP及端口</li>
+<li>ip反向查询域名</li>
+<li>服务提供商</li>
+<li>应用服务系统、版本</li>
+<li>域名历史解析IP</li>
+<li>服务端框架、语言</li>
+<li>开源情报</li>
+</ul>
+<h3 id="域名信息收集"><a href="#域名信息收集" class="headerlink" title="域名信息收集"></a>域名信息收集</h3><p>当确定了渗透目标也即其URL，接下来我们需要收集域名对应的 ip，域名的whois信息、子域名等等一系列与域名相关的信息。如果不收集这些的话，你的攻击范围就会很窄，死盯着一个现成的域名或一个IP，无异于把自己框死。</p>
+<h4 id="IP地址查询"><a href="#IP地址查询" class="headerlink" title="IP地址查询"></a>IP地址查询</h4><p> 确定目标网站的域名之后，首先就是找其IP地址，可以通过ping进行探测，*<a target="_blank" rel="noopener" href="http://ping.chinaz.com/*%E3%80%82">http://ping.chinaz.com/*。</a></p>
+<h4 id="域名whois信息查询"><a href="#域名whois信息查询" class="headerlink" title="域名whois信息查询"></a>域名whois信息查询</h4><p>whois是用来查询域名注册所有者等信息的传输协议。简单说，whois就是一个用来查询域名是否已经被注册，以及注册域名的详细信息的数据库（如域名所有人、域名注册商），在线查询工具：*<a target="_blank" rel="noopener" href="http://whois.chinaz.com/*%EF%BC%8C%E6%9F%A5%E8%AF%A2%E5%87%BA%E9%82%AE%E7%AE%B1%E3%80%81%E6%B3%A8%E5%86%8C%E4%BA%BA%E3%80%81%E5%85%AC%E5%8F%B8%E3%80%81%E7%94%B5%E8%AF%9D%E8%BF%99%E4%BA%9B%E4%B9%8B%E5%90%8E%E5%8F%AF%E4%BB%A5%E8%BF%9B%E4%B8%80%E6%AD%A5%E5%8F%8D%E6%9F%A5%E3%80%82">http://whois.chinaz.com/*，查询出邮箱、注册人、公司、电话这些之后可以进一步反查。</a></p>
+<p>常用的子域名收集网站：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.zoomeye.org/">https://www.zoomeye.org/</a></li>
+<li><a target="_blank" rel="noopener" href="https://fofa.so/">https://fofa.so/</a></li>
+<li><a target="_blank" rel="noopener" href="https://phpinfo.me/domain/">https://phpinfo.me/domain/</a></li>
+<li><a target="_blank" rel="noopener" href="https://crt.sh/">https://crt.sh/</a></li>
+<li><a target="_blank" rel="noopener" href="https://censys.io/">https://censys.io/</a></li>
+<li><a target="_blank" rel="noopener" href="https://transparencyreport.google.com/https/certificates">https://transparencyreport.google.com/https/certificates</a></li>
+<li><a target="_blank" rel="noopener" href="https://dnsdumpster.com/">https://dnsdumpster.com/</a></li>
+<li><a target="_blank" rel="noopener" href="https://hackertarget.com/find-dns-host-records/">https://hackertarget.com/find-dns-host-records/</a></li>
+<li><a target="_blank" rel="noopener" href="https://x.threatbook.cn/">https://x.threatbook.cn/</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.virustotal.com/gui/home/search">https://www.virustotal.com/gui/home/search</a></li>
+<li><a target="_blank" rel="noopener" href="https://phpinfo.me/domain/">https://phpinfo.me/domain/</a></li>
+<li><a target="_blank" rel="noopener" href="https://site.ip138.com/baidu.com/domain.htm">https://site.ip138.com/baidu.com/domain.htm</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.t1h2ua.cn/tools/">https://www.t1h2ua.cn/tools/</a></li>
+<li><a target="_blank" rel="noopener" href="http://tool.chinaz.com/subdomain/">http://tool.chinaz.com/subdomain/</a></li>
+<li><a target="_blank" rel="noopener" href="https://spyse.com/site/not-found?q=domain:%22github%22&amp;criteria=cert">https://spyse.com/site/not-found?q=domain%3A%22github%22&amp;criteria=cert</a></li>
+</ul>
+<h4 id="网站CDN信息"><a href="#网站CDN信息" class="headerlink" title="网站CDN信息"></a>网站CDN信息</h4><p>利用站长工具进行ping测试，查看全国各个监测点是不是同一个IP，如果是同一个IP，那就是没有CDN防护；如果在各个监测点的IP不同，则是有CDN防护。如果存在CDN，则需要进一步绕过CDN防护寻找真实IP。主要有以下几种方法：</p>
+<ul>
+<li><strong>子域名</strong>：有的站点使用了CDN，有的可能未使用，因此通过子域名可以发现真实IP。</li>
+<li><strong>历史DNS信息</strong>：查询ip与域名绑定历史记录，可能会发现使用CDN之前的目标ip。</li>
+<li><strong>CDN本身</strong>：可以通过社工等其他的方法找到控制面板的账号密码，这样IP地址就很容易找到了。</li>
+<li><strong>Mx记录或邮件</strong>：很多站点都有发送邮件sendmail的功能，如Rss邮件订阅等。而且一般的邮件系统很多都是在内部，没有经过CDN的解析。可在邮件源码里面就会包含服务器的真实 IP。</li>
+<li><strong>搜索</strong>：利用公开的安全搜索引擎（zoomeye、fofa、shodan）爬取得历史快照，从数据包的头部寻找真实IP地址。</li>
+</ul>
+<h3 id="系统信息收集"><a href="#系统信息收集" class="headerlink" title="系统信息收集"></a>系统信息收集</h3><p>系统信息主要包括操作系统的类型、版本等信息收集，系统版本号可以通过工具扫描出来，kali系统对服务器的端口开放情况进行全面的安全检测，服务器是否存在漏洞，包括redis未经授权访问漏洞等等，通过端口开放情况，来查看服务器运行了那些服务，以及安装的软件。</p>
+<h3 id="网站指纹收集"><a href="#网站指纹收集" class="headerlink" title="网站指纹收集"></a>网站指纹收集</h3><p>在渗透测试中，对目标服务器进行指纹识别是相当有必要的，因为只有识别出相应的Web容器或者CMS，才能查找与其相关的漏洞，然后才能进行相应的渗透操作。CMS又称整站系统。常见的CMS有：WordPress、Dedecms、Discuz、PhpWeb、PhpWind、Dvbbs、PhpCMS等。同时也可以探测其使用的各种中间件，以及插件信息。</p>
+<p><img src="https://i.loli.net/2021/05/10/YeZCRDQUdVJPm16.png" alt="截屏2021-05-10 下午9.22.24.png"></p>
+<p>常用的指纹识别工具：</p>
+<ul>
+<li>wappalyzer：chrome插件</li>
+<li>云悉：<a target="_blank" rel="noopener" href="https://www.yunsee.cn/">https://www.yunsee.cn/</a></li>
+<li>BugScaner：<a target="_blank" rel="noopener" href="http://whatweb.bugscaner.com/look/">http://whatweb.bugscaner.com/look/</a></li>
+<li>WhatWeb：<a target="_blank" rel="noopener" href="https://whatweb.net/">https://whatweb.net/</a></li>
+</ul>
+<h3 id="应用信息搜集"><a href="#应用信息搜集" class="headerlink" title="应用信息搜集"></a>应用信息搜集</h3><ul>
+<li>端口信息</li>
+</ul>
+<p>应用信息搜索主要是针对服务器各端口的应用。例如web应用、邮件应用、等等进行探测。</p>
+<ul>
+<li>目录信息</li>
+</ul>
+<p>通过目录扫描可以获取网站登录后台信息以及其他敏感文件（git、SVN、robot.txt），推荐使用御剑扫描工具，可以在github上面查找一些敏感的网站目录，然后添加到御剑或者别的扫描工具里面，这样可以大大的增强了扫描的效果</p>
+<h3 id="防护信息搜集"><a href="#防护信息搜集" class="headerlink" title="防护信息搜集"></a>防护信息搜集</h3><p>有时候很多的网站都存在各种各样的防护措施，比如：安全狗、网防G01。摸清网站的防御措施，有助于我们针对型的bypass。常用的WAF探测工具：**<em>WAFW00F**</em>，同时也可以通过sql注入，XSS等方式来触发防护信息。</p>
+<h3 id="敏感信息检索"><a href="#敏感信息检索" class="headerlink" title="敏感信息检索"></a>敏感信息检索</h3><ul>
+<li>敏感开源信息收集</li>
+</ul>
+<p>有时候网站可能采用开源的一些模版或者代码之类的，可以通过Github等开源的平台搜索这些代码中，寻找其中泄漏敏感信息，比如：数据库的连接信息，测试用的账号密码等。</p>
+<p>Github信息搜集语法：<br><em><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_36119192/article/details/99690742">https://blog.csdn.net/qq_36119192/article/details/99690742</a></em></p>
+<ul>
+<li>敏感地址收集</li>
+</ul>
+<p>我们可以通过google、百度语法进行搜集一些网站的后台地址信息。找到地址如果防护水平比较低的话，就可以进行爆破，进入后台再进一步利用。同时也可以搜索未授权的页面、敏感URL等。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="http://honywen.com/2021/05/05/sql-so-hard-CTF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -368,7 +518,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-28 00:32:57" itemprop="dateModified" datetime="2021-04-28T00:32:57+08:00">2021-04-28</time>
+                <time title="Modified: 2021-05-10 09:45:45" itemprop="dateModified" datetime="2021-05-10T09:45:45+08:00">2021-05-10</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -894,20 +1044,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-count">9</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
