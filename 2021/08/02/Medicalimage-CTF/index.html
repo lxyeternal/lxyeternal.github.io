@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"honywen.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","Pisces | Gemini":240,"width":300,"display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="来源信息 巅峰极客2021 题目名称：Medicalimage 类型：Crypto 难度：★★★☆☆ 题目内容：小明对医疗影像资料进行了加密，但是源代码不小心损坏，请尝试恢复出原始的影像资料">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Medicalimage-CTF">
+<meta property="og:url" content="http://honywen.com/2021/08/02/Medicalimage-CTF/index.html">
+<meta property="og:site_name" content="小咕✨">
+<meta property="og:description" content="来源信息 巅峰极客2021 题目名称：Medicalimage 类型：Crypto 难度：★★★☆☆ 题目内容：小明对医疗影像资料进行了加密，但是源代码不小心损坏，请尝试恢复出原始的影像资料">
+<meta property="og:locale">
+<meta property="og:image" content="https://i.loli.net/2021/08/02/j5AnobqykcKiTaM.png">
+<meta property="og:image" content="https://i.loli.net/2021/08/02/lTqnGrmZ97x4u5a.png">
+<meta property="article:published_time" content="2021-08-02T02:09:20.000Z">
+<meta property="article:modified_time" content="2021-08-02T02:51:56.678Z">
+<meta property="article:author" content="honywen">
+<meta property="article:tag" content="Crypto">
+<meta property="article:tag" content="混沌系统">
+<meta property="article:tag" content="Logistic映射">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/08/02/j5AnobqykcKiTaM.png">
+
+<link rel="canonical" href="http://honywen.com/2021/08/02/Medicalimage-CTF/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>Medicalimage-CTF | 小咕✨</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">小咕✨</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Everything is fine</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/commonweal/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://honywen.com/2021/08/02/Medicalimage-CTF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="honywen">
+      <meta itemprop="description" content="多多指教">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小咕✨">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Medicalimage-CTF
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-08-02 10:09:20 / Modified: 10:51:56" itemprop="dateCreated datePublished" datetime="2021-08-02T10:09:20+08:00">2021-08-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2021/08/02/Medicalimage-CTF/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/08/02/Medicalimage-CTF/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="来源信息"><a href="#来源信息" class="headerlink" title="来源信息"></a>来源信息</h2><ul>
+<li>巅峰极客2021</li>
+<li>题目名称：Medicalimage</li>
+<li>类型：Crypto</li>
+<li>难度：★★★☆☆</li>
+<li>题目内容：小明对医疗影像资料进行了加密，但是源代码不小心损坏，请尝试恢复出原始的影像资料</li>
+</ul>
+<a id="more"></a>
+
+<h2 id="解题过程"><a href="#解题过程" class="headerlink" title="解题过程"></a>解题过程</h2><h3 id="原始信息"><a href="#原始信息" class="headerlink" title="原始信息"></a>原始信息</h3><p>加密之后的图片如下：</p>
+<p><img src="https://i.loli.net/2021/08/02/j5AnobqykcKiTaM.png" alt="fig1.png"></p>
+<p>给出的部分源代码如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line">from PIL import Image</span><br><span class="line">from decimal import *</span><br><span class="line">import numpy as np</span><br><span class="line">import random</span><br><span class="line">getcontext().prec &#x3D; 20</span><br><span class="line"></span><br><span class="line">def f1(x):</span><br><span class="line">    # It is based on logistic map in chaotic systems</span><br><span class="line">    # The parameter r takes the largest legal value</span><br><span class="line">    # assert(x&gt;&#x3D;0)s</span><br><span class="line">    # assert(x&lt;&#x3D;1)</span><br><span class="line"></span><br><span class="line">def f2(x):</span><br><span class="line">    # same as f1</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">def f3(x):</span><br><span class="line">    # same as f1</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">def encryptImage(path):</span><br><span class="line">    im &#x3D; Image.open(path)</span><br><span class="line">    size &#x3D; im.size</span><br><span class="line">    pic  &#x3D; np.array(im)</span><br><span class="line">    im.close()</span><br><span class="line">    r1 &#x3D; Decimal(&#39;0.478706063089473894123&#39;)</span><br><span class="line">    r2 &#x3D; Decimal(&#39;0.613494245341234672318&#39;)</span><br><span class="line">    r3 &#x3D; Decimal(&#39;0.946365754637812381837&#39;)</span><br><span class="line">    w,h &#x3D; size</span><br><span class="line">    for i in range(200):</span><br><span class="line">        r1 &#x3D; f1(r1)</span><br><span class="line">        r2 &#x3D; f2(r2)</span><br><span class="line">        r3 &#x3D; f3(r3)</span><br><span class="line">    const &#x3D; 10**14</span><br><span class="line"></span><br><span class="line">    for x in range(w):</span><br><span class="line">        for y in range(h):</span><br><span class="line">            x1 &#x3D; int(round(const*r1))%w</span><br><span class="line">            y1 &#x3D; int(round(const*r2))%h</span><br><span class="line">            r1 &#x3D; f1(r1)</span><br><span class="line">            r2 &#x3D; f2(r2)</span><br><span class="line">            tmp &#x3D; pic[y,x]</span><br><span class="line">            pic[y,x] &#x3D; pic[y1,x1]</span><br><span class="line">            pic[y1,x1] &#x3D; tmp</span><br><span class="line">    p0 &#x3D; random.randint(100,104)</span><br><span class="line">    c0 &#x3D; random.randint(200,204)</span><br><span class="line">    config &#x3D; (p0,c0)</span><br><span class="line"></span><br><span class="line">    for x in range(w):</span><br><span class="line">        for y in range(h):</span><br><span class="line">            k &#x3D; int(round(const*r3))%256</span><br><span class="line">            k &#x3D; bin(k)[2:].ljust(8,&#39;0&#39;)</span><br><span class="line">            k &#x3D; int(k[p0%8:]+k[:p0%8],2)</span><br><span class="line">            r3 &#x3D; f3(r3)</span><br><span class="line">            p0 &#x3D; pic[y,x]</span><br><span class="line">            c0 &#x3D; k^((k+p0)%256)^c0</span><br><span class="line">            pic[y,x] &#x3D; c0</span><br><span class="line">    return pic,size,config</span><br><span class="line"></span><br><span class="line">def decryptImage(path,config):</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">def outputImage(path,pic,size):</span><br><span class="line">    im &#x3D; Image.new(&#39;P&#39;, size,&#39;white&#39;)</span><br><span class="line">    pixels &#x3D; im.load()</span><br><span class="line">    for i in range(im.size[0]):</span><br><span class="line">        for j in range(im.size[1]):</span><br><span class="line">            pixels[i,j] &#x3D; (int(pic[j][i]))</span><br><span class="line"></span><br><span class="line">    im.save(path)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">enc_img &#x3D; &#39;flag.bmp&#39;</span><br><span class="line">out_im &#x3D; &#39;flag_enc.bmp&#39;</span><br><span class="line"></span><br><span class="line">pic,size,_ &#x3D; encryptImage(enc_img)</span><br><span class="line">outputImage(out_im,pic,size)</span><br></pre></td></tr></table></figure>
+
+<h3 id="解题"><a href="#解题" class="headerlink" title="解题"></a>解题</h3><p>本题是通过加密函数，反推出解密函数，然后还原出原始的图片。通过代码可以发现整个加密过程如下：</p>
+<ul>
+<li>将图片读入并转换成矩阵</li>
+<li>按行操作：对像素点的值进行交换</li>
+<li>按行操作：<code>c0 = k^((k+p0)%256)^c0</code>对每一个像素点进行如代码方法的操作</li>
+<li>将加密后的图片写入到新图片中</li>
+</ul>
+<p>这里需要注意的是，在两次操作中，都会用到f1,f2,f3三个函数，根据注释可以发现，该函数是混沌系统中的逻辑斯蒂映射，根据公式：<br>$x_{n+1} = \mu x_n(1-x_n)$</p>
+<p>所以这里f1，f2,f3函数为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">def f1(x):</span><br><span class="line">    mu &#x3D; 4</span><br><span class="line">    x &#x3D; mu * x * (1 - x)</span><br><span class="line">    return x</span><br></pre></td></tr></table></figure>
+
+<p>解密的过程是加密的逆过程，如下：</p>
+<ul>
+<li>按行操作：执行<code>c0 = k^((k+p0)%256)^c0</code>的逆操作<code>c0 = (((k^c1^c0)%256)-k)%256 </code><br>这里需要注意的是在加密的过程中，k与p0有关，而上一步的c0会参与下一步的加密。因此在解密的过程需要找到对应的k与c0.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">for x in range(w):</span><br><span class="line">    for y in range(h):</span><br><span class="line">        k &#x3D; int(round(const*r3))%256</span><br><span class="line">        k &#x3D; bin(k)[2:].ljust(8,&#39;0&#39;)</span><br><span class="line">        k &#x3D; int(k[p0%8:]+k[:p0%8],2)</span><br><span class="line">        r3 &#x3D; f3(r3)</span><br><span class="line">        c1 &#x3D; pic[y,x]</span><br><span class="line">        c0 &#x3D; (((k^c1^c0)%256)-k)%256</span><br><span class="line">        pic[y,x] &#x3D; c0</span><br><span class="line">        p0 &#x3D; c0</span><br><span class="line">        c0 &#x3D; c1</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>还原交换之前的矩阵，首先我们重新执行一遍加密的过程，将整个交换过程记录下来，然后逆一下这个过程即可实现解密。</li>
+</ul>
+<p>加密过程呢p0和c0是随机的，但是由于不是很大，所以我们可以遍历出来。</p>
+<p>整个代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br></pre></td><td class="code"><pre><span class="line">from PIL import Image</span><br><span class="line">from decimal import *</span><br><span class="line">import numpy as np</span><br><span class="line">import random</span><br><span class="line">getcontext().prec &#x3D; 20</span><br><span class="line"></span><br><span class="line">def f1(x):</span><br><span class="line">    # It is based on logistic map in chaotic systems</span><br><span class="line">    # The parameter r takes the largest legal value</span><br><span class="line">    mu &#x3D; 4</span><br><span class="line">    x &#x3D; mu * x * (1 - x)</span><br><span class="line">    return x</span><br><span class="line"></span><br><span class="line">def f2(x):</span><br><span class="line">    # same as f1</span><br><span class="line">    mu &#x3D; 4</span><br><span class="line">    x &#x3D; mu * x * (1 - x)</span><br><span class="line">    return x</span><br><span class="line">    </span><br><span class="line">def f3(x):</span><br><span class="line">    # same as f1</span><br><span class="line">    mu &#x3D; 4</span><br><span class="line">    x &#x3D; mu * x * (1 - x)</span><br><span class="line">    return x</span><br><span class="line"></span><br><span class="line">def encryptImage(path):</span><br><span class="line">    im &#x3D; Image.open(path)</span><br><span class="line">    size &#x3D; im.size</span><br><span class="line">    pic  &#x3D; np.array(im)</span><br><span class="line">    im.close()</span><br><span class="line">    r1 &#x3D; Decimal(&#39;0.478706063089473894123&#39;)</span><br><span class="line">    r2 &#x3D; Decimal(&#39;0.613494245341234672318&#39;)</span><br><span class="line">    r3 &#x3D; Decimal(&#39;0.946365754637812381837&#39;)</span><br><span class="line">    w,h &#x3D; size</span><br><span class="line">    for i in range(200):</span><br><span class="line">        r1 &#x3D; f1(r1)</span><br><span class="line">        r2 &#x3D; f2(r2)</span><br><span class="line">        r3 &#x3D; f3(r3)</span><br><span class="line">    const &#x3D; 10**14</span><br><span class="line"></span><br><span class="line">    replace_list &#x3D; list()</span><br><span class="line">    for x in range(w):</span><br><span class="line">        for y in range(h):</span><br><span class="line">            x1 &#x3D; int(round(const*r1))%w</span><br><span class="line">            y1 &#x3D; int(round(const*r2))%h</span><br><span class="line">            r1 &#x3D; f1(r1)</span><br><span class="line">            r2 &#x3D; f2(r2)</span><br><span class="line">            tmp &#x3D; pic[y,x]</span><br><span class="line">            pic[y,x] &#x3D; pic[y1,x1]</span><br><span class="line">            pic[y1,x1] &#x3D; tmp</span><br><span class="line">            replace_list.append([(y,x),(y1,x1)])</span><br><span class="line">    f &#x3D; open(&#39;test.txt&#39;,&#39;a&#39;)</span><br><span class="line">    f.write(str(replace_list))</span><br><span class="line"></span><br><span class="line">    p0 &#x3D; random.randint(100,104)</span><br><span class="line">    c0 &#x3D; random.randint(200,204)</span><br><span class="line"></span><br><span class="line">    config &#x3D; (p0,c0)</span><br><span class="line"></span><br><span class="line">    for x in range(w):</span><br><span class="line">        for y in range(h):</span><br><span class="line">            k &#x3D; int(round(const*r3))%256</span><br><span class="line">            k &#x3D; bin(k)[2:].ljust(8,&#39;0&#39;)</span><br><span class="line">            k &#x3D; int(k[p0%8:]+k[:p0%8],2)</span><br><span class="line">            r3 &#x3D; f3(r3)</span><br><span class="line">            p0 &#x3D; pic[y,x]</span><br><span class="line">            c0 &#x3D; k^((k+p0)%256)^c0</span><br><span class="line">            pic[y,x] &#x3D; c0</span><br><span class="line">    return pic,size,config</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def decryptImage(path,config):</span><br><span class="line">    im &#x3D; Image.open(path)</span><br><span class="line">    size &#x3D; im.size</span><br><span class="line">    pic &#x3D; np.array(im)</span><br><span class="line">    im.close()</span><br><span class="line">    r1 &#x3D; Decimal(&#39;0.478706063089473894123&#39;)</span><br><span class="line">    r2 &#x3D; Decimal(&#39;0.613494245341234672318&#39;)</span><br><span class="line">    r3 &#x3D; Decimal(&#39;0.946365754637812381837&#39;)</span><br><span class="line">    w, h &#x3D; size</span><br><span class="line">    for i in range(200):</span><br><span class="line">        r1 &#x3D; f1(r1)</span><br><span class="line">        r2 &#x3D; f2(r2)</span><br><span class="line">        r3 &#x3D; f3(r3)</span><br><span class="line"></span><br><span class="line">    const &#x3D; 10 ** 14</span><br><span class="line">    p0 &#x3D; config[0]</span><br><span class="line">    c0 &#x3D; config[1]</span><br><span class="line">    for x in range(w):</span><br><span class="line">        for y in range(h):</span><br><span class="line">            k &#x3D; int(round(const*r3))%256</span><br><span class="line">            k &#x3D; bin(k)[2:].ljust(8,&#39;0&#39;)</span><br><span class="line">            k &#x3D; int(k[p0%8:]+k[:p0%8],2)</span><br><span class="line">            r3 &#x3D; f3(r3)</span><br><span class="line">            c1 &#x3D; pic[y,x]</span><br><span class="line">            c0 &#x3D; (((k^c1^c0)%256)-k)%256</span><br><span class="line">            pic[y,x] &#x3D; c0</span><br><span class="line">            p0 &#x3D; c0</span><br><span class="line">            c0 &#x3D; c1</span><br><span class="line">    print(pic)</span><br><span class="line"></span><br><span class="line">    f &#x3D; open(&#39;test.txt&#39;,&#39;r&#39;)</span><br><span class="line">    tihuan &#x3D; f.read()</span><br><span class="line">    tihuan_list &#x3D; eval(tihuan)</span><br><span class="line">    new_pic &#x3D; pic</span><br><span class="line"></span><br><span class="line">    for i in tihuan_list[::-1]:</span><br><span class="line">        t1 &#x3D; i[0]</span><br><span class="line">        t2 &#x3D; i[1]</span><br><span class="line">        tmp &#x3D; new_pic[t1[0],t1[1]]</span><br><span class="line">        new_pic[t1[0], t1[1]] &#x3D; new_pic[t2[0],t2[1]]</span><br><span class="line">        new_pic[t2[0], t2[1]] &#x3D; tmp</span><br><span class="line"></span><br><span class="line">    return new_pic,size,config</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def outputImage(path,pic,size):</span><br><span class="line">    im &#x3D; Image.new(&#39;P&#39;, size,&#39;white&#39;)</span><br><span class="line">    pixels &#x3D; im.load()</span><br><span class="line">    for i in range(im.size[0]):</span><br><span class="line">        for j in range(im.size[1]):</span><br><span class="line">            pixels[i,j] &#x3D; (int(pic[j][i]))</span><br><span class="line"></span><br><span class="line">    im.save(path)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">enc_img &#x3D; &#39;flag_enc.bmp&#39;</span><br><span class="line"></span><br><span class="line">pic,size,_ &#x3D; encryptImage(enc_img)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def decmain():</span><br><span class="line"></span><br><span class="line">    config_list &#x3D; list()</span><br><span class="line">    for p0 in range(100,105):</span><br><span class="line">        for c0 in range(200,205):</span><br><span class="line">            config &#x3D; (p0,c0)</span><br><span class="line">            config_list.append(config)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    for config in config_list:</span><br><span class="line">        config_index &#x3D; config_list.index(config)</span><br><span class="line">        enc_img &#x3D; &#39;flag_enc.bmp&#39;</span><br><span class="line">        dec_img &#x3D; &#39;flag_&#39; + str(config_index) + &#39;.bmp&#39;</span><br><span class="line">        pic, size, config &#x3D; decryptImage(enc_img,config)</span><br><span class="line">        outputImage(dec_img,pic,size)</span><br><span class="line"></span><br><span class="line">decmain()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>最后得到的25张图片其实都是一样的，成功拿到flag。</p>
+<p>flag{31576107-c243-4962-a4f8-7330d4ad9a76}</p>
+<p><img src="https://i.loli.net/2021/08/02/lTqnGrmZ97x4u5a.png" alt="fig2.png"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Crypto/" rel="tag"># Crypto</a>
+              <a href="/tags/%E6%B7%B7%E6%B2%8C%E7%B3%BB%E7%BB%9F/" rel="tag"># 混沌系统</a>
+              <a href="/tags/Logistic%E6%98%A0%E5%B0%84/" rel="tag"># Logistic映射</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/07/26/%E6%BA%90%E4%BB%A3%E7%A0%81%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96%E4%B8%8E%E8%A1%A8%E7%A4%BA-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" rel="prev" title="源代码特征提取与表示-论文笔记">
+      <i class="fa fa-chevron-left"></i> 源代码特征提取与表示-论文笔记
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/08/08/%E5%9F%BA%E4%BA%8E%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E7%A0%94%E7%A9%B6-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" rel="next" title="基于图神经网络的漏洞挖掘研究-论文笔记">
+      基于图神经网络的漏洞挖掘研究-论文笔记 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A5%E6%BA%90%E4%BF%A1%E6%81%AF"><span class="nav-number">1.</span> <span class="nav-text">来源信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E8%BF%87%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">解题过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E5%A7%8B%E4%BF%A1%E6%81%AF"><span class="nav-number">2.1.</span> <span class="nav-text">原始信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98"><span class="nav-number">2.2.</span> <span class="nav-text">解题</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="honywen"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">honywen</p>
+  <div class="site-description" itemprop="description">多多指教</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lxyeternal" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lxyeternal" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1796369212@qq.com" title="E-Mail → mailto:1796369212@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/weixin_39641975" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;weixin_39641975" rel="noopener" target="_blank"><i class="fab fa-stack-overflow fa-fw"></i>CSDN</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/yourname" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://honywen.com/" title="http:&#x2F;&#x2F;honywen.com">Title</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">honywen</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'XtTLwDG0JPdYJFC2zH1ULGMN-gzGzoHsz',
+      appKey     : 'E1vcmMuSfPfzUqtr2j4z9T0N',
+      placeholder: "Just go go",
+      avatar     : '/uploads/avatar.jpg',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

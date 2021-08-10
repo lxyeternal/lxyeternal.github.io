@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"honywen.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","Pisces | Gemini":240,"width":300,"display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="A hybrid code representation learning approach for predicting method names来源信息 The Journal of Systems &amp; Software(SCI 2区) 机构：复旦大学 作者：Fengyi Zhang, Bihuan Chen, Rongfan Li, Xin Peng  Abstract程序语义属性，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="混合语义代码表示-论文笔记">
+<meta property="og:url" content="http://honywen.com/2021/07/21/%E6%B7%B7%E5%90%88%E8%AF%AD%E4%B9%89%E4%BB%A3%E7%A0%81%E8%A1%A8%E7%A4%BA-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="小咕✨">
+<meta property="og:description" content="A hybrid code representation learning approach for predicting method names来源信息 The Journal of Systems &amp; Software(SCI 2区) 机构：复旦大学 作者：Fengyi Zhang, Bihuan Chen, Rongfan Li, Xin Peng  Abstract程序语义属性，">
+<meta property="og:locale">
+<meta property="og:image" content="https://i.loli.net/2021/07/22/YIALPi28KdrRmfz.png">
+<meta property="og:image" content="https://i.loli.net/2021/07/22/Bj7KGHZELwuM2mV.png">
+<meta property="og:image" content="https://i.loli.net/2021/07/22/Yep73x2GuyTD6af.png">
+<meta property="og:image" content="https://i.loli.net/2021/07/22/RW293cxHdkrUq7l.png">
+<meta property="og:image" content="https://i.loli.net/2021/07/22/4tA7wah8mTbEjUc.png">
+<meta property="og:image" content="https://i.loli.net/2021/07/22/VCf6EheMUyTIGY8.png">
+<meta property="og:image" content="https://i.loli.net/2021/07/22/NLbipBQegK1DZ4C.png">
+<meta property="article:published_time" content="2021-07-21T07:22:09.000Z">
+<meta property="article:modified_time" content="2021-07-22T03:47:15.141Z">
+<meta property="article:author" content="honywen">
+<meta property="article:tag" content="漏洞挖掘">
+<meta property="article:tag" content="代码表示学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/07/22/YIALPi28KdrRmfz.png">
+
+<link rel="canonical" href="http://honywen.com/2021/07/21/%E6%B7%B7%E5%90%88%E8%AF%AD%E4%B9%89%E4%BB%A3%E7%A0%81%E8%A1%A8%E7%A4%BA-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>混合语义代码表示-论文笔记 | 小咕✨</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">小咕✨</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Everything is fine</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/commonweal/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://honywen.com/2021/07/21/%E6%B7%B7%E5%90%88%E8%AF%AD%E4%B9%89%E4%BB%A3%E7%A0%81%E8%A1%A8%E7%A4%BA-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="honywen">
+      <meta itemprop="description" content="多多指教">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小咕✨">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          混合语义代码表示-论文笔记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-07-21 15:22:09" itemprop="dateCreated datePublished" datetime="2021-07-21T15:22:09+08:00">2021-07-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-07-22 11:47:15" itemprop="dateModified" datetime="2021-07-22T11:47:15+08:00">2021-07-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">论文笔记</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2021/07/21/%E6%B7%B7%E5%90%88%E8%AF%AD%E4%B9%89%E4%BB%A3%E7%A0%81%E8%A1%A8%E7%A4%BA-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/07/21/%E6%B7%B7%E5%90%88%E8%AF%AD%E4%B9%89%E4%BB%A3%E7%A0%81%E8%A1%A8%E7%A4%BA-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="A-hybrid-code-representation-learning-approach-for-predicting-method-names"><a href="#A-hybrid-code-representation-learning-approach-for-predicting-method-names" class="headerlink" title="A hybrid code representation learning approach for predicting method names"></a>A hybrid code representation learning approach for predicting method names</h1><h2 id="来源信息"><a href="#来源信息" class="headerlink" title="来源信息"></a>来源信息</h2><ul>
+<li>The Journal of Systems &amp; Software(<strong>SCI 2区</strong>)</li>
+<li>机构：复旦大学</li>
+<li>作者：Fengyi Zhang, Bihuan Chen, Rongfan Li, Xin Peng</li>
+</ul>
+<h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>程序语义属性，如类名、方法名、变量名和类型，在软件开发和维护中起着重要作用。方法名称尤其重要。因为它们为开发人员提供了相互交流（如代码审查和程序理解）的抽象基础。现有的方法名预测方法通常将代码表示为词汇标记或语法AST（抽象语法树）路径，这使得它们很难学习代码语义，并阻碍了方法名预测的有效性。之前的工作已经尝试将代码表示为执行过程来捕获代码语义，但在收集执行过程时存在可伸缩性。</p>
+<a id="more"></a>
+<p>在本文中，作者提出了一种混合代码表示学习方法，即Meth2Seq，可以将方法编码为分布式向量序列。Meth2Seq由三部分构成 ：程序依赖性图上的一系列路径，类型化的中间表示语句的序列，一个自然语言注释的句子，以可伸缩地捕获代码语义。将Meth2Seq方法学习到的向量序列输入到解码器模型中以预测方法名。作者在67个Java项目中对280.5K个方法的评估表明，Meth2Seq在f1-score中比两种最先进的代码表示学习方法好92.6%和36.6%，同时也比两种最先进的方法名称预测方法多出85.6%和178.1%。</p>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>Representation learning：将原始数据嵌入到低维向量，以保留原始数据的属性，并可输入下游深度学习模型。它允许模型学习如何提取这些特征，以及如何在特定的任务中使用它们。例如word embedding， paragraph embedding。<br>编程理解任务之一是预测程序语义属性，如类名、方法名、变量名和变量类型。这项任务非常重要，因为这种语义属性或标签在软件开发和维护过程中是常见和重要的。一方面，开发人员必须为他们在程序中声明的每个类、方法、变量和参数选择有意义的语义名称。另一方面，开发人员在代码审查或维护期间经常依赖名称来理解程序或API的行为。现有的方法主要有以下几种：</p>
+<ul>
+<li><p>基于AST的预测程序语义属性的方法：将代码表示为语法级别上的一系列AST节点或路径序列，然后利用机器学习方法进行学习预测。（问题：很难学习代码语义）</p>
+</li>
+<li><p>基于执行方式的预测程序语义属性的方法：从语义级的符号和具体执行过程中学习代码表示。在预测程序属性方面取得了良好的准确性。（问题：收集执行过程时可能会遇到问题）</p>
+</li>
+<li><p>基于Token的预测程序语义属性的方法：将代码表示为词汇级别上的Token序列，并应用N-grim模型或深度神经网络模型来预测程序属性。（问题：很难学习代码语义）</p>
+</li>
+</ul>
+<h3 id="Contributions："><a href="#Contributions：" class="headerlink" title="Contributions："></a>Contributions：</h3><ul>
+<li><p>论文提出了一种混合代码表示学习方法：Meth2Seq，以嵌入基于三种代码表示的混合的方法，即程序依赖图上的一系列路径，捕获语义结构，基于上下文自由语法的类型IR语句序列，用来描述每种IR语句类型的运算语义和自然语言注释的句子。</p>
+</li>
+<li><p>在67个Java项目中，使用280.5K方法的数据集评估了方法名预测任务上的Meth2Seq，它显著优于最先进的代码表示学习方法同时方法名预测上也优于现有的方法。</p>
+</li>
+</ul>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>论文的思想是使用程序依赖图(PDG)中的代码语义结构、中间表示法(IR)中的隐式操作语义和自然语言注释中的语义。特别是，PDG中的控制流和数据流分别描述了语句的执行顺序以及语句之间的数据定义和用法。与AST相比，PDG和IR都提供了更高的代码抽象。</p>
+<p><img src="https://i.loli.net/2021/07/22/YIALPi28KdrRmfz.png" alt="截屏2021-07-22 上午9.47.42.png"></p>
+<p>如图所示，它将方法主体表示为一系列PDG路径、类型化的IR语句序列和方法注释句。然后，它首先应用位置编码和一个全连接层来初始化每个PDG路径、每个类型的IR语句和方法注释作为一个向量。并使用位置编码和Transformer编码器为每个方法生成一个向量序列。学习到的向量序列可以输入给Transformer解码器来预测名称。</p>
+<h3 id="将方法表示为一系列的PDG路径"><a href="#将方法表示为一系列的PDG路径" class="headerlink" title="将方法表示为一系列的PDG路径"></a>将方法表示为一系列的PDG路径</h3><p>PDG：程序依赖图（由控制流图+数据流图构成）</p>
+<p><img src="https://i.loli.net/2021/07/22/Bj7KGHZELwuM2mV.png" alt="截屏2021-07-22 上午9.59.51.png"><br>如图所示，红色箭头表示数据依赖，黑色箭头表示控制依赖。</p>
+<p>使用PDG路径表示代码的优势：</p>
+<ul>
+<li>PDG路径可以捕获不同的局部语义结构信息；</li>
+<li>PDG路径将非顺序图结构转换为序列；</li>
+<li>可以自动生成PDG路径，并适用于其他编程语言；</li>
+</ul>
+<p>PDG路径生成方法：随机游走策略，首先从N中均匀随机地选择一个节点作为当前节点n，然后进行迭代，直到达到最大长度k或达到出口节点ne，在每次迭代中，它均匀地从n的外边(n)中随机选择一条边缘，并使用该边缘的目标节点作为当前节点继续迭代，直到所有的节点都完成遍历。</p>
+<p>K是如何确定的？每一个方法所生成的PDG的大小都是不一样的，生成的PDG数量最大为N，针对每一种方法，生成b*｜N｜条路径，长度不超过|N|/a + 1。</p>
+<h3 id="将方法表示为类型化的IR语句序列"><a href="#将方法表示为类型化的IR语句序列" class="headerlink" title="将方法表示为类型化的IR语句序列"></a>将方法表示为类型化的IR语句序列</h3><p>该过程分为两步：IR生成和类型IR表示。</p>
+<ul>
+<li>IR生成：使用Jimple作为IR，Jimple是Java字节码的一种类型化和紧凑的3-address代码表示。</li>
+<li>类型IR表示：在Jimple中，共有15种类型的Jimple语句具有在其上下文自由语法中定义的操作语义。针对每一条语句，添加non-terminal表示该语句的类型的符号。然后，根据上下文自由语法解析每个Jimple语句，并为每个terminal符号添加它出现的no-terminal符号。基于这两条规则，可以将每个Jimple语句转换为比原始的Jimple语句更自然，可以减轻深度学习的负担。</li>
+</ul>
+<p><img src="https://i.loli.net/2021/07/22/Yep73x2GuyTD6af.png" alt="截屏2021-07-22 上午10.22.05.png"></p>
+<h3 id="将方法表示为注释的句子"><a href="#将方法表示为注释的句子" class="headerlink" title="将方法表示为注释的句子"></a>将方法表示为注释的句子</h3><p>注释表示方法是简单地使用方法注释的第一句，因为第一句话通常是根据JavaDoc指导下的方法的总结。使用常用的策略（即tokenizing、删除停用词和符号）来预处理提取的句子。最后，对每一个方法生成一条注释，对于没有注释的方法，默认留空。</p>
+<h3 id="以一种混合的方式学习代码表示"><a href="#以一种混合的方式学习代码表示" class="headerlink" title="以一种混合的方式学习代码表示"></a>以一种混合的方式学习代码表示</h3><p>将每一个方法定义为 |P| + |N | + 1，其中｜P｜为PDG路径，｜N｜为IR语句，1表示一条注释。首先使用位置编码来编码每个PDG路径中的单词的位置信息、每个输入的IR语句和方法注释。然后，使用一个全连接层来将这个句子中的每个单词嵌入到一个向量中。然后，|P|+|N|+1向量按顺序输入位置编码，以编码位置信息(对于类型化IR语句的向量特别有用)，然后使用Transformer编码器，生成一系列以混合方式表示方法的|P|+|N|+1注意矢量。</p>
+<h3 id="预测方法名称"><a href="#预测方法名称" class="headerlink" title="预测方法名称"></a>预测方法名称</h3><p>利用Meth2Seq生成的注意向量序列，使用Transformer解码器来实现方法名称预测的任务。为了构造输出词汇表，提取方法名并将它们作为输出词汇表。</p>
+<h2 id="Evaluation"><a href="#Evaluation" class="headerlink" title="Evaluation"></a>Evaluation</h2><h3 id="Dataset"><a href="#Dataset" class="headerlink" title="Dataset"></a>Dataset</h3><p>使用67个GitHub的Java项目。并创建了一个包含280.5K方法的语料库。7:1:2（训练：验证：测试）。</p>
+<h3 id="RQ1-与最先进的方法相比，Meth2Seq在预测方法名称方面的有效性如何？"><a href="#RQ1-与最先进的方法相比，Meth2Seq在预测方法名称方面的有效性如何？" class="headerlink" title="RQ1:与最先进的方法相比，Meth2Seq在预测方法名称方面的有效性如何？"></a>RQ1:与最先进的方法相比，Meth2Seq在预测方法名称方面的有效性如何？</h3><p><img src="https://i.loli.net/2021/07/22/RW293cxHdkrUq7l.png" alt="截屏2021-07-22 上午10.55.25.png"><br><img src="https://i.loli.net/2021/07/22/4tA7wah8mTbEjUc.png" alt="截屏2021-07-22 上午10.56.04.png"></p>
+<h3 id="RQ2-Meth2Seq中的三种代码表示对所实现的有效性的贡献是什么？"><a href="#RQ2-Meth2Seq中的三种代码表示对所实现的有效性的贡献是什么？" class="headerlink" title="RQ2:Meth2Seq中的三种代码表示对所实现的有效性的贡献是什么？"></a>RQ2:Meth2Seq中的三种代码表示对所实现的有效性的贡献是什么？</h3><p><img src="https://i.loli.net/2021/07/22/VCf6EheMUyTIGY8.png" alt="截屏2021-07-22 上午10.56.08.png"></p>
+<h3 id="RQ3-Meth2Seq对PDG路径数量和长度的敏感性是多少？"><a href="#RQ3-Meth2Seq对PDG路径数量和长度的敏感性是多少？" class="headerlink" title="RQ3:Meth2Seq对PDG路径数量和长度的敏感性是多少？"></a>RQ3:Meth2Seq对PDG路径数量和长度的敏感性是多少？</h3><p><img src="https://i.loli.net/2021/07/22/NLbipBQegK1DZ4C.png" alt="截屏2021-07-22 上午10.56.21.png"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98/" rel="tag"># 漏洞挖掘</a>
+              <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A1%A8%E7%A4%BA%E5%AD%A6%E4%B9%A0/" rel="tag"># 代码表示学习</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/06/06/Dropbox-CTF/" rel="prev" title="Dropbox-CTF">
+      <i class="fa fa-chevron-left"></i> Dropbox-CTF
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/07/26/%E6%BA%90%E4%BB%A3%E7%A0%81%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96%E4%B8%8E%E8%A1%A8%E7%A4%BA-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" rel="next" title="源代码特征提取与表示-论文笔记">
+      源代码特征提取与表示-论文笔记 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#A-hybrid-code-representation-learning-approach-for-predicting-method-names"><span class="nav-number">1.</span> <span class="nav-text">A hybrid code representation learning approach for predicting method names</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A5%E6%BA%90%E4%BF%A1%E6%81%AF"><span class="nav-number">1.1.</span> <span class="nav-text">来源信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Abstract"><span class="nav-number">1.2.</span> <span class="nav-text">Abstract</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction"><span class="nav-number">1.3.</span> <span class="nav-text">Introduction</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Contributions%EF%BC%9A"><span class="nav-number">1.3.1.</span> <span class="nav-text">Contributions：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95"><span class="nav-number">1.4.</span> <span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%86%E6%96%B9%E6%B3%95%E8%A1%A8%E7%A4%BA%E4%B8%BA%E4%B8%80%E7%B3%BB%E5%88%97%E7%9A%84PDG%E8%B7%AF%E5%BE%84"><span class="nav-number">1.4.1.</span> <span class="nav-text">将方法表示为一系列的PDG路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%86%E6%96%B9%E6%B3%95%E8%A1%A8%E7%A4%BA%E4%B8%BA%E7%B1%BB%E5%9E%8B%E5%8C%96%E7%9A%84IR%E8%AF%AD%E5%8F%A5%E5%BA%8F%E5%88%97"><span class="nav-number">1.4.2.</span> <span class="nav-text">将方法表示为类型化的IR语句序列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%86%E6%96%B9%E6%B3%95%E8%A1%A8%E7%A4%BA%E4%B8%BA%E6%B3%A8%E9%87%8A%E7%9A%84%E5%8F%A5%E5%AD%90"><span class="nav-number">1.4.3.</span> <span class="nav-text">将方法表示为注释的句子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A5%E4%B8%80%E7%A7%8D%E6%B7%B7%E5%90%88%E7%9A%84%E6%96%B9%E5%BC%8F%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81%E8%A1%A8%E7%A4%BA"><span class="nav-number">1.4.4.</span> <span class="nav-text">以一种混合的方式学习代码表示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%84%E6%B5%8B%E6%96%B9%E6%B3%95%E5%90%8D%E7%A7%B0"><span class="nav-number">1.4.5.</span> <span class="nav-text">预测方法名称</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Evaluation"><span class="nav-number">1.5.</span> <span class="nav-text">Evaluation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Dataset"><span class="nav-number">1.5.1.</span> <span class="nav-text">Dataset</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RQ1-%E4%B8%8E%E6%9C%80%E5%85%88%E8%BF%9B%E7%9A%84%E6%96%B9%E6%B3%95%E7%9B%B8%E6%AF%94%EF%BC%8CMeth2Seq%E5%9C%A8%E9%A2%84%E6%B5%8B%E6%96%B9%E6%B3%95%E5%90%8D%E7%A7%B0%E6%96%B9%E9%9D%A2%E7%9A%84%E6%9C%89%E6%95%88%E6%80%A7%E5%A6%82%E4%BD%95%EF%BC%9F"><span class="nav-number">1.5.2.</span> <span class="nav-text">RQ1:与最先进的方法相比，Meth2Seq在预测方法名称方面的有效性如何？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RQ2-Meth2Seq%E4%B8%AD%E7%9A%84%E4%B8%89%E7%A7%8D%E4%BB%A3%E7%A0%81%E8%A1%A8%E7%A4%BA%E5%AF%B9%E6%89%80%E5%AE%9E%E7%8E%B0%E7%9A%84%E6%9C%89%E6%95%88%E6%80%A7%E7%9A%84%E8%B4%A1%E7%8C%AE%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">1.5.3.</span> <span class="nav-text">RQ2:Meth2Seq中的三种代码表示对所实现的有效性的贡献是什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RQ3-Meth2Seq%E5%AF%B9PDG%E8%B7%AF%E5%BE%84%E6%95%B0%E9%87%8F%E5%92%8C%E9%95%BF%E5%BA%A6%E7%9A%84%E6%95%8F%E6%84%9F%E6%80%A7%E6%98%AF%E5%A4%9A%E5%B0%91%EF%BC%9F"><span class="nav-number">1.5.4.</span> <span class="nav-text">RQ3:Meth2Seq对PDG路径数量和长度的敏感性是多少？</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="honywen"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">honywen</p>
+  <div class="site-description" itemprop="description">多多指教</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lxyeternal" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lxyeternal" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1796369212@qq.com" title="E-Mail → mailto:1796369212@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/weixin_39641975" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;weixin_39641975" rel="noopener" target="_blank"><i class="fab fa-stack-overflow fa-fw"></i>CSDN</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/yourname" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://honywen.com/" title="http:&#x2F;&#x2F;honywen.com">Title</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">honywen</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'XtTLwDG0JPdYJFC2zH1ULGMN-gzGzoHsz',
+      appKey     : 'E1vcmMuSfPfzUqtr2j4z9T0N',
+      placeholder: "Just go go",
+      avatar     : '/uploads/avatar.jpg',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

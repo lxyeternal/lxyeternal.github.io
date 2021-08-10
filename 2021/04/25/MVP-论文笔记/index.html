@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"honywen.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","Pisces | Gemini":240,"width":300,"display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="MVP: Detecting Vulnerabilities using Patch-Enhanced Vulnerability Signatures来源信息 USENIX Security Symposium(CCF A) 机构：中国科学院信息工程研究所 作者：Yang Xiao;  Bihuan Chen; Chendong Yu;  Zhengzi Xu et al.  摘要反复出现的漏洞">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MVP-论文笔记">
+<meta property="og:url" content="http://honywen.com/2021/04/25/MVP-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="小咕✨">
+<meta property="og:description" content="MVP: Detecting Vulnerabilities using Patch-Enhanced Vulnerability Signatures来源信息 USENIX Security Symposium(CCF A) 机构：中国科学院信息工程研究所 作者：Yang Xiao;  Bihuan Chen; Chendong Yu;  Zhengzi Xu et al.  摘要反复出现的漏洞">
+<meta property="og:locale">
+<meta property="og:image" content="https://i.loli.net/2021/04/26/CBiPeWuYgTNnHrs.png">
+<meta property="og:image" content="https://i.loli.net/2021/04/26/MjLcF4VvriClsfJ.png">
+<meta property="og:image" content="https://i.loli.net/2021/04/26/d6lFuALpn1Vqtig.png">
+<meta property="og:image" content="https://i.loli.net/2021/04/26/FSZG2bia5CUBmJW.png">
+<meta property="og:image" content="https://i.loli.net/2021/04/26/EL2CIs5TOjXDyoU.png">
+<meta property="og:image" content="https://i.loli.net/2021/04/26/zO57ZsqnWStcIG3.png">
+<meta property="og:image" content="https://i.loli.net/2021/04/26/4V2vG9Cu1qUNmbz.png">
+<meta property="og:image" content="https://i.loli.net/2021/04/26/Bmbz5vpMtLX4P8W.png">
+<meta property="og:image" content="https://i.loli.net/2021/04/26/rlYuHw5IPgMSp8A.png">
+<meta property="og:image" content="https://i.loli.net/2021/04/26/4uZsgik3cW86ApR.png">
+<meta property="og:image" content="https://i.loli.net/2021/04/26/cxCMkma91f7H6Ts.png">
+<meta property="article:published_time" content="2021-04-25T12:01:07.000Z">
+<meta property="article:modified_time" content="2021-04-27T07:35:03.357Z">
+<meta property="article:author" content="honywen">
+<meta property="article:tag" content="漏洞检测">
+<meta property="article:tag" content="程序切片">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/04/26/CBiPeWuYgTNnHrs.png">
+
+<link rel="canonical" href="http://honywen.com/2021/04/25/MVP-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>MVP-论文笔记 | 小咕✨</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">小咕✨</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Everything is fine</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/commonweal/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://honywen.com/2021/04/25/MVP-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="honywen">
+      <meta itemprop="description" content="多多指教">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小咕✨">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MVP-论文笔记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-04-25 20:01:07" itemprop="dateCreated datePublished" datetime="2021-04-25T20:01:07+08:00">2021-04-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-04-27 15:35:03" itemprop="dateModified" datetime="2021-04-27T15:35:03+08:00">2021-04-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">论文笔记</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2021/04/25/MVP-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/04/25/MVP-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="MVP-Detecting-Vulnerabilities-using-Patch-Enhanced-Vulnerability-Signatures"><a href="#MVP-Detecting-Vulnerabilities-using-Patch-Enhanced-Vulnerability-Signatures" class="headerlink" title="MVP: Detecting Vulnerabilities using Patch-Enhanced Vulnerability Signatures"></a>MVP: Detecting Vulnerabilities using Patch-Enhanced Vulnerability Signatures</h1><h2 id="来源信息"><a href="#来源信息" class="headerlink" title="来源信息"></a>来源信息</h2><ul>
+<li>USENIX Security Symposium(<strong>CCF A</strong>)</li>
+<li>机构：中国科学院信息工程研究所</li>
+<li>作者：Yang Xiao;  Bihuan Chen; Chendong Yu;  Zhengzi Xu et al.</li>
+</ul>
+<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>反复出现的漏洞在现实世界的系统中广泛存在，而且仍然没有被检测到，而这些漏洞通常是由可重用的代码库或共享的代码逻辑造成的。然而，脆弱功能及其修补功能之间潜在的小差异，以及脆弱功能和目标功能之间可能存在的大差异，检测到的基于克隆和基于功能匹配的方法为识别这些反复出现的漏洞带来了挑战，即导致较高的假阳性和假阴性。  <a id="more"></a></p>
+<p>在论文中，作者提出了一种新方法以低假阳率和假阴率去检测重复发生的漏洞，首先使用程序切片来从语法和语义级别上的脆弱函数及其修补函数中提取漏洞和补丁签名。然后，如果目标函数与漏洞签名相匹配，但与补丁程序签名不匹配，则它将被识别为可能易受攻击。作者在MVP工具中测试该方法，对10个开源系统的评估表明，i)MVP显著优于最先进的基于克隆和基于函数匹配的漏洞检测方法；ii)MVP检测到了通用的漏洞检测方法无法检测到的反复漏洞； iii)MVP检测到了97个新漏洞，申请了23个CVE。</p>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><h3 id="现有的方法"><a href="#现有的方法" class="headerlink" title="现有的方法"></a>现有的方法</h3><p>匹配反复出现漏洞的方法大致的思想是在目标的程序代码中匹配已知的漏洞代码，现有的方法主要分为两种：基于克隆方法，基于函数匹配方法。</p>
+<ul>
+<li>基于克隆的方法<br>该方法将重复出现的漏洞检测问题视为代码克隆的检测问题，它们从已知漏洞中提取令牌或语法级签名，并识别签名的代码克隆可能容易受到攻击。</li>
+<li>基于函数匹配的方法<br>直接将已知漏洞的中漏洞函数作为签名，并检测这些漏洞函数的克隆。</li>
+</ul>
+<h3 id="现有的挑战"><a href="#现有的挑战" class="headerlink" title="现有的挑战"></a>现有的挑战</h3><ul>
+<li>第一个挑战是如何区分已经修补的漏洞，以减少误阳性。</li>
+<li>第二个挑战是如何精确地生成一个已知漏洞的签名，以减少假阳性和假阴性。</li>
+</ul>
+<h3 id="论文方法"><a href="#论文方法" class="headerlink" title="论文方法"></a>论文方法</h3><p>文章提出了针对反复出现的漏洞检测方法MVP（Matching Vulnerabilities with Patches）匹配漏洞以及补丁。具体来说：</p>
+<ul>
+<li>为了解决第一个挑战，我们不仅生成一个漏洞签名，而且还生成一个补丁签名来捕获漏洞是如何导致和修复的。我们利用漏洞签名来搜索潜在的脆弱功能，并使用补丁签名来区分它们是否已经打过补丁。</li>
+<li>为了解决第二个挑战，我们提出了一种新的切片方法，只提取与漏洞相关和补丁相关的语句，以在语法和语义级别上生成漏洞和补丁签名。</li>
+<li>此外，我们还应用语句抽象和基于熵的语句选择来进一步提高MVP的准确性。</li>
+</ul>
+<h3 id="方法评价"><a href="#方法评价" class="headerlink" title="方法评价"></a>方法评价</h3><p>MVP在10个具有25,377个安全补丁的开源系统上进行了评估。比较两种最先进的、最密切相关的基于克隆的方法(ReDeBug和VUUDY)。结果表明，MVP优于ReDeBug和VUUDY，其精度提高了74.5%和75.6%，召回率提高了42.4%和65.8%。MVP发现了97个新的漏洞，并成功提交了23个CVE。我们还将MVP与基于函数匹配的方法（SourcererCC and CCAligner)进行了比较。结果表明，MVP性能优于SourcererCC和CCCligner提高了83.1%和83.3%，召回率提高了22.5%和30.6%。</p>
+<h3 id="论文贡献"><a href="#论文贡献" class="headerlink" title="论文贡献"></a>论文贡献</h3><ul>
+<li>文章提出并实现了一种新的通过利用程序切片利用漏洞和补丁签名来实现重复漏洞检测的方法。</li>
+<li>作者进行了密集的评估，以将MVP与四种最先进的方法进行了比较。MVP在准确性上明显优于他们。</li>
+<li>在10个开源系统种进行测试，发现了97个新漏洞，提交了23个CVE。</li>
+</ul>
+<h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2><h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p><img src="https://i.loli.net/2021/04/26/CBiPeWuYgTNnHrs.png" alt="截屏2021-04-26 下午2.00.11.png"></p>
+<ul>
+<li>提取函数签名的步骤：以目标系统作为输入，并为目标系统中的每个函数生成一个签名。</li>
+<li>提取漏洞和修补程序签名的步骤：将安全补丁程序作为输入，并生成漏洞签名和补丁程序签名，以从漏洞如何引起以及如何修复漏洞的角度反映漏洞。</li>
+<li>最终的“检测漏洞”步骤：通过将目标系统中的每个函数与漏洞和补丁签名匹配来确定该功能是否存在潜在的脆弱性。</li>
+</ul>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><ul>
+<li>函数签名：给定一个C/C++函数 f，我们将它的签名定义为一个元组(fsyn，fsem)，其中fsyn是函数中所有语句的哈希值的集合；fsem是一组3元组(h1，h2，type)，这样h1和h2表示两个语句的哈希值，type{data，control}表示哈希值为h1的语句对其哈希的语句具有数据或控制依赖性.<br>fsyn捕获目标函数的语句作为语法签名。fsem捕获数据，并控制函数中语句之间的依赖关系作为语义签名。这提供了一个函数的补充信息，以帮助提高匹配的精度.</li>
+</ul>
+<p><strong><em>在本文的其余部分中，我们假设每个漏洞都在一个函数内。我们使用(fv，pv)来表示一对脆弱的函数fv和其补丁函数pv。</em></strong></p>
+<ul>
+<li>函数补丁：给定一对函数（fv、pv），函数补丁Pv由一个或多个hunk（块）组成。hunk是补丁中的一个基本单元，它由上下文行、已删除的代码行和/或已添加的代码行组成。被删除的行是fv中，但在pv中缺少的行。而添加的行是在fv中缺少但在pv中存在的行。</li>
+</ul>
+<h3 id="提取函数签名"><a href="#提取函数签名" class="headerlink" title="提取函数签名"></a>提取函数签名</h3><h4 id="解析和分析函数"><a href="#解析和分析函数" class="headerlink" title="解析和分析函数"></a>解析和分析函数</h4><p>给定目标系统的源代码作为输入，首先使用Joern来解析代码并生成一个代码属性图，它将抽象语法树、控制流图和程序依赖图合并为一个联合的数据结构。从代码属性图中，首先得到目标系统中的所有函数，然后对每个函数生成其抽象语法树(AST)和程序依赖性图(PDG)。</p>
+<h4 id="抽象化和规范化的函数"><a href="#抽象化和规范化的函数" class="headerlink" title="抽象化和规范化的函数"></a>抽象化和规范化的函数</h4><p>由于开发人员可以重用具有重命名参数/变量的代码片段，因此首先在提取签名之前对每个函数执行抽象，以避免假阴。具体地说，从一个函数的AST中识别形式参数、局部变量和字符串文本，并替换所有的形式参数、局部参数和字符串文本。</p>
+<ul>
+<li>形参 -&gt; PARAM</li>
+<li>局部变量 -&gt; VARIABLE</li>
+<li>字符串 -&gt; STRING</li>
+</ul>
+<p>在抽象之后，通过删除所有注释、大括号、tabs和空白，对函数体中的每个语句应用规范化。</p>
+<h4 id="函数签名生成"><a href="#函数签名生成" class="headerlink" title="函数签名生成"></a>函数签名生成</h4><p>为了生成函数签名，我们首先对每个抽象和规范化的语句应用一个哈希函数来计算一个hash值。因此，函数的语法签名fsyn被表示为语句的计算哈希值的集合。</p>
+<p>然后，我们从一个函数的PDG中提取数据或控制两个语句之间的依赖关系，每个依赖项表示为3元组（h1、h2、type）。一个函数的语义特征，表示为fsem，因此被表示为一组提取的依赖项。我们的抽象和规范化可能会丢失一些信息，并导致假阳性，但是考虑到语义信息（即语句之间的控制或数据依赖性）可以弥补抽象和归一化的不足。</p>
+<p><img src="https://i.loli.net/2021/04/26/MjLcF4VvriClsfJ.png" alt="截屏2021-04-26 下午3.48.44.png"></p>
+<h3 id="提取漏洞及补丁签名"><a href="#提取漏洞及补丁签名" class="headerlink" title="提取漏洞及补丁签名"></a>提取漏洞及补丁签名</h3><h4 id="识别代码修改"><a href="#识别代码修改" class="headerlink" title="识别代码修改"></a>识别代码修改</h4><p>我们首先通过解析安全补丁的头(即diff文件)来识别更改的文件，并记录获得更改文件的易受攻击和补丁版本的提交。为了识别更改的函数，我们通过解析diff文件来查找已删除和添加的语句及其行号。并在更改的文件的易受攻击版本和补丁的版本中获取所有函数以及它们的开始和结束行号。如果一个语句包括一个或多个已被删除的代码行，我们认为该语句已被删除（或添加）。部分修改的语句是删除语句、添加语句或删除语句和添加语句。</p>
+<p>通过检查已删除的（或添加的）语句的行号是否在已更改的文件的脆弱的（或补丁的）版本中函数的开始和结束行号的范围内，我们确定所有更改的函数，针对每一个函数，我们还提取Sdel和Sadd、Svul和Spat。</p>
+<p>利用切片技术可以提取相关的语句和排除不相关的语句。作者在PDG上执行前后切片，使用已删除的语句Sdel(Sadd添加的语句）作为切片的标准。向前向后切片是根据函数的依赖关系，包括数据依赖和控制依赖。</p>
+<p>传统的程序切片存在的问题：</p>
+<ul>
+<li>如果说将条件语句设置为切片准则，正向切片的结果可能包含太多的语句，其中会包含一些与漏洞无关的噪声语句。如图可以发现 24行与18行和23行相关，但是却与28行（漏洞行）无关。</li>
+</ul>
+<p><img src="https://i.loli.net/2021/04/26/d6lFuALpn1Vqtig.png" alt="截屏2021-04-26 下午5.13.02.png"></p>
+<ul>
+<li>一个补丁可以只是添加一个函数调用（第3行），而不使用其返回值。因此，如果将函数调用语句设置为切片标准，我们只有向后切片结果，但没有得到正向切片结果。  </li>
+</ul>
+<p><img src="https://i.loli.net/2021/04/26/FSZG2bia5CUBmJW.png" alt="截屏2021-04-26 下午5.16.19.png"></p>
+<p>前两种程序切片方法都存在问题，所以作者提出了一种新的切片方法。作者将Sdel和Sadd中的每个语句作为切片的标准。</p>
+<p>反向切片：对Fv和Pv的PDG进行正常的向后切片，获取对数据和控制依赖关系有影响的切片标准的所有语句。</p>
+<p>前向切片：对Fv和Pv的PDG进行前向切片时，根据不同的语句类型执行不同的切片准则。</p>
+<ul>
+<li>赋值语句：进行正常的正向切片，按照数据流进行常规切片即可</li>
+<li>条件语句：在正向切片的过程中只针对条件语句中使用的的变量或参数进行切片。</li>
+<li>返回语句：返回值与返回语句之后的语句之间如果不存在任何依赖关系了则不需要向前切片。</li>
+<li>其他：其他类型包括未使用返回值的函数调用语句。与条件语句类似</li>
+</ul>
+<h4 id="漏洞和补丁签名生成"><a href="#漏洞和补丁签名生成" class="headerlink" title="漏洞和补丁签名生成"></a>漏洞和补丁签名生成</h4><p>漏洞签名可以用于查找潜在的漏洞函数，补丁签名可以区分它们是否已经被修补。在语法和语义级别上计算漏洞签名(即Vsyn和Vsem)和补丁签名(如Psyn和Psem)。</p>
+<p><img src="https://i.loli.net/2021/04/26/EL2CIs5TOjXDyoU.png" alt="截屏2021-04-26 下午6.47.19.png"><br>我们用等式来计算Vsyn.S(sem)del是与删除语句相关的语句，因此它与漏洞的原因直接相关.S(sem)del可能不会包含所有的漏洞语句。</p>
+<h3 id="通过匹配来检测漏洞"><a href="#通过匹配来检测漏洞" class="headerlink" title="通过匹配来检测漏洞"></a>通过匹配来检测漏洞</h3><p>给定目标系统中每个函数的函数特征（fsyn；fsem），以及删除的语句Sdel、漏洞特征Vsyn和Vsem，以及补丁中每个已更改函数的Psyn和Psem，根据以下原则判断目标系统中的某个函数是否具有潜在的脆弱性签名与漏洞签名匹配，但与修补程序签名不匹配。具体地说，如果目标函数满足以下五个条件，即C1到C5，则它可能是易受攻击的。</p>
+<p><img src="https://i.loli.net/2021/04/26/zO57ZsqnWStcIG3.png" alt="截屏2021-04-26 下午7.00.06.png"></p>
+<ul>
+<li>C1：目标函数必须包含所有已删除的语句</li>
+<li>C2：目标函数的签名与漏洞签名在语法层次（syn）上匹配</li>
+<li>C3：目标函数的签名与补丁签名在语法层次（syn）上不匹配</li>
+<li>C4：目标函数的签名与漏洞签名在语义层次（sem）上匹配</li>
+<li>C5：目标函数的签名与补丁签名在语义层次（sem）上不匹配</li>
+</ul>
+<p>具体阈值可以由用户配置</p>
+<h2 id="评估"><a href="#评估" class="headerlink" title="评估"></a>评估</h2><p>实验回答以下五个问题：</p>
+<ul>
+<li>Q1：与最先进的方法相比，MVP在检测反复出现的漏洞方面的准确性如何？</li>
+<li>Q2：与最先进的方法相比，MVP在检测重复出现的漏洞方面的可扩展性如何？</li>
+<li>Q3：在MVP的匹配过程中，如何配置阈值？</li>
+<li>Q4：语句抽象和语句信息如何采样才能有助于MVP的准确性？</li>
+<li>Q5：通用漏洞检测方法检测重复漏洞的性能如何？</li>
+</ul>
+<h3 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h3><p>开源的C/C++项目</p>
+<p><img src="https://i.loli.net/2021/04/26/4V2vG9Cu1qUNmbz.png" alt="截屏2021-04-26 下午7.07.47.png"></p>
+<h3 id="试验结果"><a href="#试验结果" class="headerlink" title="试验结果"></a>试验结果</h3><p>Q1：与最先进的方法相比，MVP在检测反复出现的漏洞方面的准确性如何？</p>
+<p><img src="https://i.loli.net/2021/04/26/Bmbz5vpMtLX4P8W.png" alt="截屏2021-04-26 下午7.08.04.png"></p>
+<p> Q2：与最先进的方法相比，MVP在检测重复出现的漏洞方面的可扩展性如何？</p>
+<p> <img src="https://i.loli.net/2021/04/26/rlYuHw5IPgMSp8A.png" alt="截屏2021-04-26 下午7.13.24.png"></p>
+<p> Q3：在MVP的匹配过程中，如何配置阈值？</p>
+<p> <img src="https://i.loli.net/2021/04/26/4uZsgik3cW86ApR.png" alt="截屏2021-04-26 下午7.13.43.png"></p>
+<p>Q4：语句抽象和语句信息如何采样才能有助于MVP的准确性？</p>
+<p><img src="https://i.loli.net/2021/04/26/cxCMkma91f7H6Ts.png" alt="截屏2021-04-26 下午7.13.55.png"></p>
+<p>Q5：通用漏洞检测方法检测重复漏洞的性能如何？</p>
+<p>对比了VulDeePecker、Devign、Coverity、Checkmarx。MVP的方法检测效果要高于这四种方法。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="局限性"><a href="#局限性" class="headerlink" title="局限性"></a>局限性</h3><ul>
+<li>MVP只专注于检测反复出现的克隆漏洞</li>
+<li>使用joern生成代码的属性图，只适用于C/C++</li>
+<li>通过宏来修复的漏洞代码无法进行检测</li>
+<li>只对形式参数、局部变量和字符串进行抽象，因此无法发现已知漏洞函数具有类似函数调用或数据类型的潜在脆弱函数</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%BC%8F%E6%B4%9E%E6%A3%80%E6%B5%8B/" rel="tag"># 漏洞检测</a>
+              <a href="/tags/%E7%A8%8B%E5%BA%8F%E5%88%87%E7%89%87/" rel="tag"># 程序切片</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/24/HinCTI-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" rel="prev" title="HinCTI-论文笔记">
+      <i class="fa fa-chevron-left"></i> HinCTI-论文笔记
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/04/26/CTF-WEB-Hello-World/" rel="next" title="CTF-WEB:Hello World">
+      CTF-WEB:Hello World <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MVP-Detecting-Vulnerabilities-using-Patch-Enhanced-Vulnerability-Signatures"><span class="nav-number">1.</span> <span class="nav-text">MVP: Detecting Vulnerabilities using Patch-Enhanced Vulnerability Signatures</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A5%E6%BA%90%E4%BF%A1%E6%81%AF"><span class="nav-number">1.1.</span> <span class="nav-text">来源信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%91%98%E8%A6%81"><span class="nav-number">1.2.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.3.</span> <span class="nav-text">介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%B0%E6%9C%89%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">1.3.1.</span> <span class="nav-text">现有的方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%B0%E6%9C%89%E7%9A%84%E6%8C%91%E6%88%98"><span class="nav-number">1.3.2.</span> <span class="nav-text">现有的挑战</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BA%E6%96%87%E6%96%B9%E6%B3%95"><span class="nav-number">1.3.3.</span> <span class="nav-text">论文方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E8%AF%84%E4%BB%B7"><span class="nav-number">1.3.4.</span> <span class="nav-text">方法评价</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BA%E6%96%87%E8%B4%A1%E7%8C%AE"><span class="nav-number">1.3.5.</span> <span class="nav-text">论文贡献</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%9C%BA"><span class="nav-number">1.4.</span> <span class="nav-text">动机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95"><span class="nav-number">1.5.</span> <span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89"><span class="nav-number">1.5.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E5%8F%96%E5%87%BD%E6%95%B0%E7%AD%BE%E5%90%8D"><span class="nav-number">1.5.2.</span> <span class="nav-text">提取函数签名</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A7%A3%E6%9E%90%E5%92%8C%E5%88%86%E6%9E%90%E5%87%BD%E6%95%B0"><span class="nav-number">1.5.2.1.</span> <span class="nav-text">解析和分析函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8A%BD%E8%B1%A1%E5%8C%96%E5%92%8C%E8%A7%84%E8%8C%83%E5%8C%96%E7%9A%84%E5%87%BD%E6%95%B0"><span class="nav-number">1.5.2.2.</span> <span class="nav-text">抽象化和规范化的函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E7%AD%BE%E5%90%8D%E7%94%9F%E6%88%90"><span class="nav-number">1.5.2.3.</span> <span class="nav-text">函数签名生成</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E5%8F%96%E6%BC%8F%E6%B4%9E%E5%8F%8A%E8%A1%A5%E4%B8%81%E7%AD%BE%E5%90%8D"><span class="nav-number">1.5.3.</span> <span class="nav-text">提取漏洞及补丁签名</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%86%E5%88%AB%E4%BB%A3%E7%A0%81%E4%BF%AE%E6%94%B9"><span class="nav-number">1.5.3.1.</span> <span class="nav-text">识别代码修改</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E5%92%8C%E8%A1%A5%E4%B8%81%E7%AD%BE%E5%90%8D%E7%94%9F%E6%88%90"><span class="nav-number">1.5.3.2.</span> <span class="nav-text">漏洞和补丁签名生成</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E5%8C%B9%E9%85%8D%E6%9D%A5%E6%A3%80%E6%B5%8B%E6%BC%8F%E6%B4%9E"><span class="nav-number">1.5.4.</span> <span class="nav-text">通过匹配来检测漏洞</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%84%E4%BC%B0"><span class="nav-number">1.6.</span> <span class="nav-text">评估</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-number">1.6.1.</span> <span class="nav-text">数据集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%95%E9%AA%8C%E7%BB%93%E6%9E%9C"><span class="nav-number">1.6.2.</span> <span class="nav-text">试验结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.7.</span> <span class="nav-text">总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%80%E9%99%90%E6%80%A7"><span class="nav-number">1.7.1.</span> <span class="nav-text">局限性</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="honywen"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">honywen</p>
+  <div class="site-description" itemprop="description">多多指教</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lxyeternal" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lxyeternal" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1796369212@qq.com" title="E-Mail → mailto:1796369212@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/weixin_39641975" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;weixin_39641975" rel="noopener" target="_blank"><i class="fab fa-stack-overflow fa-fw"></i>CSDN</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/yourname" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://honywen.com/" title="http:&#x2F;&#x2F;honywen.com">Title</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">honywen</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'XtTLwDG0JPdYJFC2zH1ULGMN-gzGzoHsz',
+      appKey     : 'E1vcmMuSfPfzUqtr2j4z9T0N',
+      placeholder: "Just go go",
+      avatar     : '/uploads/avatar.jpg',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

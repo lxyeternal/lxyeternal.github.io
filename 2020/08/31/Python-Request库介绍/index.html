@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"honywen.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","Pisces | Gemini":240,"width":300,"display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Python requests库介绍Python的库函数有很多可以用来实现爬虫，这里介绍一下我经常使用的requests库。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python Request库介绍">
+<meta property="og:url" content="http://honywen.com/2020/08/31/Python-Request%E5%BA%93%E4%BB%8B%E7%BB%8D/index.html">
+<meta property="og:site_name" content="小咕✨">
+<meta property="og:description" content="Python requests库介绍Python的库函数有很多可以用来实现爬虫，这里介绍一下我经常使用的requests库。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-08-31T12:34:04.000Z">
+<meta property="article:modified_time" content="2020-09-27T12:30:02.152Z">
+<meta property="article:author" content="honywen">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Request">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://honywen.com/2020/08/31/Python-Request%E5%BA%93%E4%BB%8B%E7%BB%8D/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>Python Request库介绍 | 小咕✨</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">小咕✨</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Everything is fine</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/commonweal/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://honywen.com/2020/08/31/Python-Request%E5%BA%93%E4%BB%8B%E7%BB%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="honywen">
+      <meta itemprop="description" content="多多指教">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小咕✨">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python Request库介绍
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-08-31 20:34:04" itemprop="dateCreated datePublished" datetime="2020-08-31T20:34:04+08:00">2020-08-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-09-27 20:30:02" itemprop="dateModified" datetime="2020-09-27T20:30:02+08:00">2020-09-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2020/08/31/Python-Request%E5%BA%93%E4%BB%8B%E7%BB%8D/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/08/31/Python-Request%E5%BA%93%E4%BB%8B%E7%BB%8D/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Python-requests库介绍"><a href="#Python-requests库介绍" class="headerlink" title="Python requests库介绍"></a>Python requests库介绍</h1><p>Python的库函数有很多可以用来实现爬虫，这里介绍一下我经常使用的requests库。</p>
+<a id="more"></a>
+
+<p><strong>官方中文文档：</strong><a target="_blank" rel="noopener" href="https://cn.python-requests.org/zh_CN/latest/" title="快速上手 - Requests 2.18.1 文档">快速上手 - Requests 2.18.1 文档</a></p>
+<h2 id="1-库函数的安装"><a href="#1-库函数的安装" class="headerlink" title="1- 库函数的安装"></a>1- 库函数的安装</h2><p>使用pip安装<br><code>$ pip install requests</code><br>或者使用easy_install安装<br><code>$ easy_install requests</code><br>还可以使用IDE自带的一些功能实现安装的</p>
+<h2 id="2-requests用法"><a href="#2-requests用法" class="headerlink" title="2- requests用法"></a>2- requests用法</h2><p>这里我们就不一一的介绍requests的各种方法了，我们这里举两个例子分别介绍如何使用requests实现POST和GET两种常用的方法。</p>
+<hr>
+<h3 id="GET方法请求页面"><a href="#GET方法请求页面" class="headerlink" title="- GET方法请求页面"></a>- GET方法请求页面</h3><p><code>    import requests     host = &quot;www.honywen.com&quot;     response = requests.get(host, headers=headers,timeout=1,params=payload,stream=True,proxies=proxies )     print(response.text)</code><br>这样就获得到了页面的源代码。  </p>
+<pre><code>&lt;!DOCTYPE html&gt;    
+&lt;html&gt;  
+    &lt;head&gt;
+        &lt;meta charset=&quot;utf-8&quot; /&gt;
+        &lt;title&gt;hi&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        ···
+        ···
+        ···
+    &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<p>这里我们解释一下上面的相关的代码</p>
+<p>首先就是requests中除了<code>host</code>即网页的URL是必须的之外其他的参数都是可选的<br><code>headers=headers,timeout=1,params=payload,stream=True,proxies=proxies</code><br>这些都是可有可无的</p>
+<h3 id="发送参数的get请求"><a href="#发送参数的get请求" class="headerlink" title="- -发送参数的get请求"></a>- -发送参数的get请求</h3><p><code>    response = requests.get(host)</code><br>这样的请求一般是不可取的，因为大部分的网站都是有一定的反爬机制的，最简单的就是最容易被封的。</p>
+<h3 id="添加headers伪造浏览器进行请求"><a href="#添加headers伪造浏览器进行请求" class="headerlink" title="- -添加headers伪造浏览器进行请求"></a>- -添加headers伪造浏览器进行请求</h3><p> <code>   response = requests.get(host, headers=headers )</code><br>这里的常用的请求头如下所示：<br><code>    HEADER = &#123;&#39;Accept&#39;: &#39;text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&#39;,         &#39;Accept-Language&#39;: &#39;zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2&#39;,         &#39;Cache-Control&#39;: &#39;max-age=0&#39;,         &#39;Connection&#39;: &#39;Keep-alive&#39;,         &#39;Upgrade-Insecure-Requests&#39;: &#39;1&#39;,         &#39;User-Agent&#39;:&#39;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36&#39; &#125;</code><br>之前写代码的时候找了很多的浏览器代理，在日常的代码中可以采用随机请求头来避免被封。<br>    “Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36(KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36”,<br>        “Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 “<br>        “(KHTML, like Gecko) Chrome/22.0.1207.1 Safari/537.1”,<br>        “Mozilla/5.0 (X11; CrOS i686 2268.111.0) AppleWebKit/536.11 “<br>        “(KHTML, like Gecko) Chrome/20.0.1132.57 Safari/536.11”,<br>        “Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.6 “<br>        “(KHTML, like Gecko) Chrome/20.0.1092.0 Safari/536.6”,<br>        “Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.6 “<br>        “(KHTML, like Gecko) Chrome/20.0.1090.0 Safari/536.6”,<br>        “Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.1 “<br>        “(KHTML, like Gecko) Chrome/19.77.34.5 Safari/537.1”,<br>        “Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/536.5 “<br>        “(KHTML, like Gecko) Chrome/19.0.1084.9 Safari/536.5”,<br>        “Mozilla/5.0 (Windows NT 6.0) AppleWebKit/536.5 “<br>        “(KHTML, like Gecko) Chrome/19.0.1084.36 Safari/536.5”,<br>        “Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.3 “<br>        “(KHTML, like Gecko) Chrome/19.0.1063.0 Safari/536.3”,<br>        “Mozilla/5.0 (Windows NT 5.1) AppleWebKit/536.3 “<br>        “(KHTML, like Gecko) Chrome/19.0.1063.0 Safari/536.3”,<br>        “Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_0) AppleWebKit/536.3 “<br>        “(KHTML, like Gecko) Chrome/19.0.1063.0 Safari/536.3”,<br>        “Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.3 “<br>        “(KHTML, like Gecko) Chrome/19.0.1062.0 Safari/536.3”,<br>        “Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.3 “<br>        “(KHTML, like Gecko) Chrome/19.0.1062.0 Safari/536.3”,<br>        “Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.3 “<br>        “(KHTML, like Gecko) Chrome/19.0.1061.1 Safari/536.3”,<br>        “Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.3 “<br>        “(KHTML, like Gecko) Chrome/19.0.1061.1 Safari/536.3”,<br>        “Mozilla/5.0 (Windows NT 6.1) AppleWebKit/536.3 “<br>        “(KHTML, like Gecko) Chrome/19.0.1061.1 Safari/536.3”,<br>        “Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.3 “<br>        “(KHTML, like Gecko) Chrome/19.0.1061.0 Safari/536.3”,<br>        “Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.24 “<br>        “(KHTML, like Gecko) Chrome/19.0.1055.1 Safari/535.24”,<br>        “Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/535.24 “<br>        “(KHTML, like Gecko) Chrome/19.0.1055.1 Safari/535.24”<br>`</p>
+<h3 id="添加timeout来设置请求超时时间"><a href="#添加timeout来设置请求超时时间" class="headerlink" title="- -添加timeout来设置请求超时时间"></a>- -添加timeout来设置请求超时时间</h3><p><code>response = requests.get(host, timeout=1 )</code></p>
+<h3 id="使用params来传递参数"><a href="#使用params来传递参数" class="headerlink" title="- -使用params来传递参数"></a>- -使用params来传递参数</h3><p><code>payload = &#123;&quot;key1&quot;:value1,&quot;key2&quot;:&quot;value2&quot;&#125;</code><br><code>response = requests.get(host,params=payload )</code><br>通过参数设置其实最后实际的URL<br><code>http://www.honywen.com?key1=value1&amp;key2=value2</code><br>初次之外还可以直接传递一个list<br>    payload = {“key1”:value1,”key2”:[value2,value3]}<br>    response = requests.get(host,params=payload )<br>最后实际的URL<br><code>http://www.honywen.com?key1=value1&amp;key2=value2&amp;key2=value3</code></p>
+<h3 id="使用stream-True来获取来自服务器的原始套接字响应"><a href="#使用stream-True来获取来自服务器的原始套接字响应" class="headerlink" title="- -使用stream=True来获取来自服务器的原始套接字响应"></a>- -使用stream=True来获取来自服务器的原始套接字响应</h3><p><code>response = requests.get(host,stream=True )</code><br>然后获取原始套接字响应<br><code>response.raw</code><br>这里要提醒一下，只有设置了stream之后才能获取原始套接字，没有该参数是接收不到的。<br><code>&lt;requests.packages.urllib3.response.HTTPResponse object at 0x101194810&gt;</code><br><code>response.raw.read(10)</code><br>    ‘\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\x03’</p>
+<h3 id="使用proxies-proxies来设置代理"><a href="#使用proxies-proxies来设置代理" class="headerlink" title="- -使用proxies=proxies来设置代理"></a>- -使用proxies=proxies来设置代理</h3><p>这里主要考虑的是访问国外的一些网站的时候，为了顺利的出去都是需要设置代理的<br> <code>  proxies = &#123;           &quot;http&quot;: &quot;http://149.28.21.37:3128&quot;,           &quot;https&quot;: &quot;http://149.28.21.38:1080&quot;,         &#125;         response = requests.get(&quot;http://www.honywen.com&quot;, proxies=proxies)</code></p>
+<h3 id="使用cookies更快的访问网站"><a href="#使用cookies更快的访问网站" class="headerlink" title="- -使用cookies更快的访问网站"></a>- -使用cookies更快的访问网站</h3><p>Cookie 是一个保存在客户机中的简单的文本文件一般为4kb, 这个文件与特定的 Web网站关联在一起, 保存了该客户机访问这个Web网站时的相关信息, 使用cookie可以弥补HTTP无状态连接的缺点，维护web会话的状态</p>
+<pre><code>cookies = &#123;&#39;testCookies_1&#39;: &#39;Hello_Python3&#39;, &#39;testCookies_2&#39;: &#39;Hello_Requests&#39;&#125;
+response = requests.get(&quot;http://example.org&quot;, cookies=cookies)</code></pre>
+<p>常用request方法请求参数基本就是以上几种了<br>接下来接收一下POST请求，大部分的参数是一样的</p>
+<hr>
+<h3 id="POST方法请求页面"><a href="#POST方法请求页面" class="headerlink" title="- -POST方法请求页面"></a>- -POST方法请求页面</h3><p>post方法和get方法最主要的差别在于参数传递的不同。</p>
+<h3 id="使用data传递参数"><a href="#使用data传递参数" class="headerlink" title="- -使用data传递参数"></a>- -使用data传递参数</h3><p>post所传递的参数都是键值对的，所以可以使用字典也可以使用json来传递数据。</p>
+<ol>
+<li>使用字典传递参数<br><code>response = requests.post(&#39;http://www.honywen.com/post&#39;,data=&#123;&quot;kay&quot;:&quot;value&quot;&#125;)</code></li>
+<li>使用json来传递参数<br><code>  payload = &#123;&quot;key&quot;:&quot;value&quot;&#125;</code><br><code>response = requests.get(&#39;http://www.honywen.com/post&#39;,json = payload)</code><br>同时也可以使用json库函数所提供的方法实现字典转化json数据进行传递。<br><code>data=json.dumps(payload)</code><h3 id="使用files来传递文件"><a href="#使用files来传递文件" class="headerlink" title="- -使用files来传递文件"></a>- -使用files来传递文件</h3>上传文件一般情况下用的比较的少，主要的方法代码所示<br> firles = {‘file’:open(‘test.txt’,’rb’)}<br> response = requests.post(url,files=files)</li>
+</ol>
+<p>除了GET，POST方法之外还有其他的方法，这里就不详细说明了，参数同上。<br>    requests.get(url) #GET请求<br>    requests.post(url) #POST请求<br>    requests.put(url) #PUT请求<br>    requests.delete(url) #DELETE请求<br>    requests.head(url) #HEAD请求<br>    requests.options(url) #OPTIONS请求</p>
+<h3 id="Response响应的处理"><a href="#Response响应的处理" class="headerlink" title="- Response响应的处理"></a>- Response响应的处理</h3><p>使用requests方法后，会返回一个response对象，其存储了服务器响应的内容，包括文本响应内容，状态码，cookies，</p>
+<ol>
+<li><p><code>response.status_code</code><br>返回状态码</p>
+</li>
+<li><p><code>response.url</code><br>返回访问的url</p>
+</li>
+<li><p><code>response.raw</code><br>返回原始套接字</p>
+</li>
+<li><p><code> response.content</code><br>返回字节方式的响应体</p>
+<p>  b’<!DOCTYPE html>\n&lt;html xmlns=”<a target="_blank" rel="noopener" href="http://www.w3.org/1999/xhtml&quot;...&#39;">http://www.w3.org/1999/xhtml&quot;...&#39;</a></p>
+</li>
+</ol>
+<p>5.<code> response.text</code><br>返回字符串方式的响应体</p>
+<pre><code>u&#39;&lt;!DOCTYPE html&gt;\n&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;...&#39;</code></pre>
+<p>6.<code>response.headers</code><br>返回字典形式的服务器响应头<br><code>response.headers[&#39;Content-Type&#39;]</code><br><code>text/html; charset=utf-8</code><br><code>response.headers.get(&#39;content-type&#39;)</code><br><code>text/html; charset=utf-8</code></p>
+<ol start="7">
+<li><code>response.json()</code><br>Requests中内置的JSON解码器</li>
+<li><code>response.raise_for_status()</code><br>失败请求抛出异常</li>
+<li><code>response.encoding</code><br>返回编码方式</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Request/" rel="tag"># Request</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2020/09/27/MYSQL%E6%95%B0%E6%8D%AE%E8%A1%A8%E6%81%A2%E5%A4%8D/" rel="next" title="MYSQL数据表恢复">
+      MYSQL数据表恢复 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Python-requests%E5%BA%93%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">Python requests库介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%BA%93%E5%87%BD%E6%95%B0%E7%9A%84%E5%AE%89%E8%A3%85"><span class="nav-number">1.1.</span> <span class="nav-text">1- 库函数的安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-requests%E7%94%A8%E6%B3%95"><span class="nav-number">1.2.</span> <span class="nav-text">2- requests用法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GET%E6%96%B9%E6%B3%95%E8%AF%B7%E6%B1%82%E9%A1%B5%E9%9D%A2"><span class="nav-number">1.2.1.</span> <span class="nav-text">- GET方法请求页面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%91%E9%80%81%E5%8F%82%E6%95%B0%E7%9A%84get%E8%AF%B7%E6%B1%82"><span class="nav-number">1.2.2.</span> <span class="nav-text">- -发送参数的get请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0headers%E4%BC%AA%E9%80%A0%E6%B5%8F%E8%A7%88%E5%99%A8%E8%BF%9B%E8%A1%8C%E8%AF%B7%E6%B1%82"><span class="nav-number">1.2.3.</span> <span class="nav-text">- -添加headers伪造浏览器进行请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0timeout%E6%9D%A5%E8%AE%BE%E7%BD%AE%E8%AF%B7%E6%B1%82%E8%B6%85%E6%97%B6%E6%97%B6%E9%97%B4"><span class="nav-number">1.2.4.</span> <span class="nav-text">- -添加timeout来设置请求超时时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8params%E6%9D%A5%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0"><span class="nav-number">1.2.5.</span> <span class="nav-text">- -使用params来传递参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8stream-True%E6%9D%A5%E8%8E%B7%E5%8F%96%E6%9D%A5%E8%87%AA%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%8E%9F%E5%A7%8B%E5%A5%97%E6%8E%A5%E5%AD%97%E5%93%8D%E5%BA%94"><span class="nav-number">1.2.6.</span> <span class="nav-text">- -使用stream&#x3D;True来获取来自服务器的原始套接字响应</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8proxies-proxies%E6%9D%A5%E8%AE%BE%E7%BD%AE%E4%BB%A3%E7%90%86"><span class="nav-number">1.2.7.</span> <span class="nav-text">- -使用proxies&#x3D;proxies来设置代理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8cookies%E6%9B%B4%E5%BF%AB%E7%9A%84%E8%AE%BF%E9%97%AE%E7%BD%91%E7%AB%99"><span class="nav-number">1.2.8.</span> <span class="nav-text">- -使用cookies更快的访问网站</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#POST%E6%96%B9%E6%B3%95%E8%AF%B7%E6%B1%82%E9%A1%B5%E9%9D%A2"><span class="nav-number">1.2.9.</span> <span class="nav-text">- -POST方法请求页面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8data%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0"><span class="nav-number">1.2.10.</span> <span class="nav-text">- -使用data传递参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8files%E6%9D%A5%E4%BC%A0%E9%80%92%E6%96%87%E4%BB%B6"><span class="nav-number">1.2.11.</span> <span class="nav-text">- -使用files来传递文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Response%E5%93%8D%E5%BA%94%E7%9A%84%E5%A4%84%E7%90%86"><span class="nav-number">1.2.12.</span> <span class="nav-text">- Response响应的处理</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="honywen"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">honywen</p>
+  <div class="site-description" itemprop="description">多多指教</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lxyeternal" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lxyeternal" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1796369212@qq.com" title="E-Mail → mailto:1796369212@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/weixin_39641975" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;weixin_39641975" rel="noopener" target="_blank"><i class="fab fa-stack-overflow fa-fw"></i>CSDN</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/yourname" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://honywen.com/" title="http:&#x2F;&#x2F;honywen.com">Title</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">honywen</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'XtTLwDG0JPdYJFC2zH1ULGMN-gzGzoHsz',
+      appKey     : 'E1vcmMuSfPfzUqtr2j4z9T0N',
+      placeholder: "Just go go",
+      avatar     : '/uploads/avatar.jpg',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

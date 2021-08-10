@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"honywen.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","Pisces | Gemini":240,"width":300,"display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="HinCTI: A Cyber Threat Intelligence Modeling and Identification System Based on Heterogeneous Information Network来源信息 IEEE Transactions on Knowledge and Data Engineering(CCF A) 机构：北京邮电大学 作者：Yali Gao;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HinCTI-论文笔记">
+<meta property="og:url" content="http://honywen.com/2021/04/24/HinCTI-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="小咕✨">
+<meta property="og:description" content="HinCTI: A Cyber Threat Intelligence Modeling and Identification System Based on Heterogeneous Information Network来源信息 IEEE Transactions on Knowledge and Data Engineering(CCF A) 机构：北京邮电大学 作者：Yali Gao;">
+<meta property="og:locale">
+<meta property="og:image" content="https://i.loli.net/2021/04/24/c9lAk1FjQr5b6eH.png">
+<meta property="og:image" content="https://i.loli.net/2021/04/24/sCPHmVTAfkZoUKx.png">
+<meta property="og:image" content="https://i.loli.net/2021/04/24/2TNbDgjvd5tU4Jh.png">
+<meta property="og:image" content="https://i.loli.net/2021/04/24/TPnOIGJsov8WeBl.png">
+<meta property="og:image" content="https://i.loli.net/2021/04/24/s98WJXjVTgLZCxu.png">
+<meta property="og:image" content="https://i.loli.net/2021/04/24/8W9LNaZymPQxIj5.png">
+<meta property="og:image" content="https://i.loli.net/2021/04/24/RusBgaMLO8yQZ7Y.png">
+<meta property="og:image" content="https://i.loli.net/2021/04/24/zcPadGOsCFQfquB.png">
+<meta property="og:image" content="https://i.loli.net/2021/04/24/IMsiqFCa7ZNzlJo.png">
+<meta property="article:published_time" content="2021-04-24T07:38:48.000Z">
+<meta property="article:modified_time" content="2021-04-24T09:08:31.946Z">
+<meta property="article:author" content="honywen">
+<meta property="article:tag" content="威胁情报">
+<meta property="article:tag" content="异质图神经网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/04/24/c9lAk1FjQr5b6eH.png">
+
+<link rel="canonical" href="http://honywen.com/2021/04/24/HinCTI-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>HinCTI-论文笔记 | 小咕✨</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">小咕✨</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Everything is fine</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/commonweal/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://honywen.com/2021/04/24/HinCTI-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="honywen">
+      <meta itemprop="description" content="多多指教">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小咕✨">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          HinCTI-论文笔记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-04-24 15:38:48 / Modified: 17:08:31" itemprop="dateCreated datePublished" datetime="2021-04-24T15:38:48+08:00">2021-04-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">论文笔记</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2021/04/24/HinCTI-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/04/24/HinCTI-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="HinCTI-A-Cyber-Threat-Intelligence-Modeling-and-Identification-System-Based-on-Heterogeneous-Information-Network"><a href="#HinCTI-A-Cyber-Threat-Intelligence-Modeling-and-Identification-System-Based-on-Heterogeneous-Information-Network" class="headerlink" title="HinCTI: A Cyber Threat Intelligence Modeling and Identification System Based on Heterogeneous Information Network"></a>HinCTI: A Cyber Threat Intelligence Modeling and Identification System Based on Heterogeneous Information Network</h1><h2 id="来源信息"><a href="#来源信息" class="headerlink" title="来源信息"></a>来源信息</h2><ul>
+<li>IEEE Transactions on Knowledge and Data Engineering(<strong>CCF A</strong>)</li>
+<li>机构：北京邮电大学</li>
+<li>作者：Yali Gao; Xiaoyong LI; Hao PENG; Binxing Fang</li>
+</ul>
+<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>网络攻击日益复杂化、持久化、组织化和武器化。面对这种情况，全世界越来越多的组织正显示出越来越愿意利用网络威胁情报公开交换（CTI）来全面了解快速演变的网络威胁形势，并保护自己免受网络攻击。然而，由于CTI之间的显式和隐式关系以及CTI所涉及的网络威胁基础设施节点的异构性，对CTI的建模具有挑战性。<a id="more"></a><br>由于CTI中涉及的网络威胁基础设施节点的标签有限，因此自动识别基础设施节点的威胁类型进行预警也是一个挑战。为了应对这些挑战，开发了一个名为HinCTI的实用系统，用于对网络威胁情报进行建模和识别威胁类型。文章设计了一个威胁情报元模式来描述威胁实体的语义关联性。然后在异构信息网络（HIN）上建立网络威胁情报模型，该模型能够集成各种类型的基础设施节点及其之间丰富的关系。在此基础上，定义了一种基于元路径和元图实例的实体节点间相似性实体基础设施节点的威胁类型。此外，通过分层正则化策略，可以缓解过度拟合的问题，在实体的威胁类型识别中取得了很好的效果。利用HinCTI在真实数据集上进行了综合实验，实验结果表明，与现有的最新基线方法相比，本文提出的方法能够显著提高威胁类型识别的性能。我们的工作有助于大大减轻安全人员繁重的分析工作，并有效地保护组织免受网络攻击。</p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>如今，为了全面了解快速发展的网络威胁局势，保护自己免受复杂、持续、有组织和武器化的网络攻击，世界上越来越多的组织越来越愿意利用网络威胁情报公开交流。*<strong>CTI是关于现有或新兴资产威胁的证明性知识，可提供主体对威胁反应的决策支持**<em>。众所周知，网络犯罪分子通常充分利用网络基础设施（如域名、互联网协议或IP地址）进行网络攻击。一般来说，不同的情报来源有助于从不同的角度描述网络威胁基础设施节点。CTI建模提供了许多优势，例如获得快速演变的网络威胁形势的全貌，以及揭示特定攻击背后的潜在集团。以域名基础设施节点为例，域名的威胁类型可以是垃圾邮件URL、暴力登录攻击、恶意软件活动和僵尸网络节点活动。</em></strong>识别基础设施节点的威胁类型不仅有利于细粒度的威胁预警，而且有利于采取有针对性的防御措施***。</p>
+<h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2><p>CTI的建模和威胁情报实体的威胁类型识别无疑应该是任何网络威胁防御和预警系统的最基本的要求。虽然现在针对此有很多的研究，但是依然存在着以下的问题：</p>
+<ul>
+<li>现有的CTI中涉及的威胁实体的类型标签有限的问题。因此，如何准确有效地从有限的标记威胁实体以及它们之间的大量关系中学习，以预测未标记节点的威胁类型。</li>
+<li>现有的针对威胁情报的研究主要集中在同质图。但现实中，很多的威胁实体都是异质的。所以如何针对不同类型的节点提取更高级的语义也是一个挑战。</li>
+</ul>
+<h3 id="论文贡献"><a href="#论文贡献" class="headerlink" title="论文贡献"></a>论文贡献</h3><ul>
+<li>提出了一种基于HIN的CTI建模方法。通过基于HIN的CTI建模，该框架不仅可以以语义的方式集成CTI中涉及的威胁实体，同时也可以提取合并实体间的高级语义。</li>
+<li>提出了一种基于MIIS度量的异构GCN方法来识别实体的威胁类型。作者在实体之间定义了一个MIIS度量值，并提出了基于MIIS度量的异构GCN方法来识别实体的威胁类型。通过分层正则化，可以缓解过拟合问题，实现较高的检测效果。</li>
+<li>本文开发了一种被称为HinCTI的系统，用于建模网络威胁情报和识别威胁类型。实验结果表明，与现有的基线方法相比，我们提出的方法可以显著提高威胁类型识别的性能。</li>
+</ul>
+<h2 id="CTI建模"><a href="#CTI建模" class="headerlink" title="CTI建模"></a>CTI建模</h2><h3 id="基于HIN的CTI建模"><a href="#基于HIN的CTI建模" class="headerlink" title="基于HIN的CTI建模"></a>基于HIN的CTI建模</h3><p><img src="https://i.loli.net/2021/04/24/c9lAk1FjQr5b6eH.png" alt="hincti1.png"></p>
+<ul>
+<li>节点类型：四种节点：从情报提供商收集的CTI通常是恶意软件hash、恶意IP地址、恶意域名和邮箱。</li>
+<li>HinCTI：五种关系，表示威胁实体之间的关系。</li>
+<li>元模式：不同类型的节点及其之间的关系抽象出的一张图</li>
+<li>元路径和元图：元路径是在元模式图上所定义的路径，**<em>指的是不同顶点之间的一系列关系序列组成的一条路径**</em>。充分且直观地利用了网络结构。在节点类型上定义的元路径和元图可以反映关于相似性的语义上有意义的信息。例如，元路径的两个域名之间的关系可以通过域-恶意软件-域来揭示，它描述了两个域名被同一恶意软件访问，或者通过元路径域-电子邮件-Domain来访问 描述由同一电子邮件地址注册的两个域名<br>威胁情报可被视为一组威胁基础设施节点和威胁基础设施关系。</li>
+</ul>
+<h3 id="系统架构"><a href="#系统架构" class="headerlink" title="系统架构"></a>系统架构</h3><p><img src="https://i.loli.net/2021/04/24/sCPHmVTAfkZoUKx.png" alt="hincti2.png"></p>
+<ul>
+<li>1:基于HIN的CTI建模。通过各种CTI提供商提供的API，获得大量的威胁实体以及它们之间的关系。在CTI建模中，上下文信息与节点关联得越多，就越有利于CTI分析。因此，为了丰富节点的上下文，作者从外部数据库建立相同类型和不同类型的节点之间的关系，如域名和IP节点的“Whois”数据库、恶意软件节点的“CVE”数据库和PDNS的域名和邮件地址节点数据库。这样，就可以构建网络威胁情报HIN来描述各种实体之间的关系。</li>
+<li>2:特征提取器和元路径和元图生成器。基于之前的网络威胁情报HIN设计的元模式，论文构建了一组元路径和元图，以从不同的语义上捕获在实体之间的更高层次的关系。</li>
+<li>3:基于异构GCN的威胁类型识别。首先提取基础结构节点特征，并生成节点特征矩阵X。然后融合元图和元路径得到邻接矩阵B，学习网络威胁基础设施节点的威胁类型。</li>
+<li>4:威胁类型识别：对于每个待识别的未知威胁实体，将首先提取实体特征，然后从外部源中提取其相关的信息。基于提取的特征和构造的基于异构GCN的威胁类型识别模型，识别该实体的威胁类型。</li>
+</ul>
+<h3 id="特征提取"><a href="#特征提取" class="headerlink" title="特征提取"></a>特征提取</h3><p><img src="https://i.loli.net/2021/04/24/2TNbDgjvd5tU4Jh.png" alt="hincti3.png"></p>
+<ul>
+<li>节点特征：正常域名较为简洁，而恶意域名通常是由域名生成算法(DGA)批量生成的。因此选择域名的长度、信息熵作为特征。恶意域名的使用时间较短同时更新频率较低，因此将域名的活跃时间以及更新频率作为特征。</li>
+<li>关系特征：<ul>
+<li>R：域名及其解析IP之间关系</li>
+<li>S：域名是否被恶意软件访问</li>
+<li>G：域名与注册邮件的关系</li>
+<li>C：IP地址于恶意软件的关系</li>
+<li>N：IP地址于Email的关系</li>
+</ul>
+</li>
+</ul>
+<h3 id="元路径和元图构建"><a href="#元路径和元图构建" class="headerlink" title="元路径和元图构建"></a>元路径和元图构建</h3><p><img src="https://i.loli.net/2021/04/24/TPnOIGJsov8WeBl.png" alt="hincti4.png"></p>
+<ul>
+<li>元路径可以用来描述节点之间的相关性。<br>不同的元路径有着不同的语义信息。例如，D-I-D：表示不同的域名指向同样的IP地址。</li>
+<li>元图：具有单源节点和目标节点的有向无环图。<br>元图更全面的描述了网络威胁实体之间的关系，其中包含了外部和内在关联。例如：Φ_11表示两个域名被同一个恶意软件访问，同时它们解析的IP地址解析到了同样的Email，而且与相同的恶意软件通信。</li>
+</ul>
+<h3 id="基于异构GCN的威胁类型识别"><a href="#基于异构GCN的威胁类型识别" class="headerlink" title="基于异构GCN的威胁类型识别"></a>基于异构GCN的威胁类型识别</h3><ul>
+<li>在提取了威胁实体的特征并构建了元路径和元图之后，论文提出了基于MIIS度量的异构GCN方法识别CTI涉及的威胁实体的威胁类型。HinCTI，同时集成了节点特性和元路径和元图以及基于相似性的邻接关系，使得能够以更全面的方式表示威胁节点。</li>
+<li><strong>MIIS度量</strong>从两个角度定义：<em>语义重叠</em>，由威胁实体vi和vj之间的路径数定义。<em>语义广度</em>。由它们之间的路径实例数（即从vi到vi的路径以及从vj到vj的路径）定义。利用可自动学习的权重向量β将基于元路径和元图的节点相似性结合在一起。MIIS度量计算了任意两个域名节点的相似性，可以构造一个维数为N×N的矩阵B，其中N是域名节点数和Bij=Bji=MIIS(vi，vj)。</li>
+</ul>
+<h3 id="层次结构正则化"><a href="#层次结构正则化" class="headerlink" title="层次结构正则化"></a>层次结构正则化</h3><p><img src="https://i.loli.net/2021/04/24/s98WJXjVTgLZCxu.png" alt="hincti5.png"><br>如果我们简单地把每个类型作为一个独立标签，可以直接用于训练神经网络。然而，在威胁类型标签中通常有一个层次结构， 其中，一个父标签包含几个子标签。因此，在标签之间引入层次依赖关系可以提高威胁类型识别的性能。也就是说，当叶标签（在层次结构中没有子标签）很少有训练示例时，决策可以通过其父标签进行正则化。论文在GCN模型的最终输出层上的分层正则化，提高模型的检测效率。</p>
+<h2 id="实验与分析"><a href="#实验与分析" class="headerlink" title="实验与分析"></a>实验与分析</h2><h3 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h3><p><img src="https://i.loli.net/2021/04/24/8W9LNaZymPQxIj5.png" alt="hincti6.png"><br>威胁情报共享平台IBMX-ForceExchange平台和VirousTotal收集真实数据，并丰富数据，收集到的数据集中包含126,933个威胁实体，在预处理后只剩下11,340个实体。利用威胁情报公司爬取10833个标签，其余507个未标记的由人工和第三方工具进行标记。</p>
+<h3 id="Baselines"><a href="#Baselines" class="headerlink" title="Baselines"></a>Baselines</h3><ul>
+<li><strong>Node2Vec+SVM</strong>：一种基于随机游走的齐次图网络嵌入方法。忽略了节点的异质性，并对整个异质域对节点进行Node2Vec。</li>
+<li><strong>Metapath2Vec+SVM</strong>：一种异构图嵌入方法，它执行基于元路径的随机游走，并利用skip-gram嵌入异构图。对比实验中，作者测试了所有的元路径。</li>
+<li><strong>HAN+SVM</strong>：一种半监督的异构图神经网络，它考虑了节点级注意力和语义级注意力来分别学习节点和元路径的重要性。</li>
+<li>**HinCTI-**：不考虑层次正则化的HinCTI模型。</li>
+</ul>
+<h3 id="实验对比"><a href="#实验对比" class="headerlink" title="实验对比"></a>实验对比</h3><p><img src="https://i.loli.net/2021/04/24/RusBgaMLO8yQZ7Y.png" alt="hincti8.png"></p>
+<p>基线对比实验可以看出HinCTI方法效果是最高的，同时对比HinCTI-可以发现，节点特征和关系特征的选择很有效。</p>
+<p><img src="https://i.loli.net/2021/04/24/zcPadGOsCFQfquB.png" alt="hincti9.png"></p>
+<p>与传统的方法对比结果：贝叶斯、决策树、SVM、KNN</p>
+<ul>
+<li>-2是将所有的节点特征以及关系特征作为输入对比的实验</li>
+<li>-1是只选择节点特征的实验</li>
+</ul>
+<p>两个特征比一个特征模型的F1要高7%-9%</p>
+<p><img src="https://i.loli.net/2021/04/24/IMsiqFCa7ZNzlJo.png" alt="hincti10.png"></p>
+<p>在其他威胁实体（IP，恶意软件，邮箱）上的实验也发现，HinCTI方法效果最好。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="工作总结"><a href="#工作总结" class="headerlink" title="工作总结"></a>工作总结</h3><p>论文提出了一种基于HIN的CTI建模和威胁类型识别系统：HinCTI。作者设计了元模式和一组元路径和元图来在HIN上建模CTI，提取并合并CTI中涉及的网络威胁实体的高级语义。通过提出的基于MIIS度量的异构GCN的威胁类型识别方法，克服了有限标签的挑战。通过层次正则化缓解了过拟合的问题 。与现有的方法对比发现，HinCTI效果更好。</p>
+<h3 id="展望"><a href="#展望" class="headerlink" title="展望"></a>展望</h3><p>HinCTI只有节点特征和关系特征，不能充分的表示节点的语义信息，可以利用。利用自然语言处理技术提取更细粒度的结构化数据，同时可以针对非结构化数据中的实体提取进一步研究，丰富异构信息网络，提高威胁识别的性能。</p>
+<ul>
+<li>域名资料特征域名直接相关的特征：<ul>
+<li>注册商 - 攻击者可能因为某些原因而具有偏好使用的注册商，如注册商价格低，对于投诉不理睬• </li>
+<li>权威域名服务器 - 攻击者在使用权威域名服务器上也具有某些规律，如使用自解析服务器。这里文中使用的数据为域名注册5分钟内，从zone文件中查询得到的。• 名称服务器IP地址和AS</li>
+<li>注册时间，攻击者是否在注册时间上具有规律性，如每天的几点，每周的周几• 注册的生成周期</li>
+<li>三元模型• 最长英语单词比例• 是否包含数字• 是否包含“-”</li>
+<li>域名长度• 与已知恶意域名的编辑距离</li>
+<li>注册历史特征这部分是注册强相关特征，寻找异常的注册行为</li>
+<li>批相关特征同样是在域名注册时的特性，寻找注册的异常行为，文中使用的是在特定注册商上，五分钟内注册的域名</li>
+</ul>
+</li>
+</ul>
+<h3 id="PPT链接：https-github-com-lxyeternal-Paper-Reading"><a href="#PPT链接：https-github-com-lxyeternal-Paper-Reading" class="headerlink" title="PPT链接：https://github.com/lxyeternal/Paper-Reading"></a>PPT链接：<a target="_blank" rel="noopener" href="https://github.com/lxyeternal/Paper-Reading">https://github.com/lxyeternal/Paper-Reading</a></h3>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%A8%81%E8%83%81%E6%83%85%E6%8A%A5/" rel="tag"># 威胁情报</a>
+              <a href="/tags/%E5%BC%82%E8%B4%A8%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag"># 异质图神经网络</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/09/27/MYSQL%E6%95%B0%E6%8D%AE%E8%A1%A8%E6%81%A2%E5%A4%8D/" rel="prev" title="MYSQL数据表恢复">
+      <i class="fa fa-chevron-left"></i> MYSQL数据表恢复
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/04/25/MVP-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" rel="next" title="MVP-论文笔记">
+      MVP-论文笔记 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#HinCTI-A-Cyber-Threat-Intelligence-Modeling-and-Identification-System-Based-on-Heterogeneous-Information-Network"><span class="nav-number">1.</span> <span class="nav-text">HinCTI: A Cyber Threat Intelligence Modeling and Identification System Based on Heterogeneous Information Network</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A5%E6%BA%90%E4%BF%A1%E6%81%AF"><span class="nav-number">1.1.</span> <span class="nav-text">来源信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%91%98%E8%A6%81"><span class="nav-number">1.2.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">1.3.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%9C%BA"><span class="nav-number">1.4.</span> <span class="nav-text">动机</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BA%E6%96%87%E8%B4%A1%E7%8C%AE"><span class="nav-number">1.4.1.</span> <span class="nav-text">论文贡献</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CTI%E5%BB%BA%E6%A8%A1"><span class="nav-number">1.5.</span> <span class="nav-text">CTI建模</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8EHIN%E7%9A%84CTI%E5%BB%BA%E6%A8%A1"><span class="nav-number">1.5.1.</span> <span class="nav-text">基于HIN的CTI建模</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84"><span class="nav-number">1.5.2.</span> <span class="nav-text">系统架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96"><span class="nav-number">1.5.3.</span> <span class="nav-text">特征提取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%83%E8%B7%AF%E5%BE%84%E5%92%8C%E5%85%83%E5%9B%BE%E6%9E%84%E5%BB%BA"><span class="nav-number">1.5.4.</span> <span class="nav-text">元路径和元图构建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E5%BC%82%E6%9E%84GCN%E7%9A%84%E5%A8%81%E8%83%81%E7%B1%BB%E5%9E%8B%E8%AF%86%E5%88%AB"><span class="nav-number">1.5.5.</span> <span class="nav-text">基于异构GCN的威胁类型识别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E6%AD%A3%E5%88%99%E5%8C%96"><span class="nav-number">1.5.6.</span> <span class="nav-text">层次结构正则化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E4%B8%8E%E5%88%86%E6%9E%90"><span class="nav-number">1.6.</span> <span class="nav-text">实验与分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-number">1.6.1.</span> <span class="nav-text">数据集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Baselines"><span class="nav-number">1.6.2.</span> <span class="nav-text">Baselines</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E5%AF%B9%E6%AF%94"><span class="nav-number">1.6.3.</span> <span class="nav-text">实验对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.7.</span> <span class="nav-text">总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E6%80%BB%E7%BB%93"><span class="nav-number">1.7.1.</span> <span class="nav-text">工作总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%95%E6%9C%9B"><span class="nav-number">1.7.2.</span> <span class="nav-text">展望</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PPT%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps-github-com-lxyeternal-Paper-Reading"><span class="nav-number">1.7.3.</span> <span class="nav-text">PPT链接：https:&#x2F;&#x2F;github.com&#x2F;lxyeternal&#x2F;Paper-Reading</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="honywen"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">honywen</p>
+  <div class="site-description" itemprop="description">多多指教</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lxyeternal" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lxyeternal" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1796369212@qq.com" title="E-Mail → mailto:1796369212@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/weixin_39641975" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;weixin_39641975" rel="noopener" target="_blank"><i class="fab fa-stack-overflow fa-fw"></i>CSDN</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/yourname" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://honywen.com/" title="http:&#x2F;&#x2F;honywen.com">Title</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">honywen</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'XtTLwDG0JPdYJFC2zH1ULGMN-gzGzoHsz',
+      appKey     : 'E1vcmMuSfPfzUqtr2j4z9T0N',
+      placeholder: "Just go go",
+      avatar     : '/uploads/avatar.jpg',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
