@@ -173,6 +173,141 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://honywen.com/2021/08/30/SQVDT-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="honywen">
+      <meta itemprop="description" content="多多指教">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小咕✨">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/08/30/SQVDT-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">SQVDT-论文笔记</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-08-30 21:17:10 / Modified: 21:18:52" itemprop="dateCreated datePublished" datetime="2021-08-30T21:17:10+08:00">2021-08-30</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">论文笔记</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2021/08/30/SQVDT-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/08/30/SQVDT-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="SQVDT-A-Scalable-Quantitative-Vulnerability-Detection-Technique-for-Source-Code-Security-Assessment"><a href="#SQVDT-A-Scalable-Quantitative-Vulnerability-Detection-Technique-for-Source-Code-Security-Assessment" class="headerlink" title="SQVDT: A Scalable Quantitative Vulnerability Detection Technique for Source Code Security Assessment"></a>SQVDT: A Scalable Quantitative Vulnerability Detection Technique for Source Code Security Assessment</h1><h2 id="来源信息"><a href="#来源信息" class="headerlink" title="来源信息"></a>来源信息</h2><ul>
+<li>机构：清华大学软件学院信息系统安全重点实验室</li>
+<li>作者：Junaid Akram，Ping Luo</li>
+</ul>
+<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>在论文中，作者提出了一种漏洞检测技术来检测软件以及源代码级共享库中的漏洞，根据不同Web源的CVE编号跟踪和定位补丁文件，从而抓取脆弱源代码，并构建了2931个脆弱文件的指纹索引。之后，作者开发了一个基于到吗克隆检测技术的漏洞检测方法，并在数千个Github开源项目中检测了数百个未被发现的漏洞，在最新版本的Linux、HTC内核、FindX中也有检测到漏洞。此外，作者还对这些漏洞进行了实证评估和验证，包括项目内克隆漏洞、复制内核克隆漏洞和库使用的克隆漏洞。该技术非常快速、高效、可靠、实用、可伸缩，可以在工业层面上实现。与最先进的工具的比较显示了我们的方法的有效性。</p>
+<h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2><p>以下原因促使在源代码级别上检测不同项目中的漏洞。</p>
+<ul>
+<li>OSS普遍使用的增加，增加了主要由代码克隆引起的软件漏洞，造成了巨大的威胁。</li>
+<li>安全审计人员很难在大规模上审计漏洞检测的源代码。</li>
+<li>大多数软件，直接或间接地依赖于外部组件，包括库，实用程序，和程序，这些可能是错误的或脆弱的。如此大量的组件重用是潜在的面向风险的。分析显示，近0.62%的Maven项目存在漏洞。</li>
+<li>然而，大多数研究人员一直在研究基于模型的漏洞检测，这一重点是通过预测软件相关属性来预防软件漏洞。在源代码级别上，关注可扩展的定量漏洞检测的研究非常少。</li>
+<li>重点关注基于其CVE号的脆弱源代码的检测。</li>
+<li>通过关注精确匹配检测（脆弱代码）来降低错误检测率。</li>
+</ul>
+<h2 id="论文贡献"><a href="#论文贡献" class="headerlink" title="论文贡献"></a>论文贡献</h2><ul>
+<li>通过跟踪补丁文件来提取和构建漏洞源代码基准测试。</li>
+<li>开发了一种基于代码克隆检测技术的漏洞检测方法(SQVDT)。</li>
+<li>检测到一些非常著名的OSS中的漏洞。</li>
+<li>对这些检测到的漏洞进行实证评估和验证研究。</li>
+<li>基于补丁的静态分析对这些漏洞的影响。 </li>
+<li>展示了 7 TB 源代码（152,823 个项目）中许多检测到的漏洞的结果。 </li>
+</ul>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>代码克隆一共有四种类型：精确克隆、重命名克隆、重构克隆、语义克隆。</p>
+<p><img src="https://i.loli.net/2021/08/30/7KCysPmxQrEJ3wh.png" alt="sqcdt.PNG"></p>
+<h3 id="源代码预处理"><a href="#源代码预处理" class="headerlink" title="源代码预处理"></a>源代码预处理</h3><p>首先跟踪补丁文件的原始源代码文件（打补丁之前的代码），来提取脆弱代码。删除所有的不相关代码，包括注释、空格等。然后将源代码转化成特定的token。在这过程使用词法分析器进行token化，同时为每一个token分配id。</p>
+<p>替换规则：</p>
+<ul>
+<li>替换标识符 -&gt; idN，N表示出现的编号</li>
+<li>替换字符串 -&gt; null，替换所有的统一字符串为空</li>
+<li>整数数值 -&gt; 0</li>
+<li>浮点型 -&gt; 0</li>
+<li>布尔型 -&gt; true<br>例 ：  x = a + y<em>z    -&gt;      id0 = id1 + id2</em>id3</li>
+</ul>
+<h3 id="提取代码特征"><a href="#提取代码特征" class="headerlink" title="提取代码特征"></a>提取代码特征</h3><p>代码特征就是指纹，通过提取指纹，可以减少比较的代码量。特征包含以下五点：</p>
+<ul>
+<li>MD5哈希：对每个文件的前15个token和后15个token分别生成hash值，然后通过$进行拼接。hash(Pre 15)@hash(Suf 15)</li>
+<li>FNV哈希：指纹索引特征，将每个文件的总token分成10个相等的部分，即p0、p1、p2、…p9。然后对每个部分应用FNV hash来生成FNV哈希值。在生成FNV散列后，从每个文件的每个分区中选择10个最小的散列。然后将它们全部添加到一个单一的值（长整数）中，以形成另一个特性，它显示了每个文件的完整特性。</li>
+</ul>
+<h3 id="指纹索引"><a href="#指纹索引" class="headerlink" title="指纹索引"></a>指纹索引</h3><p>指纹索引的目的是用来快速寻找单个文件或者整个系统脆弱代码，所有的指纹索引使用HBase大表进行存储，该方法较为灵活快速。索引信息包括：MD5哈希值、易受攻击文件的路径、FNV哈希值和存储在HBase中的每个源文件的总令牌大小。指纹索引信息的示例如图所示。</p>
+<p><img src="https://i.loli.net/2021/08/30/HXFoGn2QJdOpca7.png" alt="Snipaste_2021-08-30_16-57-16.PNG"></p>
+<h3 id="漏洞检测"><a href="#漏洞检测" class="headerlink" title="漏洞检测"></a>漏洞检测</h3><p>通过在项目上应用不同的过滤器来提取所有相关特征（MD5哈希、FNV散列、最小哈希和文件路径），过滤器将项目的相关特征与指纹的索引值进行比较。当系统和指纹数据集的特征100%相似时，就表示存在漏洞，并进行定位和展示。</p>
+<ul>
+<li>Filter 1：用来比较MD5哈希值，如果一致则进入下一个Filter。</li>
+<li>Filter 2：检测每个文件中的token总数，然后将它们与HBase中存储的指纹索引（单位）进行比较。</li>
+<li>Filter 3：用来比较FNV哈希值，如果一致则进入下一个Filter。</li>
+<li>Filter 4：在获得每个过滤器上的abstract克隆文件后，我们通过使用最小哈希进一步评估精确克隆的结果。最小哈希算法帮助我们进一步比较生成的文件，以找到精确的克隆文件。</li>
+<li>Filter 5：用来比较MD5哈希值，如果一致则进入下一个Filter。</li>
+</ul>
+<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><p>与SOAT进行对比的结果<br><img src="https://i.loli.net/2021/08/30/R3Tu4PQzfbUKcoG.png" alt="Snipaste_2021-08-30_17-12-14.PNG"></p>
+<p>检测到的小米内核中的漏洞<br><img src="https://i.loli.net/2021/08/30/ZcqyOTRaCiXBEQd.png" alt="Snipaste_2021-08-30_17-11-20.PNG"></p>
+<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><ul>
+<li>该方法不仅可以针对大规模的漏洞检测而且单个文件也可以进行检测。利用Hadoop可以实现分分布式的检索，提高检测的效率。</li>
+<li>在图上可以看到，在Patch File -&gt; Retrieved Vulnerable Code -&gt; Preprecessing 这个过程中，提取到的脆弱代码就是补丁文件中删除的代码，这些代码语义信息并不完整，同时在预处理过程中，将字符串，整数，浮点型统一替换为0，这样对于缓冲区溢出等类型的代码是无法检测的，因为这些类型的漏洞需要精确的缓冲区空间大小（数组索引大小）</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="http://honywen.com/2021/08/08/%E5%9F%BA%E4%BA%8E%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E7%A0%94%E7%A9%B6-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1042,108 +1177,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://honywen.com/2021/04/27/OneThink-CTF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="honywen">
-      <meta itemprop="description" content="多多指教">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小咕✨">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/27/OneThink-CTF/" class="post-title-link" itemprop="url">OneThink-CTF</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-04-27 22:22:50" itemprop="dateCreated datePublished" datetime="2021-04-27T22:22:50+08:00">2021-04-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-05-10 09:45:45" itemprop="dateModified" datetime="2021-05-10T09:45:45+08:00">2021-05-10</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/2021/04/27/OneThink-CTF/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/04/27/OneThink-CTF/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="来源信息"><a href="#来源信息" class="headerlink" title="来源信息"></a>来源信息</h2><ul>
-<li>i春秋</li>
-<li>题目名称：OneThink</li>
-<li>类型：Web</li>
-<li>难度：★★☆☆☆</li>
-<li>题目地址：<a target="_blank" rel="noopener" href="http://f120ee497a764414a70c37188425a46252579bdd15f34a9d.changame.ichunqiu.com/">链接</a></li>
-<li>题目内容：利用已知的漏洞拿shell吧</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/04/27/OneThink-CTF/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1215,7 +1248,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-count">16</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1228,7 +1261,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-count">32</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

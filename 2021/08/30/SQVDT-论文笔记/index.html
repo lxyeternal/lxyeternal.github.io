@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"honywen.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","Pisces | Gemini":240,"width":300,"display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="SQVDT: A Scalable Quantitative Vulnerability Detection Technique for Source Code Security Assessment来源信息 机构：清华大学软件学院信息系统安全重点实验室 作者：Junaid Akram，Ping Luo  摘要在论文中，作者提出了一种漏洞检测技术来检测软件以及源代码级共享库中的漏洞，根据不同Web">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQVDT-论文笔记">
+<meta property="og:url" content="http://honywen.com/2021/08/30/SQVDT-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="小咕✨">
+<meta property="og:description" content="SQVDT: A Scalable Quantitative Vulnerability Detection Technique for Source Code Security Assessment来源信息 机构：清华大学软件学院信息系统安全重点实验室 作者：Junaid Akram，Ping Luo  摘要在论文中，作者提出了一种漏洞检测技术来检测软件以及源代码级共享库中的漏洞，根据不同Web">
+<meta property="og:locale">
+<meta property="og:image" content="https://i.loli.net/2021/08/30/7KCysPmxQrEJ3wh.png">
+<meta property="og:image" content="https://i.loli.net/2021/08/30/HXFoGn2QJdOpca7.png">
+<meta property="og:image" content="https://i.loli.net/2021/08/30/R3Tu4PQzfbUKcoG.png">
+<meta property="og:image" content="https://i.loli.net/2021/08/30/ZcqyOTRaCiXBEQd.png">
+<meta property="article:published_time" content="2021-08-30T13:17:10.000Z">
+<meta property="article:modified_time" content="2021-08-30T13:18:52.997Z">
+<meta property="article:author" content="honywen">
+<meta property="article:tag" content="漏洞挖掘">
+<meta property="article:tag" content="克隆检测">
+<meta property="article:tag" content="代码安全">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/08/30/7KCysPmxQrEJ3wh.png">
+
+<link rel="canonical" href="http://honywen.com/2021/08/30/SQVDT-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>SQVDT-论文笔记 | 小咕✨</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">小咕✨</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Everything is fine</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/commonweal/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://honywen.com/2021/08/30/SQVDT-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="honywen">
+      <meta itemprop="description" content="多多指教">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小咕✨">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SQVDT-论文笔记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-08-30 21:17:10 / Modified: 21:18:52" itemprop="dateCreated datePublished" datetime="2021-08-30T21:17:10+08:00">2021-08-30</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">论文笔记</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2021/08/30/SQVDT-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/08/30/SQVDT-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="SQVDT-A-Scalable-Quantitative-Vulnerability-Detection-Technique-for-Source-Code-Security-Assessment"><a href="#SQVDT-A-Scalable-Quantitative-Vulnerability-Detection-Technique-for-Source-Code-Security-Assessment" class="headerlink" title="SQVDT: A Scalable Quantitative Vulnerability Detection Technique for Source Code Security Assessment"></a>SQVDT: A Scalable Quantitative Vulnerability Detection Technique for Source Code Security Assessment</h1><h2 id="来源信息"><a href="#来源信息" class="headerlink" title="来源信息"></a>来源信息</h2><ul>
+<li>机构：清华大学软件学院信息系统安全重点实验室</li>
+<li>作者：Junaid Akram，Ping Luo</li>
+</ul>
+<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>在论文中，作者提出了一种漏洞检测技术来检测软件以及源代码级共享库中的漏洞，根据不同Web源的CVE编号跟踪和定位补丁文件，从而抓取脆弱源代码，并构建了2931个脆弱文件的指纹索引。之后，作者开发了一个基于到吗克隆检测技术的漏洞检测方法，并在数千个Github开源项目中检测了数百个未被发现的漏洞，在最新版本的Linux、HTC内核、FindX中也有检测到漏洞。此外，作者还对这些漏洞进行了实证评估和验证，包括项目内克隆漏洞、复制内核克隆漏洞和库使用的克隆漏洞。该技术非常快速、高效、可靠、实用、可伸缩，可以在工业层面上实现。与最先进的工具的比较显示了我们的方法的有效性。</p>
+<h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2><p>以下原因促使在源代码级别上检测不同项目中的漏洞。</p>
+<ul>
+<li>OSS普遍使用的增加，增加了主要由代码克隆引起的软件漏洞，造成了巨大的威胁。</li>
+<li>安全审计人员很难在大规模上审计漏洞检测的源代码。</li>
+<li>大多数软件，直接或间接地依赖于外部组件，包括库，实用程序，和程序，这些可能是错误的或脆弱的。如此大量的组件重用是潜在的面向风险的。分析显示，近0.62%的Maven项目存在漏洞。</li>
+<li>然而，大多数研究人员一直在研究基于模型的漏洞检测，这一重点是通过预测软件相关属性来预防软件漏洞。在源代码级别上，关注可扩展的定量漏洞检测的研究非常少。</li>
+<li>重点关注基于其CVE号的脆弱源代码的检测。</li>
+<li>通过关注精确匹配检测（脆弱代码）来降低错误检测率。</li>
+</ul>
+<h2 id="论文贡献"><a href="#论文贡献" class="headerlink" title="论文贡献"></a>论文贡献</h2><ul>
+<li>通过跟踪补丁文件来提取和构建漏洞源代码基准测试。</li>
+<li>开发了一种基于代码克隆检测技术的漏洞检测方法(SQVDT)。</li>
+<li>检测到一些非常著名的OSS中的漏洞。</li>
+<li>对这些检测到的漏洞进行实证评估和验证研究。</li>
+<li>基于补丁的静态分析对这些漏洞的影响。 </li>
+<li>展示了 7 TB 源代码（152,823 个项目）中许多检测到的漏洞的结果。 </li>
+</ul>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>代码克隆一共有四种类型：精确克隆、重命名克隆、重构克隆、语义克隆。</p>
+<p><img src="https://i.loli.net/2021/08/30/7KCysPmxQrEJ3wh.png" alt="sqcdt.PNG"></p>
+<h3 id="源代码预处理"><a href="#源代码预处理" class="headerlink" title="源代码预处理"></a>源代码预处理</h3><p>首先跟踪补丁文件的原始源代码文件（打补丁之前的代码），来提取脆弱代码。删除所有的不相关代码，包括注释、空格等。然后将源代码转化成特定的token。在这过程使用词法分析器进行token化，同时为每一个token分配id。</p>
+<p>替换规则：</p>
+<ul>
+<li>替换标识符 -&gt; idN，N表示出现的编号</li>
+<li>替换字符串 -&gt; null，替换所有的统一字符串为空</li>
+<li>整数数值 -&gt; 0</li>
+<li>浮点型 -&gt; 0</li>
+<li>布尔型 -&gt; true<br>例 ：  x = a + y<em>z    -&gt;      id0 = id1 + id2</em>id3</li>
+</ul>
+<h3 id="提取代码特征"><a href="#提取代码特征" class="headerlink" title="提取代码特征"></a>提取代码特征</h3><p>代码特征就是指纹，通过提取指纹，可以减少比较的代码量。特征包含以下五点：</p>
+<ul>
+<li>MD5哈希：对每个文件的前15个token和后15个token分别生成hash值，然后通过$进行拼接。hash(Pre 15)@hash(Suf 15)</li>
+<li>FNV哈希：指纹索引特征，将每个文件的总token分成10个相等的部分，即p0、p1、p2、…p9。然后对每个部分应用FNV hash来生成FNV哈希值。在生成FNV散列后，从每个文件的每个分区中选择10个最小的散列。然后将它们全部添加到一个单一的值（长整数）中，以形成另一个特性，它显示了每个文件的完整特性。</li>
+</ul>
+<h3 id="指纹索引"><a href="#指纹索引" class="headerlink" title="指纹索引"></a>指纹索引</h3><p>指纹索引的目的是用来快速寻找单个文件或者整个系统脆弱代码，所有的指纹索引使用HBase大表进行存储，该方法较为灵活快速。索引信息包括：MD5哈希值、易受攻击文件的路径、FNV哈希值和存储在HBase中的每个源文件的总令牌大小。指纹索引信息的示例如图所示。</p>
+<p><img src="https://i.loli.net/2021/08/30/HXFoGn2QJdOpca7.png" alt="Snipaste_2021-08-30_16-57-16.PNG"></p>
+<h3 id="漏洞检测"><a href="#漏洞检测" class="headerlink" title="漏洞检测"></a>漏洞检测</h3><p>通过在项目上应用不同的过滤器来提取所有相关特征（MD5哈希、FNV散列、最小哈希和文件路径），过滤器将项目的相关特征与指纹的索引值进行比较。当系统和指纹数据集的特征100%相似时，就表示存在漏洞，并进行定位和展示。</p>
+<ul>
+<li>Filter 1：用来比较MD5哈希值，如果一致则进入下一个Filter。</li>
+<li>Filter 2：检测每个文件中的token总数，然后将它们与HBase中存储的指纹索引（单位）进行比较。</li>
+<li>Filter 3：用来比较FNV哈希值，如果一致则进入下一个Filter。</li>
+<li>Filter 4：在获得每个过滤器上的abstract克隆文件后，我们通过使用最小哈希进一步评估精确克隆的结果。最小哈希算法帮助我们进一步比较生成的文件，以找到精确的克隆文件。</li>
+<li>Filter 5：用来比较MD5哈希值，如果一致则进入下一个Filter。</li>
+</ul>
+<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><p>与SOAT进行对比的结果<br><img src="https://i.loli.net/2021/08/30/R3Tu4PQzfbUKcoG.png" alt="Snipaste_2021-08-30_17-12-14.PNG"></p>
+<p>检测到的小米内核中的漏洞<br><img src="https://i.loli.net/2021/08/30/ZcqyOTRaCiXBEQd.png" alt="Snipaste_2021-08-30_17-11-20.PNG"></p>
+<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><ul>
+<li>该方法不仅可以针对大规模的漏洞检测而且单个文件也可以进行检测。利用Hadoop可以实现分分布式的检索，提高检测的效率。</li>
+<li>在图上可以看到，在Patch File -&gt; Retrieved Vulnerable Code -&gt; Preprecessing 这个过程中，提取到的脆弱代码就是补丁文件中删除的代码，这些代码语义信息并不完整，同时在预处理过程中，将字符串，整数，浮点型统一替换为0，这样对于缓冲区溢出等类型的代码是无法检测的，因为这些类型的漏洞需要精确的缓冲区空间大小（数组索引大小）</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98/" rel="tag"># 漏洞挖掘</a>
+              <a href="/tags/%E5%85%8B%E9%9A%86%E6%A3%80%E6%B5%8B/" rel="tag"># 克隆检测</a>
+              <a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%89%E5%85%A8/" rel="tag"># 代码安全</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/08/08/%E5%9F%BA%E4%BA%8E%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E7%A0%94%E7%A9%B6-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" rel="prev" title="基于图神经网络的漏洞挖掘研究-论文笔记">
+      <i class="fa fa-chevron-left"></i> 基于图神经网络的漏洞挖掘研究-论文笔记
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#SQVDT-A-Scalable-Quantitative-Vulnerability-Detection-Technique-for-Source-Code-Security-Assessment"><span class="nav-number">1.</span> <span class="nav-text">SQVDT: A Scalable Quantitative Vulnerability Detection Technique for Source Code Security Assessment</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A5%E6%BA%90%E4%BF%A1%E6%81%AF"><span class="nav-number">1.1.</span> <span class="nav-text">来源信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%91%98%E8%A6%81"><span class="nav-number">1.2.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%9C%BA"><span class="nav-number">1.3.</span> <span class="nav-text">动机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BA%E6%96%87%E8%B4%A1%E7%8C%AE"><span class="nav-number">1.4.</span> <span class="nav-text">论文贡献</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95"><span class="nav-number">1.5.</span> <span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BA%90%E4%BB%A3%E7%A0%81%E9%A2%84%E5%A4%84%E7%90%86"><span class="nav-number">1.5.1.</span> <span class="nav-text">源代码预处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E5%8F%96%E4%BB%A3%E7%A0%81%E7%89%B9%E5%BE%81"><span class="nav-number">1.5.2.</span> <span class="nav-text">提取代码特征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E7%BA%B9%E7%B4%A2%E5%BC%95"><span class="nav-number">1.5.3.</span> <span class="nav-text">指纹索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E6%A3%80%E6%B5%8B"><span class="nav-number">1.5.4.</span> <span class="nav-text">漏洞检测</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C"><span class="nav-number">1.6.</span> <span class="nav-text">实验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%9D%E8%80%83"><span class="nav-number">1.7.</span> <span class="nav-text">思考</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="honywen"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">honywen</p>
+  <div class="site-description" itemprop="description">多多指教</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lxyeternal" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lxyeternal" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1796369212@qq.com" title="E-Mail → mailto:1796369212@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/weixin_39641975" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;weixin_39641975" rel="noopener" target="_blank"><i class="fab fa-stack-overflow fa-fw"></i>CSDN</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/yourname" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://honywen.com/" title="http:&#x2F;&#x2F;honywen.com">Title</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">honywen</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'XtTLwDG0JPdYJFC2zH1ULGMN-gzGzoHsz',
+      appKey     : 'E1vcmMuSfPfzUqtr2j4z9T0N',
+      placeholder: "Just go go",
+      avatar     : '/uploads/avatar.jpg',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
