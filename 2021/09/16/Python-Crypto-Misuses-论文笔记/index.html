@@ -20,32 +20,29 @@
     var CONFIG = {"hostname":"honywen.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","Pisces | Gemini":240,"width":300,"display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="来源信息 i春秋 题目名称：Hello World 类型：Web 难度：★★★☆☆ 题目地址：链接">
+  <meta name="description" content="Python Crypto Misuses in the Wild来源信息 机构：达姆施塔特工业大学 作者：Anna-Katharina Wickert, Lars Baumgärtner, Florian Breitfelder, Mira Mezini  摘要先前的研究表明，高达99.59%使用加密api的Java应用程序至少滥用一次API，但是针对Python的相关研究非常少，为了研究Pyt">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CTF-WEB:Hello World">
-<meta property="og:url" content="http://honywen.com/2021/04/26/CTF-WEB-Hello-World/index.html">
+<meta property="og:title" content="Python_Crypto_Misuses-论文笔记">
+<meta property="og:url" content="http://honywen.com/2021/09/16/Python-Crypto-Misuses-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/index.html">
 <meta property="og:site_name" content="小咕✨">
-<meta property="og:description" content="来源信息 i春秋 题目名称：Hello World 类型：Web 难度：★★★☆☆ 题目地址：链接">
+<meta property="og:description" content="Python Crypto Misuses in the Wild来源信息 机构：达姆施塔特工业大学 作者：Anna-Katharina Wickert, Lars Baumgärtner, Florian Breitfelder, Mira Mezini  摘要先前的研究表明，高达99.59%使用加密api的Java应用程序至少滥用一次API，但是针对Python的相关研究非常少，为了研究Pyt">
 <meta property="og:locale">
-<meta property="og:image" content="https://i.loli.net/2021/04/25/dyTWBQ4MkGFeRIV.png">
-<meta property="og:image" content="https://i.loli.net/2021/04/25/vk31YtwqrnhLUIe.png">
-<meta property="og:image" content="https://i.loli.net/2021/04/25/9FXjKIJi7RPmVys.png">
-<meta property="og:image" content="https://i.loli.net/2021/04/25/ytrlj3p2qgaWxc7.png">
-<meta property="og:image" content="https://i.loli.net/2021/04/25/jP7YhZdLtTUfV1K.png">
-<meta property="og:image" content="https://i.loli.net/2021/04/25/iQgclPxXOEKkALp.png">
-<meta property="og:image" content="https://i.loli.net/2021/04/25/UcJN1guE7VASnxr.png">
-<meta property="og:image" content="https://i.loli.net/2021/04/25/vm6ktMTbRVnN3Jo.png">
-<meta property="og:image" content="https://i.loli.net/2021/04/26/AU9ucRPMXOjnz3W.png">
-<meta property="og:image" content="https://i.loli.net/2021/04/26/hBbs2SzCPn9XTDk.png">
-<meta property="article:published_time" content="2021-04-25T16:20:08.000Z">
-<meta property="article:modified_time" content="2021-04-25T16:23:55.978Z">
+<meta property="og:image" content="https://i.loli.net/2021/09/15/DqbmMcivFxC8fkI.png">
+<meta property="og:image" content="https://i.loli.net/2021/09/15/DjPzvOVEpQNeHtU.png">
+<meta property="og:image" content="https://i.loli.net/2021/09/15/67cQo1AwTHdyYMP.png">
+<meta property="og:image" content="https://i.loli.net/2021/09/15/f9aiFMvn5sYL73S.png">
+<meta property="og:image" content="https://i.loli.net/2021/09/15/ACwYWspkShEzNQe.png">
+<meta property="og:image" content="https://i.loli.net/2021/09/15/B68sRgeF34waf2C.png">
+<meta property="article:published_time" content="2021-09-16T06:45:40.000Z">
+<meta property="article:modified_time" content="2021-09-16T06:47:14.001Z">
 <meta property="article:author" content="honywen">
-<meta property="article:tag" content="Web">
-<meta property="article:tag" content="git泄漏">
+<meta property="article:tag" content="代码安全">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="密码学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2021/04/25/dyTWBQ4MkGFeRIV.png">
+<meta name="twitter:image" content="https://i.loli.net/2021/09/15/DqbmMcivFxC8fkI.png">
 
-<link rel="canonical" href="http://honywen.com/2021/04/26/CTF-WEB-Hello-World/">
+<link rel="canonical" href="http://honywen.com/2021/09/16/Python-Crypto-Misuses-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
 
 
 <script id="page-configurations">
@@ -58,7 +55,7 @@
   };
 </script>
 
-  <title>CTF-WEB:Hello World | 小咕✨</title>
+  <title>Python_Crypto_Misuses-论文笔记 | 小咕✨</title>
   
 
 
@@ -189,7 +186,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://honywen.com/2021/04/26/CTF-WEB-Hello-World/">
+    <link itemprop="mainEntityOfPage" href="http://honywen.com/2021/09/16/Python-Crypto-Misuses-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -202,7 +199,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          CTF-WEB:Hello World
+          Python_Crypto_Misuses-论文笔记
         </h1>
 
         <div class="post-meta">
@@ -213,7 +210,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-04-26 00:20:08 / Modified: 00:23:55" itemprop="dateCreated datePublished" datetime="2021-04-26T00:20:08+08:00">2021-04-26</time>
+              <time title="Created: 2021-09-16 14:45:40 / Modified: 14:47:14" itemprop="dateCreated datePublished" datetime="2021-09-16T14:45:40+08:00">2021-09-16</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -221,7 +218,7 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">论文笔记</span></a>
                 </span>
             </span>
 
@@ -234,8 +231,8 @@
       </span>
       <span class="post-meta-item-text">Valine: </span>
     
-    <a title="valine" href="/2021/04/26/CTF-WEB-Hello-World/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/04/26/CTF-WEB-Hello-World/" itemprop="commentCount"></span>
+    <a title="valine" href="/2021/09/16/Python-Crypto-Misuses-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/09/16/Python-Crypto-Misuses-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -250,38 +247,36 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="来源信息"><a href="#来源信息" class="headerlink" title="来源信息"></a>来源信息</h2><ul>
-<li>i春秋</li>
-<li>题目名称：Hello World</li>
-<li>类型：Web</li>
-<li>难度：★★★☆☆</li>
-<li>题目地址：<a target="_blank" rel="noopener" href="http://106.75.72.168:9999/">链接</a></li>
+        <h1 id="Python-Crypto-Misuses-in-the-Wild"><a href="#Python-Crypto-Misuses-in-the-Wild" class="headerlink" title="Python Crypto Misuses in the Wild"></a>Python Crypto Misuses in the Wild</h1><h2 id="来源信息"><a href="#来源信息" class="headerlink" title="来源信息"></a>来源信息</h2><ul>
+<li>机构：达姆施塔特工业大学</li>
+<li>作者：Anna-Katharina Wickert, Lars Baumgärtner, Florian Breitfelder, Mira Mezini</li>
 </ul>
-<a id="more"></a>
-
-<h2 id="解题过程"><a href="#解题过程" class="headerlink" title="解题过程"></a>解题过程</h2><p>打开链接直接看到的就只有Hello World，其他什么信息都没有。</p>
-<p><img src="https://i.loli.net/2021/04/25/dyTWBQ4MkGFeRIV.png" alt="截屏2021-04-25 下午11.11.58.png"></p>
-<p>第一翻译就是F12看源码了，常规操作。打开就能看到**<em>flag.xmas.js**</em></p>
-<p><img src="https://i.loli.net/2021/04/25/vk31YtwqrnhLUIe.png" alt="截屏2021-04-25 下午11.12.06.png"></p>
-<p>第一反应就是flag可能与这个文件有关系。接下来就是寻找该文件。</p>
-<p>首先试了一下了 <a target="_blank" rel="noopener" href="http://106.75.72.168:9999/flag.xmas.js">http://106.75.72.168:9999/flag.xmas.js</a>  发现啥也没有，只能想想其他的方法了。<br><img src="https://i.loli.net/2021/04/25/9FXjKIJi7RPmVys.png" alt="截屏2021-04-25 下午11.20.28.png"></p>
-<p>然后想想可能路径不对，就尝试用dirsearch扫描一下服务器的目录文件。<br>果然有重大的发现，目录中有很多的git文件，第一反应就是git源码泄漏。</p>
-<p><img src="https://i.loli.net/2021/04/25/ytrlj3p2qgaWxc7.png" alt="截屏2021-04-25 下午11.19.46.png"></p>
-<p>于是尝试使用githack去抓他的源码。果然有发现，找到了flag.js和flag.php.</p>
-<p><img src="https://i.loli.net/2021/04/25/jP7YhZdLtTUfV1K.png" alt="截屏2021-04-25 下午11.25.36.png"></p>
-<p>三个文件中index.php就是那个hello world界面，没啥用。</p>
-<p>flag.js 看着像是一个用来加密的js文件，但是非常的乱，啥也看不了。</p>
-<p><img src="https://i.loli.net/2021/04/25/iQgclPxXOEKkALp.png" alt="截屏2021-04-25 下午11.58.30.png"></p>
-<p>flag.php文件，同样也是一个编码的文件，但是不知道怎么解。同时看到下面提示的变量c，flag_is_not_here。应该就是说flag不在这里。</p>
-<p><img src="https://i.loli.net/2021/04/25/UcJN1guE7VASnxr.png" alt="截屏2021-04-25 下午11.29.28.png"></p>
-<p>分析了半天的flag.js实在是看不下去了，然后找了wp，发现自己踩了一个坑。wp中说git泄漏中有两个flag.js文件，但是我使用githack只抓到了一个，于是重新换了一个工具，找到了另一个文件。</p>
-<p><img src="https://i.loli.net/2021/04/25/vm6ktMTbRVnN3Jo.png" alt="截屏2021-04-25 下午11.52.35.png"></p>
-<p>git中包含两个flag.js文件，也不知道这两个文件有啥区别，直接用站长之家在线<a target="_blank" rel="noopener" href="https://tool.chinaz.com/tools/diff">diff工具</a>看一下不同。</p>
-<p><img src="https://i.loli.net/2021/04/26/AU9ucRPMXOjnz3W.png" alt="截屏2021-04-26 上午12.08.14.png"></p>
-<p>仔细对比了这37处不同，发现就是flag。</p>
-<p><img src="https://i.loli.net/2021/04/26/hBbs2SzCPn9XTDk.png" alt="截屏2021-04-26 上午12.16.43.png"></p>
-<p>如果说缺了字符的话，就以flag.js为准，如果说字符不同的话就以flag.js.04bb09为准</p>
-<p>flag{82efc37f1cd5d4636ea7cadcd5a814a2}</p>
+<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>先前的研究表明，高达99.59%使用加密api的Java应用程序至少滥用一次API，但是针对Python的相关研究非常少，为了研究Python加密项目的API使用情况，作者开发了一个静态分析工具，涵盖了5种不同的Python加密api的常见滥用，分析了Github的895个项目和51个嵌入式项目，52.26%的Python项目至少有一次滥用。此外，一些Python加密软件库的API设计促使了开发人员滥用加密函数，而这些函数在使用Java和C的项目中更常见。</p>
+<h2 id="研究目标"><a href="#研究目标" class="headerlink" title="研究目标"></a>研究目标</h2><p>作者聚焦于Python加密API中的六种加密方式。</p>
+<p><img src="https://i.loli.net/2021/09/15/DqbmMcivFxC8fkI.png" alt="Snipaste_2021-09-15_16-10-34.PNG"></p>
+<ul>
+<li>ECB加密被确定为不安全的加密方式</li>
+<li>CBC如果使用非随机初始化向量(IV)。由于IV的可预测性，CBC的使用是确定性的和不安全的。</li>
+<li>固定的加密密钥不安全，而且不应该是硬编码</li>
+<li>非随机salt会使得加密变得不安全</li>
+<li>PBE标准PKCS#5中定义的1,000次迭代的最小推荐值，因此小于1000不安全</li>
+<li>种子可以确保随机数生成器的输出是不确定性的。</li>
+</ul>
+<h2 id="LICMA工具"><a href="#LICMA工具" class="headerlink" title="LICMA工具"></a>LICMA工具</h2><p>将一个源代码文件解析为各自的抽象语法树(AST)。更具体地说，我们使用Babelfish创建了一个通用的抽象语法树(UAST)，它结合了独立于语言的AST元素与特定于语言的元素。定义误用的规则，如果触发该规则就继续向后分析。<br>后向切片是通过在XPath3查询的帮助下过滤AST来创建的，其工作原理如下：首先，后向切片算法(BSA)识别在各自规则中引用的所有源代码行。例子：一个函数调用参数，比如加密函数。其次，BSA确定所有函数调用的参数是硬编码的、本地分配的还是全局分配的。如果满足这三种情况中的一种，则返回相应的值。这个值会根据规则中定义的函数进行检查，例如，如果5的值小于1000。在负的情况下，BSA查找函数的调用者，并如上所述检查调用者的参数。如果返回一个值或没有进一步的分析调用者可用，则算法停止，并返回分析的结果。在报告中，LICMA区分了由于缺少调用者而无法解决的潜在误用，以及明确的不安全规则。</p>
+<p><img src="https://i.loli.net/2021/09/15/DjPzvOVEpQNeHtU.png" alt="Snipaste_2021-09-15_16-38-04.PNG"></p>
+<h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><p>论文分析了Python5个加密模块cryptography, M2Crypto, PyCrypto, PyNaCl, ucryptolib</p>
+<p>如图为每一个库所能覆盖到的误用规则<br><img src="https://i.loli.net/2021/09/15/67cQo1AwTHdyYMP.png" alt="Snipaste_2021-09-15_16-47-54.PNG"></p>
+<p>超过30个滥用规则的Python项目<br><img src="https://i.loli.net/2021/09/15/f9aiFMvn5sYL73S.png" alt="Snipaste_2021-09-15_16-49-12.PNG"></p>
+<p>在Python的库中发现的滥用规则<br><img src="https://i.loli.net/2021/09/15/ACwYWspkShEzNQe.png" alt="Snipaste_2021-09-15_16-49-35.PNG"></p>
+<p>与Java和C的分析工具进行对比<br><img src="https://i.loli.net/2021/09/15/B68sRgeF34waf2C.png" alt="Snipaste_2021-09-15_16-49-41.PNG"></p>
+<p>Python的模块通过设计避免了6规则的触发</p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><ul>
+<li>依赖：发现的所有依赖中，只有7%出现在代码中，剩余的都是出现在代码的依赖中，都是由于外部引入引发的。</li>
+<li>只有14.81%的项目中直接包含了滥用加密的API，其余的都是通过第三方代码引发的。</li>
+<li>Python加密API的设计支持开发人员避免由于AES加密的不安全块模式而导致的滥用。</li>
+<li>58.82%的明确滥用，密码很容易受到字典攻击。</li>
+<li>使用Python的加密API可以避免在其代码中使用AES加密的块模式时的常见滥用</li>
+</ul>
 
     </div>
 
@@ -291,8 +286,9 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Web/" rel="tag"># Web</a>
-              <a href="/tags/git%E6%B3%84%E6%BC%8F/" rel="tag"># git泄漏</a>
+              <a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%89%E5%85%A8/" rel="tag"># 代码安全</a>
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/" rel="tag"># 密码学</a>
           </div>
 
         
@@ -301,13 +297,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/04/25/MVP-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" rel="prev" title="MVP-论文笔记">
-      <i class="fa fa-chevron-left"></i> MVP-论文笔记
+    <a href="/2021/08/30/SQVDT-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" rel="prev" title="SQVDT-论文笔记">
+      <i class="fa fa-chevron-left"></i> SQVDT-论文笔记
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2021/04/27/OneThink-CTF/" rel="next" title="OneThink-CTF">
-      OneThink-CTF <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -367,7 +360,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A5%E6%BA%90%E4%BF%A1%E6%81%AF"><span class="nav-number">1.</span> <span class="nav-text">来源信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E8%BF%87%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">解题过程</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Python-Crypto-Misuses-in-the-Wild"><span class="nav-number">1.</span> <span class="nav-text">Python Crypto Misuses in the Wild</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A5%E6%BA%90%E4%BF%A1%E6%81%AF"><span class="nav-number">1.1.</span> <span class="nav-text">来源信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%91%98%E8%A6%81"><span class="nav-number">1.2.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A0%94%E7%A9%B6%E7%9B%AE%E6%A0%87"><span class="nav-number">1.3.</span> <span class="nav-text">研究目标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LICMA%E5%B7%A5%E5%85%B7"><span class="nav-number">1.4.</span> <span class="nav-text">LICMA工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C"><span class="nav-number">1.5.</span> <span class="nav-text">结果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%9E%90"><span class="nav-number">1.6.</span> <span class="nav-text">分析</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
