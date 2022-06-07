@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"honywen.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","Pisces | Gemini":240,"width":300,"display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="来源信息 四川大学2022CTF比赛 难度：★★★★☆ 地址：https:&#x2F;&#x2F;www.scuctf.com&#x2F;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WriteUp of 2022scuctf-CTF">
+<meta property="og:url" content="http://honywen.com/2022/05/23/wp-of-2022scuctf-CTF/index.html">
+<meta property="og:site_name" content="小咕✨">
+<meta property="og:description" content="来源信息 四川大学2022CTF比赛 难度：★★★★☆ 地址：https:&#x2F;&#x2F;www.scuctf.com&#x2F;">
+<meta property="og:locale">
+<meta property="og:image" content="https://s2.loli.net/2022/05/23/HEua91mJS7dzRiT.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/23/9hgOYuJR3bB7nzA.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/23/eVbYoThZrMkDgwu.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/23/2iQcqeATzGtkxlS.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/23/CgsSWjoM6eTwx4N.jpg">
+<meta property="og:image" content="https://s2.loli.net/2022/05/23/6YGCwc2UrovlRSd.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/23/Ut9E3JQ1ZWXkO4w.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/23/ztZ9dbYMxkm8ciy.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/23/6AfJTvyUZ9LMEhY.png">
+<meta property="article:published_time" content="2022-05-23T08:13:20.000Z">
+<meta property="article:modified_time" content="2022-05-23T09:00:26.133Z">
+<meta property="article:author" content="honywen">
+<meta property="article:tag" content="Web">
+<meta property="article:tag" content="Misc">
+<meta property="article:tag" content="Real World">
+<meta property="article:tag" content="SCUCTF">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2022/05/23/HEua91mJS7dzRiT.png">
+
+<link rel="canonical" href="http://honywen.com/2022/05/23/wp-of-2022scuctf-CTF/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>WriteUp of 2022scuctf-CTF | 小咕✨</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">小咕✨</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Everything is fine</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/commonweal/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://honywen.com/2022/05/23/wp-of-2022scuctf-CTF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="honywen">
+      <meta itemprop="description" content="多多指教">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小咕✨">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          WriteUp of 2022scuctf-CTF
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-05-23 16:13:20 / Modified: 17:00:26" itemprop="dateCreated datePublished" datetime="2022-05-23T16:13:20+08:00">2022-05-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2022/05/23/wp-of-2022scuctf-CTF/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/05/23/wp-of-2022scuctf-CTF/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="来源信息"><a href="#来源信息" class="headerlink" title="来源信息"></a>来源信息</h2><ul>
+<li>四川大学2022CTF比赛</li>
+<li>难度：★★★★☆</li>
+<li>地址：<a target="_blank" rel="noopener" href="https://www.scuctf.com/">https://www.scuctf.com/</a></li>
+</ul>
+<a id="more"></a>
+
+
+<h3 id="SignIN"><a href="#SignIN" class="headerlink" title="SignIN"></a>SignIN</h3><p>hint1: 首页只是为了好看，不是注入<br>hint2: 简单的云渗透</p>
+<p><img src="https://s2.loli.net/2022/05/23/HEua91mJS7dzRiT.png" alt="sign1.png"></p>
+<p>刚开始dompdf rce差点没试死，最后出了hit才知道不是rce，看到网站指纹是spring，去网上找相关的文档进行测试，发现env接口可以访问，有回显，里面有flagpath，以及secretid和secretkey。但是secretkey是*遮掩的。在heapdump接口下载到了JVM 堆信息，利用Memory Analyzer解析出secretkey，最终解析出了key。</p>
+<p><img src="https://s2.loli.net/2022/05/23/9hgOYuJR3bB7nzA.png" alt="sign2.png"></p>
+<p>从flag和hint知道是云渗透，需要去连接oss，利用ossutilmac64工具配置相关的参数，访问flag的path就可以拿到flag了。</p>
+<p><img src="https://s2.loli.net/2022/05/23/eVbYoThZrMkDgwu.png" alt="sign3.png"></p>
+<h3 id="Never-Gonna-Give-Misc-Up"><a href="#Never-Gonna-Give-Misc-Up" class="headerlink" title="Never Gonna Give Misc Up"></a>Never Gonna Give Misc Up</h3><p>题目：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">take me to ur heart</span><br><span class="line">we know the sys and we&#39;re gonna play it</span><br><span class="line">we know the base64 and we&#39;re gonna play it</span><br><span class="line">give key up &quot;Never Gonna Give You Up&quot;</span><br><span class="line">gonna encrypt rick</span><br><span class="line">give areYouRoll up 0</span><br><span class="line">give  astleyCounter up 0 </span><br><span class="line">together forever and never to part</span><br><span class="line">and if u ask me how im feeling astleyCounter is length(rick)</span><br><span class="line">desert u</span><br><span class="line">say goodbye</span><br><span class="line">and if u ask me how im feeling areYouRoll is 1</span><br><span class="line">desert u</span><br><span class="line">say goodbye</span><br><span class="line">give  watermanCounter up 0</span><br><span class="line">together forever and never to part</span><br><span class="line">and if u ask me how im feeling watermanCounter+astleyCounter is length(rick)</span><br><span class="line">give areYouRoll up 1</span><br><span class="line">desert u</span><br><span class="line">say goodbye</span><br><span class="line">and if u ask me how im feeling watermanCounter is length(key)</span><br><span class="line">desert u</span><br><span class="line">say goodbye</span><br><span class="line">give rick[astleyCounter + watermanCounter] up ord(rick[astleyCounter + watermanCounter]) ^ ord(key[watermanCounter])</span><br><span class="line">give watermanCounter up watermanCounter + 1</span><br><span class="line">say goodbye</span><br><span class="line">give astleyCounter up astleyCounter + length(key)</span><br><span class="line">say goodbye</span><br><span class="line">give rick up base64.b64encode(bytes(rick))</span><br><span class="line">i just wanna tell u how im feeling rick</span><br><span class="line">say goodbye</span><br><span class="line">give flag up sys.stdin.readline()[:-1]</span><br><span class="line">encrypt(list(flag))</span><br><span class="line"># PQYDBgZGPFYIWgUZf1xCSBhsXRENYUgrAFsEShVzQlhXAxR2CkNQFTxeEF0&#x3D;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到歌词是有规律的，首先去网上找相似的题目，在github找到了RickRoll，参照着其中的语法讲文本翻译成python代码并进行调试，可以发现加密函数和解密函数是一样的。只需要修改最后的输出即可。</p>
+<p>参考这个：<a target="_blank" rel="noopener" href="https://github.com/Rick-Lang/rickroll-lang">https://github.com/Rick-Lang/rickroll-lang</a> 进行翻译</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">import base64</span><br><span class="line">import sys</span><br><span class="line">from tokenize import String</span><br><span class="line">from turtle import right</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def encrypt(string):</span><br><span class="line">    key &#x3D; &quot;Never Gonna Give You Up&quot;</span><br><span class="line">    rick &#x3D; list(string)</span><br><span class="line">    areYouRoll &#x3D; 0</span><br><span class="line">    astleyCounter &#x3D; 0</span><br><span class="line">    while True:</span><br><span class="line">        if astleyCounter &#x3D;&#x3D; len(rick):</span><br><span class="line">            break</span><br><span class="line">        if areYouRoll &#x3D;&#x3D; 1:</span><br><span class="line">            break</span><br><span class="line">        watermanCounter &#x3D; 0</span><br><span class="line">        while(True):</span><br><span class="line">            if watermanCounter + astleyCounter &#x3D;&#x3D; len(rick):</span><br><span class="line">                areYouRoll &#x3D; 1</span><br><span class="line">                break</span><br><span class="line">            if watermanCounter &#x3D;&#x3D; len(key):</span><br><span class="line">                break</span><br><span class="line">            rick[astleyCounter + watermanCounter] &#x3D; ord(rick[astleyCounter + watermanCounter]) ^ ord(key[watermanCounter])</span><br><span class="line">            watermanCounter &#x3D; watermanCounter + 1</span><br><span class="line">        astleyCounter &#x3D; astleyCounter + len(key)</span><br><span class="line">    rick &#x3D; base64.b64encode(bytes(rick))</span><br><span class="line">    print(rick)</span><br></pre></td></tr></table></figure>
+<p>解密函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">def decrypt(flag_en):</span><br><span class="line">    string &#x3D; base64.b64decode(flag_en)</span><br><span class="line">    flag_en &#x3D; bytes.decode(string)</span><br><span class="line">    key &#x3D; &quot;Never Gonna Give You Up&quot;</span><br><span class="line">    rick &#x3D; list(flag_en)</span><br><span class="line">    areYouRoll &#x3D; 0</span><br><span class="line">    astleyCounter &#x3D; 0</span><br><span class="line">    while True:</span><br><span class="line">        if astleyCounter &#x3D;&#x3D; len(rick):</span><br><span class="line">            break</span><br><span class="line">        if areYouRoll &#x3D;&#x3D; 1:</span><br><span class="line">            break</span><br><span class="line">        watermanCounter &#x3D; 0</span><br><span class="line">        while(True):</span><br><span class="line">            if watermanCounter + astleyCounter &#x3D;&#x3D; len(rick):</span><br><span class="line">                areYouRoll &#x3D; 1  </span><br><span class="line">                break</span><br><span class="line">            if watermanCounter &#x3D;&#x3D; len(key):</span><br><span class="line">                break</span><br><span class="line">            rick[astleyCounter + watermanCounter] &#x3D; ord(rick[astleyCounter + watermanCounter]) ^ ord(key[watermanCounter])</span><br><span class="line">            watermanCounter &#x3D; watermanCounter + 1</span><br><span class="line">        astleyCounter &#x3D; astleyCounter + len(key)</span><br><span class="line">    rick &#x3D; base64.b64encode(bytes(rick))</span><br><span class="line">    rick &#x3D; base64.b64decode(rick)</span><br><span class="line">    rick &#x3D; bytes.decode(rick)</span><br><span class="line">    print(rick)</span><br><span class="line"></span><br><span class="line">decrypt(&#39;PQYDBgZGPFgIC1ATcQoVSBloV0ENYRYoUVtcRBkjQghfVkUhWBcGFmBYQ10&#x3D;&#39;)</span><br></pre></td></tr></table></figure>
+<p>最后可以成功解出flag。</p>
+<h3 id="CheckIn"><a href="#CheckIn" class="headerlink" title="CheckIn"></a>CheckIn</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">error_reporting(0);</span><br><span class="line"></span><br><span class="line">$action &#x3D; $_GET[&#39;a&#39;]?$_GET[&#39;a&#39;]:highlight_file(__FILE__);</span><br><span class="line"></span><br><span class="line">if($action&#x3D;&#x3D;&#x3D;&#39;inject&#39;)&#123;</span><br><span class="line">    die(&#39;Permission denied&#39;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$lock &#x3D; call_user_func(($_GET[&#39;Y&#39;]));</span><br><span class="line">if (isset($_GET[&#39;env&#39;]) &amp;&amp; $lock &#x3D;&#x3D; &quot;Web_Dog&quot; &amp;&amp; $action &#x3D;&#x3D; &#39;inject&#39;) &#123;</span><br><span class="line">    foreach ($_GET[&quot;env&quot;] as $k &#x3D;&gt; $v) &#123;</span><br><span class="line">        putenv(&quot;&#123;$k&#125;&#x3D;&#123;$v&#125;&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    system(&quot;bash -c &#39;snakin&#39;&quot;);</span><br><span class="line">    foreach ($_GET[&quot;env&quot;] as $k &#x3D;&gt; $v) &#123;</span><br><span class="line">        putenv(&quot;&#123;$k&#125;&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<p>第一反应就是绕参数，构造env，Y，a。a由于用的是弱等于，所以只需要保证前面一致，后面随便加些字符就可以绕过，env去网上找到相关的题目，是环境命令注入，但是Y由于是call_user_func（）函数，因此刚开始一直没有任何的办法，最后只能尝试利用phpinfo()去解析，成功解析。在返回的环境中发现了flag。</p>
+<p><img src="https://s2.loli.net/2022/05/23/2iQcqeATzGtkxlS.png" alt="checkin.png"></p>
+<h3 id="无e烦"><a href="#无e烦" class="headerlink" title="无e烦"></a>无e烦</h3><p>RSA加密，已知多组c，m，已知n，求解flag</p>
+<p>题目：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">from Crypto.Util.number import *</span><br><span class="line">from random import randint</span><br><span class="line">from hashlib import md5, sha256</span><br><span class="line">from secret import flag</span><br><span class="line"></span><br><span class="line">p &#x3D; getPrime(512)</span><br><span class="line">q &#x3D; getPrime(512)</span><br><span class="line">e &#x3D; getPrime(1020)</span><br><span class="line">n &#x3D; p * q</span><br><span class="line">M &#x3D; [randint(1, 2**128) for _ in range(10)]</span><br><span class="line">C &#x3D; []</span><br><span class="line">m &#x3D; randint(1, 2**128)</span><br><span class="line"></span><br><span class="line">for i in M:</span><br><span class="line">    tmp &#x3D; pow(i, e, n)</span><br><span class="line">    C.append(tmp)</span><br><span class="line">c &#x3D; pow(m, e, n)</span><br><span class="line">assert flag.lstrip(&#39;SCUCTF&#123;&#39;).rstrip(&#39;&#125;&#39;) &#x3D;&#x3D; md5(str(c).encode()).hexdigest()</span><br><span class="line"></span><br><span class="line">print(&#39;n &#x3D; &#39;, n)</span><br><span class="line">print(&#39;m &#x3D; &#39;,m)</span><br><span class="line">print(&#39;M &#x3D; &#39;, M)</span><br><span class="line">print(&#39;C &#x3D; &#39;, C)</span><br><span class="line">print(&#39;sha256(c) &#x3D; &#39;, sha256(str(c).encode()).hexdigest())</span><br><span class="line">&#39;&#39;&#39;</span><br><span class="line">this time, you dont have yi, can you solve it?</span><br><span class="line">n &#x3D;  80866130102261518785138247492226418988283622967107642931626670770991287290017575544856640708656070056599413982921939820092653964250560158534164684509508570827031257145358915936716873579275999289598802214938312512124960829274763697183422853018643009337211154573323694306354847681849997475073748060554116885743</span><br><span class="line">m &#x3D;  27869827573821748315559900687594988919</span><br><span class="line">M &#x3D;  [5579, 598603829, 260990180, 1021754, 776307182737258, 1024275153677530399, 4600527292991, 122745486818718559362816, 648394777237946314, 967584531487748385405909929860]</span><br><span class="line">C &#x3D;  [31144948752006156956371408281561352243079201486174266637408555124157021185950319222361922834637592274602797401823142568566421878331058293593226929896870037754087323313283303137533025781672293482174192932461883863211124310703337677122102074722437833121327084819887896193852163626471460810662932603076534660804, 58749052925641223456561705208530964408557935651157882734266347388456853409033384416852410757712668576320121029921896159470323217774586441972199278374439949270876469606930228396601576234668190157650922636135501186357625172032576738756614273367295339284973641828226470658939082400779599258757898885883644801053, 40579637913832144242682484264514378732436426402443803846093953264515971181103912187778246987360607324323099933248625621555519103040756905979660584142448386505386901820391693230451974101594790778026848209779850319523275751832867671987115959904668387865788935422538240044475848660391245453237006973560308165704, 15835925903597045972140032459728544439513422823860173109658290670683594043875129538306223165929079184397089052592444654067130249396164980960356271754915481618011410536765933171454501338047351306704434512914546553962486447770536415910399995606608613315118790692706536805083836633281529931209281637891318353741, 4151494489564600318094655116793301906740457645167301450751640199360784554254420449223484211520605752417331051052221881536558310384015644237944026227453976543115190245641063933315808492207164476079528582238760181801532524373077098185522630038060400419605143520089304061730233240190827575204697167386552820873, 46450004515612124682062326769786875920262836498726465653281013385901400386040827258028783122454588622468817101329068510845265192227085655559383112363438579993120259202146869556553612006784560362028894578429513744992720306276354566189337126874210742595318199174149347871156773709876660547468111493256985790264, 5293675028656705650831635378836383447792200771454173820886211319500431128744638963226815998459995451887706586775256373154495638727831792733331349999470387188688842268193444623645723157924374339534474296911972302241786675561240710375985864649928838541714831703346767850719207370350131520678912020234750273930, 30043574658200438024547973628567719018751546081493990329929735757336474377209161041596827306653602292215720621453139092179169784224079738652396993819458373985141265627934492408720528950069791313892499982826159264170102770059863789006549726625129186587016838115681900755406881891907749234407979155358030945914, 49664459429620491137496885409272085607758468537571273414043041753461839754010622955053495314196284424560133883998315943659743474201365515603408943978523525179827702636431575706855973368124936003475671990897616340108065511459270017655645179716434335969764382936670154226518119191587925302403315274959019503422, 72335423827835340317296400031661018813932187781068379309839710979890568519179106231620831225764055797117609283378510499491626336945698456043068123495971189674660151501766805123602763163842302478047056395083249502992176542543200848695685618337947070448376674020551810665597616550148876318339506522538505673458]</span><br><span class="line">sha256(c) &#x3D;  845a1ffbdc9850b729c57b7e672355aa3eb163e382f02e620cc37394ddb52163</span><br><span class="line">&#39;&#39;&#39;</span><br></pre></td></tr></table></figure>
+
+<p>题目给出了多组的c和M，而且还给出了一个m，flag = md5(c) =  RSA(m)。</p>
+<p>根据RSA的公式，我们可以得到：</p>
+<pre><code>c1 = m1^e mod n
+c2 = m2^e mod n
+...
+c10 = m10^e mod n
+
+其中，c1, c2, ..., c10是密文，m1, m2, ..., m10是明文。</code></pre>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">c1c2 &#x3D; (m1m2 mod n)^e mod n</span><br></pre></td></tr></table></figure>
+
+<p>只要能找到m与Mk之间的关系，就可以找到c与Ck之间的关系。<br>最终</p>
+<p>我们对m和m1～m10进行分解</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># [7, 797]</span><br><span class="line"># [631, 948659]</span><br><span class="line"># [2, 2, 5, 11, 83, 14293]</span><br><span class="line"># [2, 641, 797]</span><br><span class="line"># [2, 371179, 1045731551]</span><br><span class="line"># [1012967, 1011163397897]</span><br><span class="line"># [7, 657218184713]</span><br><span class="line"># [2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 1231, 43277783002583209]</span><br><span class="line"># [2, 631, 641, 844913, 948659]</span><br><span class="line"># [2, 2, 5, 426095513, 113540802703518305461]</span><br><span class="line"></span><br><span class="line"># m  [7, 7, 844913, 1012967, 657218184713, 1011163397897]</span><br></pre></td></tr></table></figure>
+<p>最终发现m之间的关系满足</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">m &#x3D; (m0 * m6 * m8 * m5) &#x2F; (m3 * m1)</span><br></pre></td></tr></table></figure>
+<p>因此C也满足同样的关系,这里直接使用sege可以计算得到c，但是一定要记得mod n</p>
+<p>c = [(c0 * c6 * c8 * c5) / (c3 * c1)] mod n</p>
+<p>最终计算得到flag</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">md5(str(c).encode()).hexdigest() &#x3D;&#x3D; flag</span><br></pre></td></tr></table></figure>
+
+
+<p>flag = 0bc5e3a135bc252623bb4a391c886c08</p>
+<h3 id="窗外的山"><a href="#窗外的山" class="headerlink" title="窗外的山"></a>窗外的山</h3><p>开局一张图，位置全靠猜</p>
+<p><img src="https://s2.loli.net/2022/05/23/CgsSWjoM6eTwx4N.jpg" alt="image.jpeg"></p>
+<p>找图中框出来的山峰</p>
+<p><img src="https://s2.loli.net/2022/05/23/6YGCwc2UrovlRSd.png" alt="question.png"></p>
+<p>先利用在线的网站查图片的信息<br><a target="_blank" rel="noopener" href="https://www.strerr.com/cn/exif.html">https://www.strerr.com/cn/exif.html</a></p>
+<p><img src="https://s2.loli.net/2022/05/23/Ut9E3JQ1ZWXkO4w.png" alt="fig2.png"></p>
+<p><img src="https://s2.loli.net/2022/05/23/ztZ9dbYMxkm8ciy.png" alt="fig1.png"></p>
+<p>找到发现是在成都附近的山峰，网上搜成都附近的山，对照一下就是天牙峰</p>
+<p><a target="_blank" rel="noopener" href="https://sichuan.scol.com.cn/sczh/202009/57894100.html">https://sichuan.scol.com.cn/sczh/202009/57894100.html</a></p>
+<p><img src="https://s2.loli.net/2022/05/23/6AfJTvyUZ9LMEhY.png" alt="截屏2022-05-23 16.54.32.png"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Web/" rel="tag"># Web</a>
+              <a href="/tags/Misc/" rel="tag"># Misc</a>
+              <a href="/tags/Real-World/" rel="tag"># Real World</a>
+              <a href="/tags/SCUCTF/" rel="tag"># SCUCTF</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/18/%E6%BA%90%E4%BB%A3%E7%A0%81%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E6%96%B9%E5%90%91%E8%AE%BA%E6%96%87%E9%9B%86%E5%90%88-%E8%AE%BA%E6%96%87%E6%95%B4%E5%90%88/" rel="prev" title="源代码漏洞挖掘方向论文集合-论文整合">
+      <i class="fa fa-chevron-left"></i> 源代码漏洞挖掘方向论文集合-论文整合
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/06/07/SeqTrans-%E6%BC%8F%E6%B4%9E%E8%87%AA%E5%8A%A8%E5%8C%96%E4%BF%AE%E5%A4%8D-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" rel="next" title="SeqTrans:漏洞自动化修复-论文笔记">
+      SeqTrans:漏洞自动化修复-论文笔记 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A5%E6%BA%90%E4%BF%A1%E6%81%AF"><span class="nav-number">1.</span> <span class="nav-text">来源信息</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SignIN"><span class="nav-number">1.1.</span> <span class="nav-text">SignIN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Never-Gonna-Give-Misc-Up"><span class="nav-number">1.2.</span> <span class="nav-text">Never Gonna Give Misc Up</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CheckIn"><span class="nav-number">1.3.</span> <span class="nav-text">CheckIn</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A0e%E7%83%A6"><span class="nav-number">1.4.</span> <span class="nav-text">无e烦</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AA%97%E5%A4%96%E7%9A%84%E5%B1%B1"><span class="nav-number">1.5.</span> <span class="nav-text">窗外的山</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="honywen"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">honywen</p>
+  <div class="site-description" itemprop="description">多多指教</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lxyeternal" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lxyeternal" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1796369212@qq.com" title="E-Mail → mailto:1796369212@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/weixin_39641975" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;weixin_39641975" rel="noopener" target="_blank"><i class="fab fa-stack-overflow fa-fw"></i>CSDN</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/yourname" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://honywen.com/" title="http:&#x2F;&#x2F;honywen.com">Title</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">honywen</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'XtTLwDG0JPdYJFC2zH1ULGMN-gzGzoHsz',
+      appKey     : 'E1vcmMuSfPfzUqtr2j4z9T0N',
+      placeholder: "Just go go",
+      avatar     : '/uploads/avatar.jpg',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
