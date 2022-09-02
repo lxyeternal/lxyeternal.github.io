@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"honywen.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","Pisces | Gemini":240,"width":300,"display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Finding Bugs Using Your Own Code: Detecting Functionally-similar yet Inconsistent Code来源信息 机构：东北大学(USA) 作者：Mansour Ahmadi, Reza Mirzazade Farkhani, Ryan Williams, Long Lu Usenix 2021  摘要对于同一个代码库来说，功能相">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Usenix2021-用自己的代码查找bug-论文笔记">
+<meta property="og:url" content="http://honywen.com/2022/09/02/Usenix2021-%E7%94%A8%E8%87%AA%E5%B7%B1%E7%9A%84%E4%BB%A3%E7%A0%81%E6%9F%A5%E6%89%BEbug-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="小咕✨">
+<meta property="og:description" content="Finding Bugs Using Your Own Code: Detecting Functionally-similar yet Inconsistent Code来源信息 机构：东北大学(USA) 作者：Mansour Ahmadi, Reza Mirzazade Farkhani, Ryan Williams, Long Lu Usenix 2021  摘要对于同一个代码库来说，功能相">
+<meta property="og:locale">
+<meta property="og:image" content="https://s2.loli.net/2022/09/03/M5Sf7BXQbjFElyL.jpg">
+<meta property="og:image" content="https://s2.loli.net/2022/09/03/zk7PY6urfldKHq1.jpg">
+<meta property="og:image" content="https://s2.loli.net/2022/09/02/uASgGfxy4W9pRPc.png">
+<meta property="og:image" content="https://s2.loli.net/2022/09/02/amAOkPEgY7dzfFZ.png">
+<meta property="og:image" content="https://s2.loli.net/2022/09/02/sOMFQTkqenSwgcU.png">
+<meta property="og:image" content="https://s2.loli.net/2022/09/02/P24kDtWGSbBRlhz.png">
+<meta property="og:image" content="https://s2.loli.net/2022/09/02/ZnGXNsiCK2hYFMx.png">
+<meta property="og:image" content="https://s2.loli.net/2022/09/02/xtZV7AsDa9zvuHM.png">
+<meta property="og:image" content="https://s2.loli.net/2022/09/02/OvPk7eNcH9wprYq.png">
+<meta property="article:published_time" content="2022-09-02T12:37:09.000Z">
+<meta property="article:modified_time" content="2022-09-02T16:12:14.550Z">
+<meta property="article:author" content="honywen">
+<meta property="article:tag" content="漏洞检测">
+<meta property="article:tag" content="图嵌入">
+<meta property="article:tag" content="代码表征">
+<meta property="article:tag" content="聚类">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2022/09/03/M5Sf7BXQbjFElyL.jpg">
+
+<link rel="canonical" href="http://honywen.com/2022/09/02/Usenix2021-%E7%94%A8%E8%87%AA%E5%B7%B1%E7%9A%84%E4%BB%A3%E7%A0%81%E6%9F%A5%E6%89%BEbug-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>Usenix2021-用自己的代码查找bug-论文笔记 | 小咕✨</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">小咕✨</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Everything is fine</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="http://about.honywen.com/" rel="noopener" target="_blank"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/commonweal/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://honywen.com/2022/09/02/Usenix2021-%E7%94%A8%E8%87%AA%E5%B7%B1%E7%9A%84%E4%BB%A3%E7%A0%81%E6%9F%A5%E6%89%BEbug-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="honywen">
+      <meta itemprop="description" content="多多指教">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小咕✨">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Usenix2021-用自己的代码查找bug-论文笔记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-09-02 20:37:09" itemprop="dateCreated datePublished" datetime="2022-09-02T20:37:09+08:00">2022-09-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-09-03 00:12:14" itemprop="dateModified" datetime="2022-09-03T00:12:14+08:00">2022-09-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">论文笔记</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2022/09/02/Usenix2021-%E7%94%A8%E8%87%AA%E5%B7%B1%E7%9A%84%E4%BB%A3%E7%A0%81%E6%9F%A5%E6%89%BEbug-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/09/02/Usenix2021-%E7%94%A8%E8%87%AA%E5%B7%B1%E7%9A%84%E4%BB%A3%E7%A0%81%E6%9F%A5%E6%89%BEbug-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Finding-Bugs-Using-Your-Own-Code-Detecting-Functionally-similar-yet-Inconsistent-Code"><a href="#Finding-Bugs-Using-Your-Own-Code-Detecting-Functionally-similar-yet-Inconsistent-Code" class="headerlink" title="Finding Bugs Using Your Own Code: Detecting Functionally-similar yet Inconsistent Code"></a>Finding Bugs Using Your Own Code: Detecting Functionally-similar yet Inconsistent Code</h2><h2 id="来源信息"><a href="#来源信息" class="headerlink" title="来源信息"></a>来源信息</h2><ul>
+<li>机构：东北大学(USA)</li>
+<li>作者：Mansour Ahmadi, Reza Mirzazade Farkhani, Ryan Williams, Long Lu</li>
+<li>Usenix 2021</li>
+</ul>
+<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p><strong>对于同一个代码库来说，功能相似的代码片段，应该有着相似的形式</strong>。</p>
+<p>对于一组功能相似但段形式不同的代码段，如果其中一个正常的话，则另一个有很大的可能存在bug。基于这个思想，作者提出了一种基于两步聚类的bug识别方法FICS，第一步：在粗粒度上聚类出功能相似的代码段，第二步：对第一步聚类出的簇进行更细粒度的聚类，找出功能相似而形式不一致的代码段，最后人工对偏差代码段进行分析，确定其中的bug，该方法并不特定于一种类型的不一致或bug，可以用于未知类型bug的检测。同时FICS在QEMU和OPENSSL等5个开源库中找到了22个新的bug。</p>
+<a id="more"></a>
+
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><h3 id="现有方法存在的问题"><a href="#现有方法存在的问题" class="headerlink" title="现有方法存在的问题"></a>现有方法存在的问题</h3><p>现有的基于机器学习的bug检测方法主要是通过训练大量的已有的bug样本，然后应用在项目中发现相似的bug。该方法存在两个问题。</p>
+<ul>
+<li>训练需要大规模的已知bug，但是采集和清洗工作量巨大。</li>
+<li>这类模型通常只能检测一个或几个特定类型的bug，对未知的bug无法检测。</li>
+</ul>
+<h3 id="启发"><a href="#启发" class="headerlink" title="启发"></a>启发</h3><p>对于一个大项项目来说，通常存在很多功能相似的代码，当然大部分的代码形式也是相似的。当它们的形式不一样的时候，如果一个代码段正常（没有bug），那另一个有很大的可能存在着bug。论文中作者具了一个例子，我为了验证这个现象是否具有普遍性，自己去找了一个，十分钟我就在openssl找到了。</p>
+<p><img src="https://s2.loli.net/2022/09/03/M5Sf7BXQbjFElyL.jpg" alt="FICS11.jpeg"></p>
+<p>这是openssl存在的一个bug，影响“V_7_9_P1”以上版本，修复的方法就是添加了红框中的一行代码。我在上一个版本V_7_8的发行版代码中找到了这个漏洞，同时在不同文件中找到了相似的代码片段但却不存在bug（本身就包含补丁那句）。</p>
+<p><img src="https://s2.loli.net/2022/09/03/zk7PY6urfldKHq1.jpg" alt="FICS5.jpeg"></p>
+<h3 id="FICS整体思路"><a href="#FICS整体思路" class="headerlink" title="FICS整体思路"></a>FICS整体思路</h3><p>作者对不一致是这样定义的：如果一组代码段的语义或逻辑是同义的，但是它们在实现上存在很大的不同，那么就称之为不一致。</p>
+<p><img src="https://s2.loli.net/2022/09/02/uASgGfxy4W9pRPc.png" alt="FICS1.png"></p>
+<p>如图是FICS的工作流，首先这对源代码的Construct进行提取（该过程的重点是选择何种代码粒度才能有效的捕捉功能的一致性和形式的不一致性），然后对函数进行聚类找出其中功能一致性的代码片段，接着对每一个簇中的代码片段再进行聚类，区分出形式不一致的代码段，最后对偏离正常的代码段进行手工检测，最终确定bug。</p>
+<h2 id="具体方法"><a href="#具体方法" class="headerlink" title="具体方法"></a>具体方法</h2><p>针对上面的代码粒度，作者选择过程间数据依赖图的子图。因为大部分的漏洞和补丁代码修改都发生在一个函数中，同时FICS关注过程间的不一致性，该粒度可以很好的聚类算法扩展到大型代码库。</p>
+<p><img src="https://s2.loli.net/2022/09/02/amAOkPEgY7dzfFZ.png" alt="FICS2.png"></p>
+<p>FICS主要包括9步，首先将源代码编译为LLVM bitcode方便后续的操作，然后提取每个函数的过程间DDG，接着针对DDG提取Construct，下一步对利用Bag-of-Nodes对提取的Construct进行粗粒度的嵌入进行第一步聚类，目的是对功能相似的Construct进行分组，然后使用Graph2Vec进行细粒度的嵌入，对每一个分组内部进行二次聚类，找出区别于其他Construct的Construct。最终人工对不一致的代码段进行分析确定bug。</p>
+<h3 id="代码表征和粒度选择"><a href="#代码表征和粒度选择" class="headerlink" title="代码表征和粒度选择"></a>代码表征和粒度选择</h3><p>Q1: 为什么选择DDG作为代码的粒度？</p>
+<ul>
+<li>DDG本身就可以捕获导致大量bug的根本原因。例如，缺少检查，滥用api，错误的铸件，以及许多其他类型的bug，同时DDG相对于PDG等其他的表征形式更加的简单和高效。</li>
+<li>bug及其补丁通常出现在单个函数中，通过过程间的DDG就可以区分bug和正常代码的异同，去除与bug无关的代码，可以是FICS更加的高效，适用于大规模的项目检测。</li>
+<li>DDG可以很好的用于图嵌入。</li>
+</ul>
+<p>Q2: Construct的定义？</p>
+<p> Construct本质是DDG的子图，类似于程序切片。从一个指定的节点（根节点）开始遍历DDG，直到后续的所有节点都全覆盖或者到达Construct的最大深度，所有遍历的边和节点就组成了一个Construct。在一个函数中，所有的变量都可以作为根节点，因此Construct是一个Variable-based的DDG子图。Construct的最大深度本质就是DDG子图中节点的数量最大值，默认是无限的。</p>
+<p> 通过定义Construct就可以识别一致性的问题转变为检测单个变量在计算和操作上的相似和不一致性问题。作者进一步对Construct进行抽象化表示，删除语句中变量名，只保留变量类型，同时删除了常量和文本。因为这些内容对FICS无用，会影响后续的聚类。</p>
+<h3 id="分步聚类"><a href="#分步聚类" class="headerlink" title="分步聚类"></a>分步聚类</h3><h4 id="第一步聚类（功能相似性聚类）"><a href="#第一步聚类（功能相似性聚类）" class="headerlink" title="第一步聚类（功能相似性聚类）"></a>第一步聚类（功能相似性聚类）</h4><p>  <img src="https://s2.loli.net/2022/09/02/sOMFQTkqenSwgcU.png" alt="FICS6.png"></p>
+<p>第一步聚类目的是找出同一个代码库中那些功能相似的代码，bug代码和补丁代码就具有很高的相似性，通常只是增加或删减了几行代码，或者代码顺序发生微调，(a),(b)就是同一函数的补丁前后代码，我们认为这就是相似的代码段，第一步的目的也就是将这类代码划分为一组，可以发现如果不考虑代码的前后顺序的话，(a)(b)的相似度就非常高，因此在第一步聚类的过程中，FICS不考虑边的信息，直接将Block利用NLP技术进行嵌入，同时利用connected-component algorithm完成聚类。</p>
+<h4 id="第二步聚类（不一致聚类）"><a href="#第二步聚类（不一致聚类）" class="headerlink" title="第二步聚类（不一致聚类）"></a>第二步聚类（不一致聚类）</h4><p>第二步聚类的目的是找出功能相似但不一致的代码段，这就需要更细粒度的表征了，论文利用Graph2Vec来完成嵌入，其可以很好的表征代码的图结构语义信息，包括节点以及调用关系等。聚类算法同上一步。</p>
+<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><p>数据集来自主流的5个开源项目</p>
+<p><img src="https://s2.loli.net/2022/09/02/P24kDtWGSbBRlhz.png" alt="FICS8.png"></p>
+<p>FICS的检测能力优于APIsan, LRSan, Crix</p>
+<p><img src="https://s2.loli.net/2022/09/02/ZnGXNsiCK2hYFMx.png" alt="FICS7.png"></p>
+<p><img src="https://s2.loli.net/2022/09/02/xtZV7AsDa9zvuHM.png" alt="FICS10.png"></p>
+<p>FICS可以检测到未知的bug，检测到了218个不一致的代码，其中22已经被厂商确认</p>
+<p><img src="https://s2.loli.net/2022/09/02/OvPk7eNcH9wprYq.png" alt="FICS9.png"></p>
+<h2 id="局限"><a href="#局限" class="headerlink" title="局限"></a>局限</h2><ul>
+<li>FICS目前只能检测相似代码的不一致性bug，不能检测那些没有相似函数的bug代码。</li>
+<li>Construct并不适用于所有的bug，有的bug可能只是一行代码，粒度太小。同时Construct是函数内的，因此无法检测那些跨函数导致的bug。</li>
+<li>FICS不支持C++代码检测。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%BC%8F%E6%B4%9E%E6%A3%80%E6%B5%8B/" rel="tag"># 漏洞检测</a>
+              <a href="/tags/%E5%9B%BE%E5%B5%8C%E5%85%A5/" rel="tag"># 图嵌入</a>
+              <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A1%A8%E5%BE%81/" rel="tag"># 代码表征</a>
+              <a href="/tags/%E8%81%9A%E7%B1%BB/" rel="tag"># 聚类</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/06/07/SeqTrans-%E6%BC%8F%E6%B4%9E%E8%87%AA%E5%8A%A8%E5%8C%96%E4%BF%AE%E5%A4%8D-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" rel="prev" title="SeqTrans:漏洞自动化修复-论文笔记">
+      <i class="fa fa-chevron-left"></i> SeqTrans:漏洞自动化修复-论文笔记
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Finding-Bugs-Using-Your-Own-Code-Detecting-Functionally-similar-yet-Inconsistent-Code"><span class="nav-number">1.</span> <span class="nav-text">Finding Bugs Using Your Own Code: Detecting Functionally-similar yet Inconsistent Code</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A5%E6%BA%90%E4%BF%A1%E6%81%AF"><span class="nav-number">2.</span> <span class="nav-text">来源信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%91%98%E8%A6%81"><span class="nav-number">3.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-number">4.</span> <span class="nav-text">背景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%B0%E6%9C%89%E6%96%B9%E6%B3%95%E5%AD%98%E5%9C%A8%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">4.1.</span> <span class="nav-text">现有方法存在的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8F%91"><span class="nav-number">4.2.</span> <span class="nav-text">启发</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FICS%E6%95%B4%E4%BD%93%E6%80%9D%E8%B7%AF"><span class="nav-number">4.3.</span> <span class="nav-text">FICS整体思路</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B7%E4%BD%93%E6%96%B9%E6%B3%95"><span class="nav-number">5.</span> <span class="nav-text">具体方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E8%A1%A8%E5%BE%81%E5%92%8C%E7%B2%92%E5%BA%A6%E9%80%89%E6%8B%A9"><span class="nav-number">5.1.</span> <span class="nav-text">代码表征和粒度选择</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%AD%A5%E8%81%9A%E7%B1%BB"><span class="nav-number">5.2.</span> <span class="nav-text">分步聚类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%E8%81%9A%E7%B1%BB%EF%BC%88%E5%8A%9F%E8%83%BD%E7%9B%B8%E4%BC%BC%E6%80%A7%E8%81%9A%E7%B1%BB%EF%BC%89"><span class="nav-number">5.2.1.</span> <span class="nav-text">第一步聚类（功能相似性聚类）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%E8%81%9A%E7%B1%BB%EF%BC%88%E4%B8%8D%E4%B8%80%E8%87%B4%E8%81%9A%E7%B1%BB%EF%BC%89"><span class="nav-number">5.2.2.</span> <span class="nav-text">第二步聚类（不一致聚类）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C"><span class="nav-number">6.</span> <span class="nav-text">实验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B1%80%E9%99%90"><span class="nav-number">7.</span> <span class="nav-text">局限</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="honywen"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">honywen</p>
+  <div class="site-description" itemprop="description">多多指教</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lxyeternal" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lxyeternal" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1796369212@qq.com" title="E-Mail → mailto:1796369212@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/weixin_39641975" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;weixin_39641975" rel="noopener" target="_blank"><i class="fab fa-stack-overflow fa-fw"></i>CSDN</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/yourname" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://honywen.com/" title="http:&#x2F;&#x2F;honywen.com">Title</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">honywen</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'XtTLwDG0JPdYJFC2zH1ULGMN-gzGzoHsz',
+      appKey     : 'E1vcmMuSfPfzUqtr2j4z9T0N',
+      placeholder: "Just go go",
+      avatar     : '/uploads/avatar.jpg',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
