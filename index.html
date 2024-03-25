@@ -168,6 +168,171 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://honywen.com/2024/03/25/ASE2023-PyPI%E7%94%9F%E6%80%81%E4%B8%AD%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E7%9A%84%E5%AE%9E%E8%AF%81%E7%A0%94%E7%A9%B6-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="honywen">
+      <meta itemprop="description" content="多多指教">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小咕✨">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/03/25/ASE2023-PyPI%E7%94%9F%E6%80%81%E4%B8%AD%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E7%9A%84%E5%AE%9E%E8%AF%81%E7%A0%94%E7%A9%B6-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">ASE2023-PyPI生态中恶意代码的实证研究-论文笔记</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-03-25 23:29:03 / Modified: 23:31:11" itemprop="dateCreated datePublished" datetime="2024-03-25T23:29:03+08:00">2024-03-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">论文笔记</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2024/03/25/ASE2023-PyPI%E7%94%9F%E6%80%81%E4%B8%AD%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E7%9A%84%E5%AE%9E%E8%AF%81%E7%A0%94%E7%A9%B6-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2024/03/25/ASE2023-PyPI%E7%94%9F%E6%80%81%E4%B8%AD%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E7%9A%84%E5%AE%9E%E8%AF%81%E7%A0%94%E7%A9%B6-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="https://files.mdnice.com/user/62039/99f68b70-75aa-4d88-bbce-5e8fb6596fce.png"></p>
+<blockquote>
+<p><em>原文标题：An Empirical Study of Malicious Code In PyPI Ecosystem</em><br><em>原文作者：Wenbo Guo, Zhengzi Xu, Chengwei Liu, Cheng Huang, Yong Fang, Yang Liu</em><br><em>原文链接：<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2309.11021.pdf">https://arxiv.org/pdf/2309.11021.pdf</a></em><br><em>发表会议：ASE 2023</em><br><em>笔记作者：郭文博@安全学术圈</em><br><em>主编：黄诚@安全学术圈</em></p>
+</blockquote>
+<h3 id="1、研究介绍"><a href="#1、研究介绍" class="headerlink" title="1、研究介绍"></a>1、研究介绍</h3><p>PyPI作为Python包管理平台，为开发人员提供了便捷的工具来加速功能实现和提升工作效率。然而，PyPI生态的迅速扩展也伴随着恶意包的广泛传播问题。开发者通过将恶意包伪装成常规组件来威胁下游用户和项目的安全。当前，PyPI恶意代码检测领域面临着高质量、大规模数据集的缺乏，这限制了对该生态中恶意代码特征的深入了解。为应对这一挑战，本研究构建了一个自动化恶意代码收集框架，利用PyPI镜像站点及其他渠道收集高质量恶意代码数据，并在此基础上进行实证研究，以揭示PyPI生态中恶意代码的特性。</p>
+<p>基于以上动机，作者围绕PyPI生态恶意代码展开了研究，并回答以下四个关键的研究问题：</p>
+<p>1）代码属性: PyPI生态中恶意代码的主要属性和来源是什么？它们与其他平台相比如何？</p>
+<p>2）攻击策略: 攻击者如何结合不同的攻击策略和恶意行为将代码注入到PyPI生态中的开源包？这些策略是如何在不同的平台和目标中演化和适应的？</p>
+<p>3）反检测技术: 目前的检测工具在识别恶意包方面的有效性如何？恶意代码采用了哪些反检测技术来逃避这些检测工具，以及这些规避技术对其在野的分布产生了何种影响？</p>
+<p>4）影响和渗透: 在PyPI生态系统中，恶意软件包对终端用户的影响如何随时间演变？哪些操作系统遭受了影响，以及恶意软件包是如何渗透到用户系统中的？</p>
+<h3 id="2、数据集构建与分类"><a href="#2、数据集构建与分类" class="headerlink" title="2、数据集构建与分类"></a>2、数据集构建与分类</h3><h4 id="2-1-数据集收集"><a href="#2-1-数据集收集" class="headerlink" title="2.1 数据集收集"></a>2.1 数据集收集</h4><p><img src="https://files.mdnice.com/user/62039/8dfaa470-7c66-4f36-bf68-f61f2f59cb4a.png"></p>
+<p>为分析PyPI生态中的恶意代码，作者构建了包含多种来源的数据集。采集工作结合了爬虫和自动化收集框架，涵盖从开源数据库如Snyk和Sonatype收集的恶意包。为确保数据集的准确性和可靠性，进行了数据验证，这包括将代码解析成抽象语法树，检查其中的敏感API调用，并使用VirusTotal进行IOC检查。<br>最终建立的数据集包含4699个恶意代码文件，覆盖多种类型的恶意行为。该数据集以被开源至Github仓库: <a target="_blank" rel="noopener" href="https://github.com/lxyeternal/pypi_malregistry">https://github.com/lxyeternal/pypi_malregistry</a>。该数据集会及时更新最新收集到的恶意包。</p>
+<p><img src="https://files.mdnice.com/user/62039/8b2fcd1e-5f79-4dfc-abea-7948a05a2271.png"></p>
+<h4 id="2-2-恶意代码分类"><a href="#2-2-恶意代码分类" class="headerlink" title="2.2 恶意代码分类"></a>2.2 恶意代码分类</h4><p><img src="https://files.mdnice.com/user/62039/3624c5ea-c89b-4d1c-8bcf-d443ec9c2db9.png"></p>
+<p>作者聚类API调用序列来分析和分类恶意代码，目的是揭示恶意软件的行为模式。通过提取与已知恶意行为相关的API调用序列，分析了恶意代码与操作系统或其他软件模块的交互。使用词法分析技术对API调用进行预处理，然后应用Word2Vec方法转换为数值向量，以便进行聚类分析。采用谱聚类算法，根据行为特征将恶意代码分类，并通过人工确认以确保聚类准确性。聚类结果揭示了五个具有特定行为模式的恶意代码类别，包括信息窃取，远程控制，代码执行，命令执行以及未授权的文件操作。具体的解释以及行为模式可以通过该网站查看: <a target="_blank" rel="noopener" href="https://sites.google.com/view/pypiempircal">https://sites.google.com/view/pypiempircal</a></p>
+<h3 id="3、实证研究"><a href="#3、实证研究" class="headerlink" title="3、实证研究"></a>3、实证研究</h3><h4 id="3-1-恶意代码生命周期特性"><a href="#3-1-恶意代码生命周期特性" class="headerlink" title="3.1 恶意代码生命周期特性"></a>3.1 恶意代码生命周期特性</h4><p><img src="https://files.mdnice.com/user/62039/dc7c69e7-770d-4299-9dcf-4f112d1fc97f.png"></p>
+<p>在此研究中，通过对所构建的Python恶意代码数据集进行广泛的实证分析，构建了恶意代码的生命周期画像。这一生命周期涉及三个主体：恶意贡献开发者、开源平台（PyPI）以及终端用户。恶意开发者创建并更新具有恶意代码的注册表；PyPI作为恶意软件分发的主渠道，促进了其在不同镜像源之间的传播；终端用户则可能无意中将这些恶意包集成到他们的项目中，从而激活其恶意功能。生命周期画像揭示了恶意代码在各个阶段的行为特征。</p>
+<p>下面是每一个研究问题的具体研究过程和细节。</p>
+<h4 id="3-2-代码属性"><a href="#3-2-代码属性" class="headerlink" title="3.2 代码属性"></a>3.2 代码属性</h4><h5 id="3-2-1-研究方法"><a href="#3-2-1-研究方法" class="headerlink" title="3.2.1 研究方法"></a>3.2.1 研究方法</h5><p>为回答研究问题RQ1，研究采用文件数量、文件深度和恶意代码密度作为指标，分析不同来源恶意代码的特性及其差异。恶意代码密度定义为LOM（包中恶意代码的行数）除以LOC（Python代码的总行数）。此外，研究还考虑了恶意代码在项目中的文件深度，以分析其结构特征。</p>
+<h5 id="3-2-2-研究结果"><a href="#3-2-2-研究结果" class="headerlink" title="3.2.2 研究结果"></a>3.2.2 研究结果</h5><p><img src="https://files.mdnice.com/user/62039/cea10613-2e79-4666-b61f-dbb51c5d854d.png"></p>
+<p>研究比较了来自不同数据源的恶意代码特性，包括文件数量、总行数、平均行数和文件深度。PyPI中恶意代码规模较小，每个包平均包含2个Python文件，文件深度不超过3层。在PyPI中，恶意代码通常集中在少数文件中以减少文件深度。恶意包文件中的恶意代码密度高，超过50%的恶意包中恶意代码密度超过50%。恶意包利用typosquatting来诱导下载和执行，且恶意行为通常存储在运行时下载的payload中，而不是恶意源代码。此外，研究发现攻击者会使用渗透工具如Metasploit工具生成恶意代码并注入到开源包。</p>
+<blockquote>
+<p><em>发现1：在 PyPI 生态中，恶意包的恶意代码量相对较少；但是密度较高。</em></p>
+</blockquote>
+<blockquote>
+<p><em>发现2：虽然不同数据源的恶意代码相似度较低且很少重叠，但存在攻击者使用渗透工具生成恶意代码并将其注入到PyPI生态中。</em></p>
+</blockquote>
+<h4 id="3-3-攻击策略"><a href="#3-3-攻击策略" class="headerlink" title="3.3 攻击策略"></a>3.3 攻击策略</h4><h5 id="3-3-1-研究方法"><a href="#3-3-1-研究方法" class="headerlink" title="3.3.1 研究方法"></a>3.3.1 研究方法</h5><p>通过提取并聚类恶意代码的API调用序列来分析恶意行为。因为相似的恶意行为通常展现出相似的API模式，这有助于识别和分类恶意行为。此外，研究采用了半自动化方法对恶意代码进行详细审计，包括手动审核一部分恶意代码以提取行为模式，并运用相似度匹配技术过滤剩余的恶意包，从而识别出恶意代码和被注入的文件。最后，通过手动检查分类结果以确保其准确性。</p>
+<h5 id="3-3-2-研究结果"><a href="#3-3-2-研究结果" class="headerlink" title="3.3.2 研究结果"></a>3.3.2 研究结果</h5><p>在研究中对1335个Python包进行了分析，发现恶意代码具有多样的恶意行为。其中630个仅有一种恶意行为，635个包存在两种或更多。其中411个包具有两种恶意行为。最常见的行为是信息窃取（49.44%）和命令执行（59.33%）。大多数信息窃取行为针对系统信息，而非浏览器信息。较少见的行为包括代码执行（2.62%）、远程控制（0.75%）和未授权文件操作（47.19%）。此外，7.87%的包采用混淆技术隐藏恶意代码，显示出攻击者不断优化逃避检测的策略。</p>
+<blockquote>
+<p><em>发现3：在PyPI生态中，恶意代码普遍存在多种恶意行为，其中信息窃取和命令执行行为尤为突出，这表明攻击者更喜欢采用综合手段来实现攻击目标。</em></p>
+</blockquote>
+<p>攻击者为了确保恶意代码能在不同操作系统上有效执行，通常首先使用sys.platform获取目标系统信息，然后根据系统定制恶意代码。研究显示，针对win32系统的恶意包最多，达428个，远超win64（25个）、Linux（43个）和Darwin（19个）。恶意代码常具有高度隐蔽性，例如安装木马后清除痕迹来避免被发现。攻击者使用os.remove、shutil.rmtree和cmd /c del等命令删除木马文件，增加了恶意代码的隐蔽性和分析难度。</p>
+<blockquote>
+<p><em>发现4：恶意代码具有显着的针对性和适应性，针对不同平台采用不同的攻击策略和触发机制。</em></p>
+</blockquote>
+<p>恶意代码在持续的进化。研究中发现18个恶意包含35个版本的代码呈现行为演化，表现为恶意行为的多样化及代码结构的简化和效率提升。例如，“dpp client”恶意包在后续版本中加入异常处理机制，增强了代码的健壮性。另一个例子，“Collored”恶意包，其代码从26行减少到17行，优化了木马文件的下载和安装过程，虽然代码量减少，但核心功能未改变。还观察到“easyfuncsys”恶意包通过版本迭代实现了对安全工具的逃避。</p>
+<blockquote>
+<p><em>发现5：PyPI生态中的恶意代码不是静态的，而是不断进化的。攻击者不断改进其恶意行为，以实现更复杂的功能和更精简的结构。</em></p>
+</blockquote>
+<h4 id="3-4-反检测技术"><a href="#3-4-反检测技术" class="headerlink" title="3.4 反检测技术"></a>3.4 反检测技术</h4><h5 id="3-4-1-研究方法"><a href="#3-4-1-研究方法" class="headerlink" title="3.4.1 研究方法"></a>3.4.1 研究方法</h5><p>本节旨在深入分析恶意代码如何采用各种策略和技术来逃避安全检测工具。为确保比较的全面性和公正性，选取了多个具有代表性的恶意代码检测工具进行比较分析，这些工具基于不同的原理和技术进行恶意代码识别。研究中构建了一个评估数据集，包含来自PyPI的1556个恶意样本和549个随机选取的良性样本，包括一些流行的软件包。这些样本覆盖了各种恶意行为和技术，如信息窃取、木马下载安装和远程访问等。</p>
+<p><img src="https://files.mdnice.com/user/62039/63fb5c32-fa1e-4eb3-820b-1ae4568a7111.png"></p>
+<h5 id="3-4-2-研究结果"><a href="#3-4-2-研究结果" class="headerlink" title="3.4.2 研究结果"></a>3.4.2 研究结果</h5><p>研究发现Bandit4mal的误报率高达86%，OSSGadget-backdoor的误报率为77%。即使在检测恶意软件包方面，这些工具的性能也不尽人意，例如Aura的误报率达87%，Virustotal为54%。相对而言，PyPI Check表现略好，但其只检测setup.py文件，漏报率为23%。导致这样结果的主要原因在于基于规则和模式的方法难以区分恶意行为和正常行为的细微差别，而基于签名的方法在面对多样化和变化的恶意代码时效果不佳。此外，一些工具检测范围有限，导致漏报。特别是，OSSGadget和PyPI Check主要漏报了与信息窃取和未经授权的文件操作相关的恶意行为。VirusTotal等工具的特征库也难以覆盖所有恶意代码变体。</p>
+<p><img src="https://files.mdnice.com/user/62039/4d2d403e-3693-483e-a367-90021ec9ac45.png"></p>
+<blockquote>
+<p><em>发现6：现有的恶意代码检测工具在识别恶意包方面表现出一定的有效性，但误报率仍然相当高。</em></p>
+</blockquote>
+<p>此外，研究还发现了以下几种新的反检测技术：</p>
+<p>间接导入：为了绕过检测工具，攻击者不会直接将恶意代码注入到当前包中，而是通过间接引用的方式实现攻击，“secbg-0.0.8”引入了恶意包“secrevtwo-0.0.1”通过“setup.py”文件中的“install_require”。</p>
+<p><img src="https://files.mdnice.com/user/62039/d9715136-818b-4a02-9948-43c9fd845835.png"><br>图像隐写：攻击者使用隐写将恶意代码隐藏在图像中，当执行代码时，其会从远程服务器下载图像并从中提取恶意代码来执行。 “colorsapi-6.6.7”利用了这种类型的攻击。<br><img src="https://files.mdnice.com/user/62039/feb53bb4-3336-4b77-b334-f10b6d74e598.png"><br>Python沙箱逃逸：攻击者通常使用“__import__“方法动态导入所需的模块，并借助内置函数在运行时编译和执行恶意代码。在数据集作者发现了63个与沙箱逃逸相关的恶意包。<br><img src="https://files.mdnice.com/user/62039/8f4f0769-929d-4b9c-807d-2ddcd29534fe.png"></p>
+<blockquote>
+<p><em>发现8：恶意代码采用多种反检测技术来逃避安全工具，包括代码混淆、外部有效负载、多阶段请求、行为重叠、间接导入、图像隐写、沙箱逃逸。</em></p>
+</blockquote>
+<p>作者对PyPI生态系统中恶意包的分布情况进行了研究。结果显示，全球PyPI镜像站点中存在大量恶意软件包。同时中国（CN）的镜像服务器上表现得尤为明显，涵盖了清华、豆瓣、北外、网易、阿里云、腾讯等不同的镜像。<br><img src="https://files.mdnice.com/user/62039/21f89073-a27a-4eaf-9ab5-7bd53f06c331.png"><br>此外，作者发现14个镜像中的不存在37个恶意包的70个版本。但在下载记录中，发现这些恶意包依然被下载。作者发现恶意代码的广泛分布与PyPI镜像的构建和同步机制有关，不同镜像的更新频率和同步策略可能导致恶意软件包在部分镜像中长期存在。</p>
+<blockquote>
+<p><em>发现8：各国PyPI镜像服务器中都存在不少恶意软件包，其中中国的镜像生态最为严重。</em></p>
+</blockquote>
+<h4 id="3-5-影响和渗透"><a href="#3-5-影响和渗透" class="headerlink" title="3.5 影响和渗透"></a>3.5 影响和渗透</h4><h5 id="3-5-1-研究方法"><a href="#3-5-1-研究方法" class="headerlink" title="3.5.1 研究方法"></a>3.5.1 研究方法</h5><p>研究方法中，恶意软件包的生命周期被定义为从开发者上传到PyPI直到其完全删除的时间跨度。考虑到镜像源的不同步可能导致恶意软件包生命周期的延长，作者从Google Cloud收集了861个PyPI注册表文件的下载记录和元数据，包括发布时间、首次下载时间和最后下载时间。恶意包发布到被发现的时间差定义为潜伏期，恶意包被发现到最后一次下载的时间差定义为残留期。</p>
+<p><img src="https://files.mdnice.com/user/62039/63588380-cb84-425c-b59b-c4d2f13a1906.png"></p>
+<h5 id="3-5-2-研究结果"><a href="#3-5-2-研究结果" class="headerlink" title="3.5.2 研究结果"></a>3.5.2 研究结果</h5><p>分析发现，残留期超过潜伏期的恶意包有622个，占总数的72.34%。28%的软件包潜伏期超过2个月，在残留期内这一数字上升至40%。39%和31%的软件包在潜伏期和残留期内下载次数超过100次，分别有6%的恶意包下载次数超过1000次。 值得注意的是，“pyscrapy”恶意包的潜伏期为5年，而“request”恶意包在潜伏期内的下载次数为6,061,233次。</p>
+<p><img src="https://files.mdnice.com/user/62039/166c6c5a-381e-4c97-b0ac-c593244628a0.png"></p>
+<blockquote>
+<p><em>发现9：72.34%恶意注册表残留期长于其潜伏期，这说明这些恶意包在被发现后仍然驻留在各个镜像中。</em></p>
+</blockquote>
+<p>同时研究发现了三种攻击向量。</p>
+<p><img src="https://files.mdnice.com/user/62039/bb371a0a-966a-4b79-9bda-df9c471c95e2.png"></p>
+<p><strong>安装时攻击</strong>: 攻击者将恶意代码插入到注册表中的setup.py文件中。具体来说，攻击者重新实现了一个安装类CustomInstall，重写了其中的run方法，然后让setuptools在安装时调用这个安装类。当用户在本地安装该包时，就会自动执行其中的恶意代码。</p>
+<p><img src="https://files.mdnice.com/user/62039/71f6337f-4037-45e7-9000-01b9e1d1f87d.png"></p>
+<p><strong>导入时攻击</strong>: 其中攻击者先在包1中嵌入恶意代码并上传至注册表存储库。接着，创建包2，并在其中引入包1。当用户导入包2时，包1会被下载到项目中，触发攻击。这种方式能够绕过检测工具。</p>
+<p><strong>运行时攻击</strong>: 将恶意代码嵌入到特定文件（如“other.py”）中。此类攻击只有通过调用含有恶意代码的函数才可以触发执行。</p>
+<p><img src="https://files.mdnice.com/user/62039/2231d8b9-f554-416d-90bb-1e375cbb5af4.png"><br>对收集到的恶意包进行分析，发现846个恶意包中有580个（约68.6%）属于安装时攻击，161个（约19%）属于导入时攻击，而105个（约12.4%）为运行时攻击。</p>
+<blockquote>
+<p><em>发现10：PyPI生态中存在三种攻击向量：安装时攻击、运行时攻击和导入时攻击，其中安装时攻击最多。</em></p>
+</blockquote>
+<p><img src="https://files.mdnice.com/user/62039/c01c3a70-7afb-4d9b-bfd2-ec31e9217f6d.png"></p>
+<p>同时发现，恶意包主要通过源代码进行安装，占总下载量的74.81%（约3,953,367次）。相比之下，通过二进制形式的安装较少，仅占25.19%，这主要是因为大多数恶意包只提供了源代码形式。研究还发现，Linux系统受到的恶意软件包攻击最多，占总下载量的77.08%（6,457,544次）。从安装方式来看，81.42%的恶意软件包通过pip工具导入用户系统。还有13.58%的恶意软件包通过直接请求进行安装，而5%的恶意包通过镜像同步到不同的注册表镜像中。</p>
+<blockquote>
+<p><em>发现11：恶意软件包主要通过源代码安装（74.81%），其中Linux系统受影响最大（77.08%）。</em></p>
+</blockquote>
+<h3 id="4-启发"><a href="#4-启发" class="headerlink" title="4 启发"></a>4 启发</h3><p><strong>用户</strong>需要提高安全意识，安装安全软件包、定期扫描主机系统、及时更新本地包文件，利用官方仓库和安全镜像源。<br><strong>注册表维护者</strong>应确保注册表的安全并防止恶意软件包的传播。包括禁止恶意维护者的帐户和加强审查机制。提供先进且全面的检测工具来识别恶意包对于过滤和防御至关重要。提供完整的恶意包黑名单，保证镜像源的安全。<br><strong>注册表镜像维护者</strong>需要定期与官方注册表同步，以确保一致性并避免错过重要的更新和修复。及时删除恶意包可以保证PyPI镜像的安全。<br><strong>研究人员</strong>可以深入研究攻击向量，探索新的攻击模式和技术。研究新的恶意代码检测方法，对抗规避技术；关注代码演化，洞察演化趋势；研究多行为特征，优化恶意代码识别和防御。大规模扫描开源包时，重点关注安装时和导入时攻击向量，以提高扫描效率。</p>
+<h3 id="论文作者信息"><a href="#论文作者信息" class="headerlink" title="论文作者信息"></a>论文作者信息</h3><ul>
+<li>论文作者：郭文博</li>
+<li>作者介绍：南洋理工大学博士在读，导师刘杨教授，研究方向涉及网络安全，供应链安全，开源情报分析。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="http://honywen.com/2022/09/02/Usenix2021-%E7%94%A8%E8%87%AA%E5%B7%B1%E7%9A%84%E4%BB%A3%E7%A0%81%E6%9F%A5%E6%89%BEbug-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1024,105 +1189,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://honywen.com/2021/08/30/SQVDT-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="honywen">
-      <meta itemprop="description" content="多多指教">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小咕✨">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/08/30/SQVDT-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">SQVDT-论文笔记</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-08-30 21:17:10" itemprop="dateCreated datePublished" datetime="2021-08-30T21:17:10+08:00">2021-08-30</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-08-31 18:26:07" itemprop="dateModified" datetime="2021-08-31T18:26:07+08:00">2021-08-31</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">论文笔记</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/2021/08/30/SQVDT-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/08/30/SQVDT-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="SQVDT-A-Scalable-Quantitative-Vulnerability-Detection-Technique-for-Source-Code-Security-Assessment"><a href="#SQVDT-A-Scalable-Quantitative-Vulnerability-Detection-Technique-for-Source-Code-Security-Assessment" class="headerlink" title="SQVDT: A Scalable Quantitative Vulnerability Detection Technique for Source Code Security Assessment"></a>SQVDT: A Scalable Quantitative Vulnerability Detection Technique for Source Code Security Assessment</h1><h2 id="来源信息"><a href="#来源信息" class="headerlink" title="来源信息"></a>来源信息</h2><ul>
-<li>机构：清华大学软件学院信息系统安全重点实验室</li>
-<li>作者：Junaid Akram，Ping Luo</li>
-</ul>
-<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>在论文中，作者提出了一种漏洞检测技术来检测软件以及源代码级共享库中的漏洞，根据不同Web源的CVE编号跟踪和定位补丁文件，从而抓取脆弱源代码，并构建了2931个脆弱文件的指纹索引。之后，作者开发了一个基于代码克隆检测技术的漏洞检测方法，并在数千个Github开源项目中检测了数百个未被发现的漏洞，在最新版本的Linux、HTC内核、FindX中也有检测到漏洞。此外，作者还对这些漏洞进行了实证评估和验证，包括项目内克隆漏洞、复制内核克隆漏洞和库使用的克隆漏洞。该技术非常快速、高效、可靠、实用、可伸缩，可以在工业层面上实现。与最先进的工具的比较显示了该方法的有效性。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/08/30/SQVDT-%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1194,7 +1260,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-count">26</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1207,7 +1273,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-count">44</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -1258,7 +1324,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2022</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
